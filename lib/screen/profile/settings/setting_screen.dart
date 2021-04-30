@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import './notification_setting_screen.dart';
-import 'settings/theme_setting_screen.dart';
-import './settings/about_screen.dart';
+import '../notification_setting_screen.dart';
+import 'theme_setting_screen.dart';
+import 'about_screen.dart';
 
 class SettingScreen extends StatefulWidget {
   @override
@@ -26,7 +26,7 @@ class _SettingScreenState extends State<SettingScreen> {
                 children:[
                   ListTile(
                     leading: Icon(Icons.notifications),
-                    title: Text("Notifications"),
+                    title: Text("Notifications",style: Theme.of(context).textTheme.bodyText1,),
                     trailing: Icon(Icons.keyboard_arrow_right),
                     onTap: (){
                       Navigator.push(
@@ -36,7 +36,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   ),
                   ListTile(
                     leading: Icon(Icons.lock),
-                    title: Text("Change Password"),
+                    title: Text("Change Password",style: Theme.of(context).textTheme.bodyText1,),
                     trailing: Icon(Icons.keyboard_arrow_right),
                     onTap: (){
 
@@ -44,7 +44,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   ),
                   ListTile(
                     leading: Icon(Icons.language),
-                    title: Text("Change Language"),
+                    title: Text("Change Language",style: Theme.of(context).textTheme.bodyText1,),
                     trailing: Icon(Icons.keyboard_arrow_right),
                     onTap: (){
 
@@ -52,7 +52,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   ),
                   ListTile(
                     leading: Icon(Icons.format_paint),
-                    title: Text("Change Theme"),
+                    title: Text("Change Theme",style: Theme.of(context).textTheme.bodyText1,),
                     trailing: Icon(Icons.keyboard_arrow_right),
                     onTap: (){
                       Navigator.push(
@@ -62,7 +62,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   ),
                   ListTile(
                     leading: Icon(Icons.info),
-                    title: Text("About "),
+                    title: Text("About",style: Theme.of(context).textTheme.bodyText1,),
                     trailing: Icon(Icons.keyboard_arrow_right),
                     onTap: (){
                       Navigator.push(
@@ -72,7 +72,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   ),
                   ListTile(
                     leading: Icon(Icons.help),
-                    title: Text("Help"),
+                    title: Text("Help",style: Theme.of(context).textTheme.bodyText1,),
                     trailing: Icon(Icons.keyboard_arrow_right),
                     onTap: (){
 

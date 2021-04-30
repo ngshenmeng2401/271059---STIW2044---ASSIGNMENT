@@ -5,7 +5,7 @@ import 'package:little_cake_story/model/theme.dart';
 import 'package:little_cake_story/model/user.dart';
 import 'package:provider/provider.dart';
 import '../login_screen.dart';
-import 'setting_screen.dart';
+import 'settings/setting_screen.dart';
 
 class MeScreen extends StatefulWidget {
   final User user;
