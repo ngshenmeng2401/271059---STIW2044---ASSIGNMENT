@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'home_screen.dart';
-import 'notification_screen.dart';
-import 'cart_screen.dart';
-import 'me_screen.dart';
-import 'user.dart';
+import 'home/home_screen.dart';
+import 'notification/notification_screen.dart';
+import 'cart/cart_screen.dart';
+import 'profile/profile_screen.dart';
+import '../model/user.dart';
 
 class BottomNavigationWidget extends StatefulWidget {
 
@@ -18,15 +18,16 @@ class BottomNavigationWidget extends StatefulWidget {
 class BottomNavigationWidgetState extends State<BottomNavigationWidget> {
 
   int _currentIndex = 0;
-  List <Widget> list = List();
+  List <Widget> list;
 
   @override
   void initState() {
-    list
-      ..add(HomeScreen())
-      ..add(NotificationScreen())
-      ..add(CartScreen())
-      ..add(MeScreen());
+    list = [
+      HomeScreen(),
+      NotificationScreen(),
+      CartScreen(),
+      MeScreen(user: widget.user)
+    ];
     super.initState();
   }
 

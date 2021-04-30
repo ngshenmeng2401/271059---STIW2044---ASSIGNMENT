@@ -1,6 +1,6 @@
-import 'notification_screen.dart';
+import 'screen/notification/notification_screen.dart';
 import 'package:flutter/material.dart';
-import 'user.dart';
+import 'model/user.dart';
 
 class MainScreen extends StatefulWidget {
 

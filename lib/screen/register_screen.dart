@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:little_cake_story/theme.dart';
+import 'package:little_cake_story/model/theme.dart';
 import 'package:provider/provider.dart';
 import 'login_screen.dart';
 import 'package:http/http.dart' as http;
-import './Password_Strength/flutter_password_strength.dart';
+import '../Password_Strength/flutter_password_strength.dart';
 
 class RegistrationScreen extends StatefulWidget {
     
@@ -16,10 +16,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   
   TextEditingController _firstNameController = new TextEditingController();
   TextEditingController _lastNameController = new TextEditingController();
+  TextEditingController _phoneNoController = new TextEditingController();
   TextEditingController _emailController = new TextEditingController();
   TextEditingController _passwordController = new TextEditingController();
   TextEditingController _confirmPasswordController = new TextEditingController();
-  bool hiddenPassword1 = false , hiddenPassword2 = false;
+  bool hiddenPassword1 = true , hiddenPassword2 = true;
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +67,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       icon:Icon(Icons.email,
                       color: Colors.red[200],),
                       labelText: 'First Name',
-                    ),
+                      ),
                     ),
                     TextField(
                       controller: _lastNameController,
@@ -74,7 +75,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       icon:Icon(Icons.people,
                       color: Colors.red[200],),
                       labelText: 'Last Name',
+                      ),
                     ),
+                    TextField(
+                      controller: _phoneNoController,
+                      decoration: InputDecoration(
+                      icon:Icon(Icons.phone,
+                      color: Colors.red[200],),
+                      labelText: 'Phone No',
+                      ),
                     ),
                     TextField(
                       controller: _emailController,
@@ -83,7 +92,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       icon:Icon(Icons.people,
                       color: Colors.red[200],),
                       labelText: 'Email',
-                    ),
+                      ),
                     ),
                     Column(
                       children: [
@@ -100,7 +109,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 });
                               },
                               child: Icon(
-                                hiddenPassword1 ? Icons.visibility : Icons.visibility_off))
+                                hiddenPassword1 ? Icons.visibility_off : Icons.visibility))
                           ),
                           obscureText: hiddenPassword1,
                           onChanged: (value) {
@@ -133,7 +142,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 });
                               },
                               child: Icon(
-                                hiddenPassword2 ? Icons.visibility : Icons.visibility_off))
+                                hiddenPassword2 ? Icons.visibility_off : Icons.visibility))
                           ),
                           obscureText: hiddenPassword2,
                           onChanged: (value) {
@@ -205,13 +214,54 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   void _onRegister() {
     String _firstname = _firstNameController.text.toString();
     String _lastname = _lastNameController.text.toString();
+    String _phoneno = _phoneNoController.text.toString();
     String _email = _emailController.text.toString();
     String _password = _passwordController.text.toString();
     String _confirmPassword = _confirmPasswordController.text.toString();
 
-    if(_firstname.isEmpty || _lastname.isEmpty || _email.isEmpty || _password.isEmpty || _confirmPassword.isEmpty){
+    if(_firstname.isEmpty && _lastname.isEmpty && _phoneno.isEmpty && _email.isEmpty && _password.isEmpty && _confirmPassword.isEmpty){
       Fluttertoast.showToast(
-        msg: "Name/Email/Password is empty",
+        msg: "Please fill in all textfield",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red[200],
+        textColor: Colors.white,
+        fontSize: 16.0);
+      return;
+    }else if(_firstname.isEmpty || _lastname.isEmpty){
+      Fluttertoast.showToast(
+        msg: "Name is empty",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red[200],
+        textColor: Colors.white,
+        fontSize: 16.0);
+      return;
+    }else if(_phoneno.isEmpty ){
+      Fluttertoast.showToast(
+        msg: "Phone No is empty",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red[200],
+        textColor: Colors.white,
+        fontSize: 16.0);
+      return;
+    }else if(_email.isEmpty){
+      Fluttertoast.showToast(
+        msg: "Email is empty",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red[200],
+        textColor: Colors.white,
+        fontSize: 16.0);
+      return;
+    }else if(_password.isEmpty || _confirmPassword.isEmpty){
+      Fluttertoast.showToast(
+        msg: "Password is empty",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
@@ -244,7 +294,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             TextButton(
               child:(Text('Ok')),
               onPressed: (){
-                _resgisterUser(_firstname,_lastname,_email,_password);
+                _resgisterUser(_firstname,_lastname,_phoneno,_email,_password);
                 Navigator.of(context).pop();
               },),
             TextButton(
@@ -257,13 +307,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       });
   }
 
-  void _resgisterUser(String firstname,String lastname,String email, String password) {
+  void _resgisterUser(String firstname,String lastname,String phoneno,String email, String password) {
 
     http.post(
       Uri.parse("https://javathree99.com/s271059/littlecakestory/php/register_user.php"),
       body: {
         "firstname":firstname,
         "lastname":lastname,
+        "phoneno":phoneno,
         "email":email,
         "password":password,
       }).then(

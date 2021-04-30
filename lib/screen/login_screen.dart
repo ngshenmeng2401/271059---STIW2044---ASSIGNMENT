@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
-import 'user.dart';
+import '../model/user.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
 import 'register_screen.dart';
-import 'theme.dart';
+import '../model/theme.dart';
 import 'bottom_navigation_bar.dart';
-
-
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -18,7 +16,6 @@ class LoginScreen extends StatefulWidget {
 
 class LoginScreenState extends State<LoginScreen> {
 
-  bool dark = true, value; 
   
   bool _rememberMe= false;
   TextEditingController _emailController = new TextEditingController();
@@ -36,11 +33,7 @@ class LoginScreenState extends State<LoginScreen> {
 
         return Scaffold(
         appBar:AppBar(
-          title: Text('LITTLE CAKE STORY',
-            style: TextStyle(
-              fontFamily: 'Arial',
-              // color: Colors.red[100]
-            ),),
+          title: Text('LITTLE CAKE STORY'),
           actions:<Widget> [
             IconButton(
               icon: Icon(Icons.brightness_6), 
@@ -201,12 +194,13 @@ class LoginScreenState extends State<LoginScreen> {
               password: _password,
               firstName: userData[1],
               lastName: userData[2],
-              dateReg: userData[3],
-              rating: userData[4],
-              credit: userData[5],
-              status: userData[6]);
-            Navigator.push(
-            context,MaterialPageRoute(builder: (context)=>BottomNavigationWidget(user:user))
+              phoneNo: userData[3],
+              dateReg: userData[4],
+              rating: userData[5],
+              credit: userData[6],
+              status: userData[7]);
+            Navigator.pushReplacement(
+            context,MaterialPageRoute(builder: (context)=>BottomNavigationWidget(user:user,))
             );
           }
       }

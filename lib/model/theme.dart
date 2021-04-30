@@ -14,9 +14,14 @@ class CustomTheme {
             cursorColor: Colors.blueGrey[300],
             selectionColor: Colors.blueGrey[300] ),
         textTheme: TextTheme(
-          headline1: TextStyle(fontSize: 42.0, ),
-          headline6: TextStyle(fontSize: 24.0, fontFamily: 'Arial'),
-          bodyText2: TextStyle(fontSize: 14.0, color: Colors.white,fontFamily: 'Arial'),
+          headline1: TextStyle(fontSize: 96.0, fontFamily: 'Arial', color: Colors.red[100]),
+          headline2: TextStyle(fontSize: 60.0, fontFamily: 'Arial', color: Colors.red[100]),
+          headline3: TextStyle(fontSize: 48.0, fontFamily: 'Arial', color: Colors.red[200]),
+          headline4: TextStyle(fontSize: 34.0, fontFamily: 'Arial', color: Colors.red[200]),
+          headline5: TextStyle(fontSize: 24.0, fontFamily: 'Arial', color: Colors.red[200]),
+          headline6: TextStyle(fontSize: 20.0, fontFamily: 'Arial', color: Colors.red[200]),
+          bodyText1: TextStyle(fontSize: 16.0, fontFamily: 'Arial', color: Colors.white),
+          bodyText2: TextStyle(fontSize: 14.0, fontFamily: 'Arial', color: Colors.white),
         ),
         buttonTheme: ButtonThemeData(
           buttonColor: Colors.red[100],
@@ -28,9 +33,9 @@ class CustomTheme {
         appBarTheme: AppBarTheme(
           backgroundColor: Colors.black,
           textTheme: TextTheme(
-          headline1: TextStyle(fontSize: 42.0, color: Colors.yellow),
-          headline6: TextStyle(fontSize: 24.0, color: Colors.red[100]),
-          bodyText2: TextStyle(fontSize: 14.0, color: Colors.black),
+          headline1: TextStyle(fontSize: 42.0, color: Colors.red[200]),
+          headline6: TextStyle(fontSize: 20.0,fontFamily: 'Arial', color: Colors.red[200]),
+          bodyText2: TextStyle(fontSize: 14.0, color: Colors.red[200]),
           ),
           actionsIconTheme: IconThemeData(
             color: Colors.white
@@ -42,6 +47,11 @@ class CustomTheme {
         ),
         iconTheme: IconThemeData(
           color: Colors.red[200],
+        ),
+        hoverColor:Colors.blue, 
+        dividerTheme: DividerThemeData(
+          thickness: 1.2,
+          color: Colors.white,
         )
         
       );
@@ -61,9 +71,14 @@ class CustomTheme {
           selectionColor: Colors.blueGrey[200]),
         fontFamily: 'Georgia',
         textTheme: TextTheme(
-          headline1: TextStyle(fontSize: 42.0, ),
-          headline6: TextStyle(fontSize: 24.0, fontFamily: 'Arial'),
-          bodyText2: TextStyle(fontSize: 14.0, color: Colors.black,fontFamily: 'Arial'),
+          headline1: TextStyle(fontSize: 96.0, fontFamily: 'Arial', color: Colors.black),
+          headline2: TextStyle(fontSize: 60.0, fontFamily: 'Arial', color: Colors.black),
+          headline3: TextStyle(fontSize: 48.0, fontFamily: 'Arial', color: Colors.black),
+          headline4: TextStyle(fontSize: 34.0, fontFamily: 'Arial', color: Colors.red[200]),
+          headline5: TextStyle(fontSize: 24.0, fontFamily: 'Arial', color: Colors.black),
+          headline6: TextStyle(fontSize: 20.0, fontFamily: 'Arial', color: Colors.black),
+          bodyText1: TextStyle(fontSize: 16.0, fontFamily: 'Arial', color: Colors.black),
+          bodyText2: TextStyle(fontSize: 14.0, fontFamily: 'Arial', color: Colors.black),
         ),
         buttonTheme: ButtonThemeData(
           buttonColor: Colors.red[200],
@@ -75,19 +90,23 @@ class CustomTheme {
         ),
         appBarTheme: AppBarTheme(
           backgroundColor: Colors.red[200],
-          textTheme: TextTheme(
-          headline1: TextStyle(fontSize: 42.0, color: Colors.yellow),
-          headline6: TextStyle(fontSize: 24.0,color: Colors.white),
-          bodyText2: TextStyle(fontSize: 14.0, color: Colors.black),
+            textTheme: TextTheme(
+            headline1: TextStyle(fontSize: 30.0, color: Colors.white),
+            headline6: TextStyle(fontSize: 20.0,fontFamily: 'Arial',color: Colors.white),
+            bodyText2: TextStyle(fontSize: 14.0, color: Colors.white),
           ),
           
           actionsIconTheme: IconThemeData(
-            color: Colors.white
+            color: Colors.black
           ),
         ),
         iconTheme: IconThemeData(
           color: Colors.red[200],
-        )
+        ),
+        dividerTheme: DividerThemeData(
+          thickness: 1.2,
+          color: Colors.grey[400],
+        ),
         
 
       );
