@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'home/home_screen.dart';
-import 'notification/notification_screen.dart';
+import 'search/search_screen.dart';
 import 'cart/cart_screen.dart';
 import 'profile/profile_screen.dart';
 import '../model/user.dart';
@@ -8,7 +8,6 @@ import '../model/user.dart';
 class BottomNavigationWidget extends StatefulWidget {
 
   final User user;
-
   const BottomNavigationWidget({Key key, this.user}) : super(key: key);
 
   @override
@@ -24,9 +23,9 @@ class BottomNavigationWidgetState extends State<BottomNavigationWidget> {
   void initState() {
     list = [
       HomeScreen(),
-      NotificationScreen(),
+      SearchScreen(),
       CartScreen(),
-      MeScreen(user: widget.user)
+      ProfileScreen(user: widget.user,)
     ];
     super.initState();
   }
@@ -47,10 +46,10 @@ class BottomNavigationWidgetState extends State<BottomNavigationWidget> {
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.alarm,
+              Icons.search,
             ),
             title:Text(
-               'Notification',
+               'Search',
             )
           ),
           BottomNavigationBarItem(

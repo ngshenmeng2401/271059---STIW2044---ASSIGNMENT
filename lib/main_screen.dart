@@ -1,4 +1,4 @@
-import 'screen/notification/notification_screen.dart';
+import 'screen/search/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'model/user.dart';
 
@@ -54,7 +54,7 @@ class _MainScreenState extends State<MainScreen> {
               onTap: (){
                 Navigator.pop(context);
                 Navigator.push(
-                context,MaterialPageRoute(builder: (context)=>NotificationScreen())
+                context,MaterialPageRoute(builder: (context)=>SearchScreen())
                 );
               },
             ),

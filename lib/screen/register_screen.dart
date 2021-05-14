@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:little_cake_story/model/theme.dart';
-import 'package:provider/provider.dart';
 import 'login_screen.dart';
 import 'package:http/http.dart' as http;
 import '../Password_Strength/flutter_password_strength.dart';
@@ -28,17 +26,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     return Scaffold(
       appBar:AppBar(
         title: Text('LITTLE CAKE STORY',style: TextStyle(fontFamily: 'Arial'),),
-        actions:<Widget> [
-            IconButton(
-              icon: Icon(Icons.brightness_6), 
-              color: Colors.white,
-              onPressed: (){
-                ThemeProvider themeProvider = Provider.of<ThemeProvider>(
-                  context,
-                  listen: false);
-                  themeProvider.swapTheme();
-              })
-          ],
       ),
       body: SingleChildScrollView(
         child:Column(
@@ -63,6 +50,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   children:[
                     TextField(
                       controller: _firstNameController,
+                      keyboardType: TextInputType.name,
                       decoration: InputDecoration(
                       icon:Icon(Icons.email,
                       color: Colors.red[200],),
@@ -71,6 +59,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     ),
                     TextField(
                       controller: _lastNameController,
+                      keyboardType: TextInputType.name,
                       decoration: InputDecoration(
                       icon:Icon(Icons.people,
                       color: Colors.red[200],),
@@ -79,6 +68,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     ),
                     TextField(
                       controller: _phoneNoController,
+                      keyboardType: TextInputType.phone,
                       decoration: InputDecoration(
                       icon:Icon(Icons.phone,
                       color: Colors.red[200],),
@@ -170,7 +160,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 children:[
                   MaterialButton(
                     shape:RoundedRectangleBorder(
-                      borderRadius:BorderRadius.circular(5),
+                      borderRadius:BorderRadius.circular(10),
                     ),
                     minWidth: 360,
                     height: 40,
@@ -288,17 +278,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         return AlertDialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(20))),
-          title: Text('Register new user?'),
-          content: Text("Are you sure?"),
+          title: Text('Register new user?',style: Theme.of(context).textTheme.headline5),
+          content: Text("Are you sure?",style: Theme.of(context).textTheme.bodyText1),
           actions: [
             TextButton(
-              child:(Text('Ok')),
+              child:(Text('Ok',style: Theme.of(context).textTheme.bodyText2)),
               onPressed: (){
                 _resgisterUser(_firstname,_lastname,_phoneno,_email,_password);
                 Navigator.of(context).pop();
               },),
             TextButton(
-              child: (Text('Cancel')),
+              child: (Text('Cancel',style: Theme.of(context).textTheme.bodyText2)),
               onPressed: (){
                 Navigator.of(context).pop();
               },),
@@ -343,7 +333,4 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       }
     );
   }
-
-
-  
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomTheme {
+
   static ThemeData get darktheme {
     return ThemeData(
         brightness: Brightness.dark,
@@ -15,9 +16,9 @@ class CustomTheme {
             selectionColor: Colors.blueGrey[300] ),
         textTheme: TextTheme(
           headline1: TextStyle(fontSize: 96.0, fontFamily: 'Calibri', color: Colors.red[100]),
-          headline2: TextStyle(fontSize: 60.0, fontFamily: 'Calibri', color: Colors.red[100]),
-          headline3: TextStyle(fontSize: 48.0, fontFamily: 'Calibri', color: Colors.red[200]),
-          headline4: TextStyle(fontSize: 34.0, fontFamily: 'Calibri', color: Colors.red[200]),
+          headline2: TextStyle(fontSize: 38.0, fontFamily: 'Calibri', color: Colors.red[200]),
+          headline3: TextStyle(fontSize: 14.0, fontFamily: 'Calibri', color: Colors.black,decoration: TextDecoration.lineThrough),
+          headline4: TextStyle(fontSize: 36.0, fontFamily: 'Calibri', color: Colors.red[200]),
           headline5: TextStyle(fontSize: 24.0, fontFamily: 'Calibri', color: Colors.white),
           headline6: TextStyle(fontSize: 20.0, fontFamily: 'Calibri', color: Colors.white),
           bodyText1: TextStyle(fontSize: 18.0, fontFamily: 'Calibri', color: Colors.white),
@@ -27,6 +28,7 @@ class CustomTheme {
           buttonColor: Colors.red[100],
         ),
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          backgroundColor: Colors.grey[900],
           selectedItemColor: Colors.red[200],
           unselectedItemColor: Colors.white,
         ),
@@ -34,11 +36,15 @@ class CustomTheme {
           backgroundColor: Colors.black,
           textTheme: TextTheme(
           headline1: TextStyle(fontSize: 42.0, color: Colors.red[200]),
+          headline2: TextStyle(fontSize: 16.0, fontFamily: 'Calibri', color: Colors.white),
+          headline3: TextStyle(fontSize: 14.0, fontFamily: 'Calibri', color: Colors.black,decoration: TextDecoration.lineThrough),
+          headline4: TextStyle(fontSize: 36.0, fontFamily: 'Calibri', color: Colors.red[200]),
+          headline5: TextStyle(fontSize: 24.0, fontFamily: 'Calibri', color: Colors.white),
           headline6: TextStyle(fontSize: 20.0,fontFamily: 'Arial', color: Colors.red[200]),
           bodyText2: TextStyle(fontSize: 14.0, color: Colors.red[200]),
           ),
           actionsIconTheme: IconThemeData(
-            color: Colors.white
+            color: Colors.black,
           ),
         ),
         inputDecorationTheme: InputDecorationTheme(
@@ -48,14 +54,14 @@ class CustomTheme {
         iconTheme: IconThemeData(
           color: Colors.red[200],
         ),
-        hoverColor:Colors.blue, 
+        highlightColor: Colors.grey[700],
+        hoverColor:Colors.grey[800], 
         dividerTheme: DividerThemeData(
           thickness: 1.2,
           color: Colors.white,
         )
         
       );
-        
         
   }
 
@@ -72,9 +78,9 @@ class CustomTheme {
         fontFamily: 'Georgia',
         textTheme: TextTheme(
           headline1: TextStyle(fontSize: 96.0, fontFamily: 'Calibri', color: Colors.black),
-          headline2: TextStyle(fontSize: 60.0, fontFamily: 'Calibri', color: Colors.black),
-          headline3: TextStyle(fontSize: 48.0, fontFamily: 'Calibri', color: Colors.black),
-          headline4: TextStyle(fontSize: 34.0, fontFamily: 'Calibri', color: Colors.red[200]),
+          headline2: TextStyle(fontSize: 38.0, fontFamily: 'Calibri', color: Colors.red[200]),
+          headline3: TextStyle(fontSize: 14.0, fontFamily: 'Calibri', color: Colors.black,decoration: TextDecoration.lineThrough),
+          headline4: TextStyle(fontSize: 36.0, fontFamily: 'Calibri', color: Colors.red[200]),
           headline5: TextStyle(fontSize: 24.0, fontFamily: 'Calibri', color: Colors.black),
           headline6: TextStyle(fontSize: 20.0, fontFamily: 'Calibri', color: Colors.black),
           bodyText1: TextStyle(fontSize: 18.0, fontFamily: 'Calibri', color: Colors.black),
@@ -82,62 +88,81 @@ class CustomTheme {
         ),
         buttonTheme: ButtonThemeData(
           buttonColor: Colors.red[200],
-          
         ),
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          backgroundColor: Colors.grey[300],
           selectedItemColor: Colors.red[200],
           unselectedItemColor: Colors.black,
         ),
         appBarTheme: AppBarTheme(
           backgroundColor: Colors.red[200],
             textTheme: TextTheme(
-            headline1: TextStyle(fontSize: 30.0, color: Colors.white),
-            headline6: TextStyle(fontSize: 20.0,fontFamily: 'Arial',color: Colors.white),
-            bodyText2: TextStyle(fontSize: 14.0, color: Colors.white),
+            headline1: TextStyle(fontSize: 30.0, fontFamily: 'Calibri', color: Colors.white),
+            headline2: TextStyle(fontSize: 16.0, fontFamily: 'Calibri', color: Colors.black),
+            headline3: TextStyle(fontSize: 14.0, fontFamily: 'Calibri', color: Colors.black,decoration: TextDecoration.lineThrough),
+            headline4: TextStyle(fontSize: 36.0, fontFamily: 'Calibri', color: Colors.red[200]),
+            headline5: TextStyle(fontSize: 24.0, fontFamily: 'Calibri', color: Colors.black),
+            headline6: TextStyle(fontSize: 20.0, fontFamily: 'Calibri', color: Colors.white),
+            bodyText2: TextStyle(fontSize: 14.0, fontFamily: 'Calibri', color: Colors.white),
           ),
           
           actionsIconTheme: IconThemeData(
-            color: Colors.black
+            color: Colors.white
           ),
         ),
         iconTheme: IconThemeData(
           color: Colors.red[200],
         ),
+        highlightColor: Colors.grey[200],
+        hoverColor:Colors.grey[200],
         dividerTheme: DividerThemeData(
           thickness: 1.2,
           color: Colors.grey[400],
         ),
         
-
       );
 
   }
 }
 
-  class ThemeProvider extends ChangeNotifier{
-    ThemeData _selectedTheme;
+class ThemeNotifier extends ChangeNotifier {
+  final String key = "theme";
+  SharedPreferences _prefs;
+  bool _darkTheme;
 
-    ThemeData light = CustomTheme.lighttheme;
-    ThemeData dark = CustomTheme.darktheme;
-
-    ThemeProvider({bool isDarkMode}){
-      _selectedTheme= isDarkMode ? dark : light;
-    }
-
-    Future<void> swapTheme() async {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      if (_selectedTheme == dark) {
-        _selectedTheme = light;
-        prefs.setBool("isDarkTheme", false);
-      } else {
-        _selectedTheme = dark;
-        prefs.setBool("isDarkTheme", true);
-      }
-      notifyListeners();
-    } 
-
-
-    ThemeData get getTheme => _selectedTheme;
-
+  bool get darkTheme => _darkTheme;
+  
+  ThemeNotifier() {
+    _darkTheme = false;
+    _loadFromPrefs();
   }
 
+  toggleDarkTheme() {
+    _darkTheme = true;
+    _saveToPrefs();
+    notifyListeners();
+  }
+
+  toggleLightTheme() {
+    _darkTheme = false;
+    _saveToPrefs();
+    notifyListeners();
+  }
+
+  _initPrefs() async {
+    if(_prefs == null)
+      _prefs = await SharedPreferences.getInstance();
+  }
+
+  _loadFromPrefs() async {
+    await _initPrefs();
+    _darkTheme = _prefs.getBool(key) ?? true;
+    notifyListeners();
+  }
+
+  _saveToPrefs()async {
+    await _initPrefs();
+    _prefs.setBool(key, _darkTheme);
+  }
+
+}

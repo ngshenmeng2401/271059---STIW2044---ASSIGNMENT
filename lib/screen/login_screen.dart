@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import '../model/user.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-
-import 'register_screen.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import '../model/theme.dart';
+import 'register_screen.dart';
 import 'bottom_navigation_bar.dart';
 
 class LoginScreen extends StatefulWidget {
+
   @override
   LoginScreenState createState() => LoginScreenState();
 }
@@ -21,6 +21,7 @@ class LoginScreenState extends State<LoginScreen> {
   TextEditingController _emailController = new TextEditingController();
   TextEditingController _passwordController = new TextEditingController();
   SharedPreferences preferences;
+  ProgressDialog pr;
 
   @override
   void initState() {
@@ -31,20 +32,25 @@ class LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
 
+    pr = new ProgressDialog(context);
+    pr.style(
+      message: 'Login ...',
+      borderRadius: 10.0,
+      backgroundColor: Theme.of(context).hoverColor,
+      progressWidget: Container(
+      padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
+      elevation: 10.0,
+      insetAnimCurve: Curves.easeInOut,
+      maxProgress: 100.0,
+      progressTextStyle: TextStyle(
+        color: Colors.red[200], fontSize: 13.0, fontWeight: FontWeight.w400),
+      messageTextStyle: TextStyle(
+        color: Colors.red[200], fontSize: 20.0, fontWeight: FontWeight.w600)
+    );
+
         return Scaffold(
         appBar:AppBar(
           title: Text('LITTLE CAKE STORY'),
-          actions:<Widget> [
-            IconButton(
-              icon: Icon(Icons.brightness_6), 
-              color: Colors.white,
-              onPressed: (){
-                ThemeProvider themeProvider = Provider.of<ThemeProvider>(
-                  context,
-                  listen: false);
-                  themeProvider.swapTheme();
-              })
-          ],
         ),
         body: SingleChildScrollView(
           child:Column(
@@ -129,7 +135,7 @@ class LoginScreenState extends State<LoginScreen> {
                     ),
                     MaterialButton(
                       shape:RoundedRectangleBorder(
-                        borderRadius:BorderRadius.circular(5),
+                        borderRadius:BorderRadius.circular(10),
                       ),
                       minWidth: 360,
                       height: 40,
@@ -167,6 +173,8 @@ class LoginScreenState extends State<LoginScreen> {
   }
                 
   void _onLogin() {
+
+    // pr.show();
 
     String _email = _emailController.text.toString();
     String _password = _passwordController.text.toString();
@@ -232,6 +240,7 @@ class LoginScreenState extends State<LoginScreen> {
       return;
     }
     setState(() {
+      print(_rememberMe);
       _rememberMe=value;
       storePreference(value,_email,_password);
     });
@@ -253,7 +262,7 @@ class LoginScreenState extends State<LoginScreen> {
         fontSize: 16.0
       );
     return;
-    }else{
+    }else{  
       await preferences.setString("email", '');
       await preferences.setString("password", '');
       await preferences.setBool("rememberme", value);
@@ -294,12 +303,12 @@ class LoginScreenState extends State<LoginScreen> {
       context: context, 
       builder: (BuildContext context){
         return AlertDialog(
-          title: Text('Forgot Your Password?'),
+          title: Text('Forgot Your Password?',style: Theme.of(context).textTheme.headline5),
           content: new Container(
             height: 100,
             child: Column(
               children: [
-                Text('Enter your recovery email.'),
+                Text('Enter your recovery email.',style: Theme.of(context).textTheme.bodyText1),
                 TextField(
                   controller: _useremailController,
                   keyboardType: TextInputType.emailAddress,
@@ -312,14 +321,13 @@ class LoginScreenState extends State<LoginScreen> {
           ),
           actions: [
             TextButton(
-              child:(Text('Submit')),
+              child:(Text('Submit',style: Theme.of(context).textTheme.bodyText2)),
               onPressed: (){
-                // print(_useremailController.text);
                 _resetPassword(_useremailController.text.toString());
                 Navigator.of(context).pop();
               },),
             TextButton(
-              child: (Text('Cancel')),
+              child: (Text('Cancel',style: Theme.of(context).textTheme.bodyText2)),
               onPressed: (){
                 Navigator.of(context).pop();
               },),
@@ -333,7 +341,7 @@ class LoginScreenState extends State<LoginScreen> {
     print(emailreset);
 
     http.post(
-      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/forgot_password.php"),
+      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/user_password/forgot_password.php"),
       body: {
         "email":emailreset,
       }).then(

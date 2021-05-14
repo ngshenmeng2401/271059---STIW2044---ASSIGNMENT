@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:little_cake_story/screen/profile/settings/terms_of_service.dart';
+import 'privacy_pilicy_screen.dart';
 
 class AboutScreen extends StatefulWidget {
   @override
@@ -76,17 +78,25 @@ class _AboutScreenState extends State<AboutScreen> {
                               style:TextStyle(fontSize: 14,color: Colors.blue[200]),
                               textAlign: TextAlign.end,
                             ),
-                            onTap: (){},
+                            onTap: (){
+                              Navigator.push(
+                              context,MaterialPageRoute(builder: (context)=>TermsServiceScreen())
+                              );  
+                            },
                           ),
                           GestureDetector(
                             child: Text('Privacy Policy',
                               style:TextStyle(fontSize: 14,color: Colors.blue[200]),
                               textAlign: TextAlign.end,
                             ),
-                            onTap: (){},
+                            onTap: (){
+                              Navigator.push(
+                              context,MaterialPageRoute(builder: (context)=>PrivacyPolicyScreen())
+                              );  
+                            },
                           ),
                           Text("SM bhd",style:TextStyle(fontSize: 14,color: Colors.grey[400]),),
-                          Text("Copyright 2021-2021 Tencent",style:TextStyle(fontSize: 14,color: Colors.grey[400]),),
+                          Text("Copyright© 2021-2021 Tencent",style:TextStyle(fontSize: 14,color: Colors.grey[400]),),
                           Text("All Rights Reserved",style:TextStyle(fontSize: 14,color: Colors.grey[400]),),
                         ]
                       ),
