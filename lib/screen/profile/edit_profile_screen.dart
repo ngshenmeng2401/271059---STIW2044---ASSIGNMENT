@@ -61,7 +61,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       children:[
                         Container(
                           padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
-                          height:screenHeight/5,
+                          height: screenHeight/5,
                           width: screenWidth/4,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
@@ -247,8 +247,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             borderRadius: BorderRadius.all(Radius.circular(10.0))),
           content: new Container(
             padding: EdgeInsets.all(0),
-            width: 250,
-            height: 120,
+            width: screenWidth/4,
+            height: screenHeight/8,
             child: Column(
               children:<Widget> [
                 ListTile(

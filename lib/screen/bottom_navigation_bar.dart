@@ -24,7 +24,7 @@ class BottomNavigationWidgetState extends State<BottomNavigationWidget> {
     list = [
       HomeScreen(),
       SearchScreen(),
-      CartScreen(),
+      CartScreen(user: widget.user,),
       ProfileScreen(user: widget.user,)
     ];
     super.initState();

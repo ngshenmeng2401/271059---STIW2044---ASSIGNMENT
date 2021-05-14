@@ -10,6 +10,7 @@ class AddAddressScreen extends StatefulWidget {
   final User user;
 
   const AddAddressScreen({Key key, this.user}) : super(key: key);
+  
 
   @override
   _AddAddressScreenState createState() => _AddAddressScreenState();
@@ -22,6 +23,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
   TextEditingController _postCodeController = new TextEditingController();
   TextEditingController _cityController = new TextEditingController();
   TextEditingController _stateController = new TextEditingController();
+  double screenHeight, screenWidth;
 
   static final CameraPosition _initialCameraPosition = CameraPosition(
     target: LatLng(6.457510, 100.505455),
@@ -38,6 +40,9 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    screenHeight = MediaQuery.of(context).size.height;
+    screenWidth = MediaQuery.of(context).size.width;
     
         return Scaffold(
           appBar:AppBar(
@@ -55,7 +60,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
             child:Column(
               children:[
                 Container(
-                  height: 300,
+                  height: screenHeight/2.3,
                   color:Colors.white,
                   child: Stack(
                     children: [
@@ -112,10 +117,10 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                       SizedBox(height:15),
                       MaterialButton(
                         shape:RoundedRectangleBorder(
-                          borderRadius:BorderRadius.circular(10),
+                          borderRadius:BorderRadius.circular(20),
                         ),
-                        minWidth: 370,
-                        height: 40,
+                        minWidth: screenWidth/1.1,
+                        height: screenHeight/18,
                         child: Text('Submit',
                         style: TextStyle(fontSize: 18,color: Colors.white,fontFamily: 'Arial'),),
                         onPressed: _addAddress,

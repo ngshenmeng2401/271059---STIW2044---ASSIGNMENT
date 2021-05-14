@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:little_cake_story/model/user.dart';
+import 'package:little_cake_story/screen/profile/payment/payment_selection.dart';
 import '../login_screen.dart';
 import 'settings/setting_screen.dart';
 import 'edit_profile_screen.dart';
@@ -127,7 +128,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ProfileMenu(
                           icon: Icon(Icons.payment),
                           text: "Payment",
-                          press: (){},
+                          press: (){
+                            Navigator.pushReplacement(
+                              context,MaterialPageRoute(builder: (context)=>PaymentSelectionScreen(user: widget.user,))
+                            );
+                          },
                         ), 
                         ProfileMenu(
                           icon: Icon(Icons.history),

@@ -22,6 +22,7 @@ class LoginScreenState extends State<LoginScreen> {
   TextEditingController _passwordController = new TextEditingController();
   SharedPreferences preferences;
   ProgressDialog pr;
+  double screenHeight, screenWidth;
 
   @override
   void initState() {
@@ -32,6 +33,8 @@ class LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
 
+    screenHeight = MediaQuery.of(context).size.height;
+    screenWidth = MediaQuery.of(context).size.width;
     pr = new ProgressDialog(context);
     pr.style(
       message: 'Login ...',
@@ -137,8 +140,8 @@ class LoginScreenState extends State<LoginScreen> {
                       shape:RoundedRectangleBorder(
                         borderRadius:BorderRadius.circular(10),
                       ),
-                      minWidth: 360,
-                      height: 40,
+                      minWidth: screenWidth/1.1,
+                      height: screenHeight/18,
                       child: Text('Login',
                       style: TextStyle(fontSize: 18,color: Colors.white,fontFamily: 'Arial'),),
                       onPressed: (){
@@ -305,7 +308,7 @@ class LoginScreenState extends State<LoginScreen> {
         return AlertDialog(
           title: Text('Forgot Your Password?',style: Theme.of(context).textTheme.headline5),
           content: new Container(
-            height: 100,
+            height: screenHeight/8,
             child: Column(
               children: [
                 Text('Enter your recovery email.',style: Theme.of(context).textTheme.bodyText1),

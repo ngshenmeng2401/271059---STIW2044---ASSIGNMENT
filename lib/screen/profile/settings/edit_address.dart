@@ -25,10 +25,13 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
   TextEditingController _cityController = new TextEditingController();
   TextEditingController _stateController = new TextEditingController();
   ProgressDialog pr;
+  double screenHeight, screenWidth;
 
   @override
   Widget build(BuildContext context) {
 
+    screenHeight = MediaQuery.of(context).size.height;
+    screenWidth = MediaQuery.of(context).size.width;
     pr = new ProgressDialog(context);
     pr.style(
       message: 'Updating ...',
@@ -96,10 +99,10 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                   MaterialButton(
                     shape:RoundedRectangleBorder(
                     side: BorderSide(color: Theme.of(context).highlightColor),
-                    borderRadius:BorderRadius.circular(10),
+                    borderRadius:BorderRadius.circular(20),
                     ),
-                    minWidth: 370,
-                    height: 40,
+                    minWidth: screenWidth/1.1,
+                    height: screenHeight/18,
                     child: Text('Delete',
                     style: TextStyle(fontSize: 18,color: Colors.red[200],fontFamily: 'Arial'),),
                     onPressed: (){
@@ -110,10 +113,10 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                   SizedBox(height:20),
                   MaterialButton(
                     shape:RoundedRectangleBorder(
-                    borderRadius:BorderRadius.circular(10),
+                    borderRadius:BorderRadius.circular(20),
                     ),
-                    minWidth: 370,
-                    height: 40,
+                    minWidth: screenWidth/1.1,
+                    height: screenHeight/18,
                     child: Text('Upload',
                     style: TextStyle(fontSize: 18,color: Colors.white,fontFamily: 'Arial'),),
                     onPressed:  (){

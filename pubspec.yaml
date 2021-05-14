@@ -42,6 +42,7 @@ dependencies:
   progress_dialog: ^1.2.4
   provider: ^5.0.0
   shared_preferences: ^2.0.5
+  url_launcher: ^6.0.3
 
 dev_dependencies:
   flutter_test:

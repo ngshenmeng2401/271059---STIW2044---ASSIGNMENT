@@ -19,9 +19,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   TextEditingController _passwordController = new TextEditingController();
   TextEditingController _confirmPasswordController = new TextEditingController();
   bool hiddenPassword1 = true , hiddenPassword2 = true;
+  double screenHeight, screenWidth;
 
   @override
   Widget build(BuildContext context) {
+
+    screenHeight = MediaQuery.of(context).size.height;
+    screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       appBar:AppBar(
@@ -162,8 +166,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     shape:RoundedRectangleBorder(
                       borderRadius:BorderRadius.circular(10),
                     ),
-                    minWidth: 360,
-                    height: 40,
+                    minWidth: screenWidth/1.1,
+                    height: screenHeight/18,
                     child: Text('Create Account',
                     style: TextStyle(fontSize: 18,color: Colors.white,fontFamily: 'Arial'),),
                     onPressed: _onRegister,
