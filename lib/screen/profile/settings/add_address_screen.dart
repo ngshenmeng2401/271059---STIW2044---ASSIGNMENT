@@ -48,13 +48,13 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
           appBar:AppBar(
             title: Text('Insert Address',style: TextStyle(fontFamily: 'Arial')),
             leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: (){
-            Navigator.pushReplacement(
-              context,MaterialPageRoute(builder: (context)=>ManageAddressScreen(user: widget.user))
-            );
-          },
-        ),
+              icon: Icon(Icons.arrow_back),
+              onPressed: (){
+                Navigator.pushReplacement(
+                  context,MaterialPageRoute(builder: (context)=>ManageAddressScreen(user: widget.user))
+                );
+              },
+            ),
           ),
           body:SingleChildScrollView(
             child:Column(
@@ -207,13 +207,13 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
           content: Text("Are you sure?",style: Theme.of(context).textTheme.bodyText1),
           actions: [
             TextButton(
-              child:(Text('Ok',style: Theme.of(context).textTheme.bodyText2)),
+              child:(Text('Yes',style: Theme.of(context).textTheme.bodyText2)),
               onPressed: (){
                 _addAddressDatabase(_streetAddress,_postalCode,_city,_state,email);
                 Navigator.of(context).pop();
               },),
             TextButton(
-              child: (Text('Cancel',style: Theme.of(context).textTheme.bodyText2)),
+              child: (Text('No',style: Theme.of(context).textTheme.bodyText2)),
               onPressed: (){
                 Navigator.of(context).pop();
               },),
@@ -226,7 +226,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
   void _addAddressDatabase(String streetAddress, String postalCode, String city, String state, String email) {
 
     http.post(
-      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/user_address/add_useraddress.php"),
+      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/add_address.php"),
       body: {
         "streetAddress":streetAddress,
         "postalCode":postalCode,

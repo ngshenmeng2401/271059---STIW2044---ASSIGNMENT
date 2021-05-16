@@ -48,7 +48,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             Container(
               alignment: Alignment.center,
               height: screenHeight/2.35,
-              // color:Colors.white10,
               child:Stack(
                 children: [
                   Align(

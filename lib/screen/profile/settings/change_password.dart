@@ -62,99 +62,110 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         ),
                         SizedBox(height: 40),
                         Container(
-                          padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                          child: Column(children: [
-                            TextField(
-                              controller: _currentpasswordController,
-                              decoration: InputDecoration(
-                                  icon: Icon(
-                                    Icons.lock,
-                                    color: Colors.red[200],
-                                  ),
-                                  labelText: 'Current Password',
-                                  labelStyle: TextStyle(
-                                      fontSize: 18, fontFamily: 'Calibri'),
-                                  suffixIcon: GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          hiddenPassword1 = !hiddenPassword1;
-                                        });
-                                      },
-                                      child: Icon(hiddenPassword1
-                                          ? Icons.visibility_off
-                                          : Icons.visibility))),
-                              obscureText: hiddenPassword1,
+                          margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(10),
                             ),
-                            SizedBox(height: 20),
-                            TextField(
-                              controller: _newpasswordController,
-                              decoration: InputDecoration(
-                                  icon: Icon(
-                                    Icons.lock,
-                                    color: Colors.red[200],
-                                  ),
-                                  labelText: 'New Password',
-                                  labelStyle: TextStyle(
-                                      fontSize: 18, fontFamily: 'Calibri'),
-                                  suffixIcon: GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          hiddenPassword2 = !hiddenPassword2;
-                                        });
-                                      },
-                                      child: Icon(hiddenPassword2
-                                          ? Icons.visibility_off
-                                          : Icons.visibility))),
-                              obscureText: hiddenPassword2,
-                              onChanged: (value) {
-                                setState(() {});
-                              },
-                            ),
-                            Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(40, 20, 0, 0),
-                                child: FlutterPasswordStrength(
-                                  password: _newpasswordController.text,
-                                  strengthCallback: (strength) {
-                                    debugPrint(strength.toString());
-                                  },
-                                )),
-                            SizedBox(height: 20),
-                            TextField(
-                              controller: _confirmPasswordController,
-                              decoration: InputDecoration(
-                                  icon: Icon(
-                                    Icons.lock,
-                                    color: Colors.red[200],
-                                  ),
-                                  labelText: 'Confirm Password',
-                                  labelStyle: TextStyle(
-                                      fontSize: 18, fontFamily: 'Calibri'),
-                                  suffixIcon: GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          hiddenPassword3 = !hiddenPassword3;
-                                        });
-                                      },
-                                      child: Icon(hiddenPassword3
-                                          ? Icons.visibility_off
-                                          : Icons.visibility))),
-                              obscureText: hiddenPassword3,
-                              onChanged: (value) {
-                                setState(() {});
-                              },
-                            ),
-                            Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(40, 20, 0, 0),
-                                child: FlutterPasswordStrength(
-                                  password: _confirmPasswordController.text,
-                                  strengthCallback: (strength) {
-                                    debugPrint(strength.toString());
-                                  },
-                                )),
-                            SizedBox(height: 20),
-                          ]),
+                            border:Border.all(
+                              color:Colors.red[200],
+                            )
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            child: Column(
+                              children: [
+                              TextField(
+                                controller: _currentpasswordController,
+                                decoration: InputDecoration(
+                                    icon: Icon(
+                                      Icons.lock,
+                                      color: Colors.red[200],
+                                    ),
+                                    labelText: 'Current Password',
+                                    labelStyle: TextStyle(
+                                        fontSize: 18, fontFamily: 'Calibri'),
+                                    suffixIcon: GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            hiddenPassword1 = !hiddenPassword1;
+                                          });
+                                        },
+                                        child: Icon(hiddenPassword1
+                                            ? Icons.visibility_off
+                                            : Icons.visibility))),
+                                obscureText: hiddenPassword1,
+                              ),
+                              SizedBox(height: 20),
+                              TextField(
+                                controller: _newpasswordController,
+                                decoration: InputDecoration(
+                                    icon: Icon(
+                                      Icons.lock,
+                                      color: Colors.red[200],
+                                    ),
+                                    labelText: 'New Password',
+                                    labelStyle: TextStyle(
+                                        fontSize: 18, fontFamily: 'Calibri'),
+                                    suffixIcon: GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            hiddenPassword2 = !hiddenPassword2;
+                                          });
+                                        },
+                                        child: Icon(hiddenPassword2
+                                            ? Icons.visibility_off
+                                            : Icons.visibility))),
+                                obscureText: hiddenPassword2,
+                                onChanged: (value) {
+                                  setState(() {});
+                                },
+                              ),
+                              Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(40, 20, 0, 0),
+                                  child: FlutterPasswordStrength(
+                                    password: _newpasswordController.text,
+                                    strengthCallback: (strength) {
+                                      debugPrint(strength.toString());
+                                    },
+                                  )),
+                              SizedBox(height: 20),
+                              TextField(
+                                controller: _confirmPasswordController,
+                                decoration: InputDecoration(
+                                    icon: Icon(
+                                      Icons.lock,
+                                      color: Colors.red[200],
+                                    ),
+                                    labelText: 'Confirm Password',
+                                    labelStyle: TextStyle(
+                                        fontSize: 18, fontFamily: 'Calibri'),
+                                    suffixIcon: GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            hiddenPassword3 = !hiddenPassword3;
+                                          });
+                                        },
+                                        child: Icon(hiddenPassword3
+                                            ? Icons.visibility_off
+                                            : Icons.visibility))),
+                                obscureText: hiddenPassword3,
+                                onChanged: (value) {
+                                  setState(() {});
+                                },
+                              ),
+                              Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(40, 20, 0, 0),
+                                  child: FlutterPasswordStrength(
+                                    password: _confirmPasswordController.text,
+                                    strengthCallback: (strength) {
+                                      debugPrint(strength.toString());
+                                    },
+                                  )),
+                              SizedBox(height: 20),
+                            ]),
+                          ),
                         ),
                       ])),
               SizedBox(height:30),
@@ -308,7 +319,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
     http.post(
         Uri.parse(
-            "https://javathree99.com/s271059/littlecakestory/php/user_password/resetpassword_user.php"),
+            "https://javathree99.com/s271059/littlecakestory/php/resetpassword_user.php"),
         body: {
           "email": email,
           "newpassword": newpassword,

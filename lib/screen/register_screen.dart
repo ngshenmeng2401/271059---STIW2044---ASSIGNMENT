@@ -166,7 +166,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     shape:RoundedRectangleBorder(
                       borderRadius:BorderRadius.circular(10),
                     ),
-                    minWidth: screenWidth/1.1,
+                    minWidth: screenWidth/1.15,
                     height: screenHeight/18,
                     child: Text('Create Account',
                     style: TextStyle(fontSize: 18,color: Colors.white,fontFamily: 'Arial'),),

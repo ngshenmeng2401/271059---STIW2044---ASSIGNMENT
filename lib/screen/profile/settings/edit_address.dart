@@ -117,7 +117,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                     ),
                     minWidth: screenWidth/1.1,
                     height: screenHeight/18,
-                    child: Text('Upload',
+                    child: Text('Update',
                     style: TextStyle(fontSize: 18,color: Colors.white,fontFamily: 'Arial'),),
                     onPressed:  (){
                       _onUpdate();
@@ -168,7 +168,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
     print(addressNo);
 
     http.post(
-      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/user_address/delete_address.php"),
+      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/delete_address.php"),
       body: {
         "addressno":widget.addressList.addressNo,
       }).then(
@@ -330,7 +330,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
 
     setState(() {
       http.post(
-      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/user_address/update_address.php"),
+      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/edit_address.php"),
       body: {
         "addressno":widget.addressList.addressNo,
         "streetAddress":streetAddress,

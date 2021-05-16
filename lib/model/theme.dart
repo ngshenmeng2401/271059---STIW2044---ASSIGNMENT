@@ -58,7 +58,7 @@ class CustomTheme {
         hoverColor:Colors.grey[800], 
         dividerTheme: DividerThemeData(
           thickness: 1.2,
-          color: Colors.white,
+          color: Colors.white54,
         )
         
       );

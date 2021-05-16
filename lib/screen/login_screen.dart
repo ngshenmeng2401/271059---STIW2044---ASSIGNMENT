@@ -140,7 +140,7 @@ class LoginScreenState extends State<LoginScreen> {
                       shape:RoundedRectangleBorder(
                         borderRadius:BorderRadius.circular(10),
                       ),
-                      minWidth: screenWidth/1.1,
+                      minWidth: screenWidth/1.15,
                       height: screenHeight/18,
                       child: Text('Login',
                       style: TextStyle(fontSize: 18,color: Colors.white,fontFamily: 'Arial'),),
@@ -344,7 +344,7 @@ class LoginScreenState extends State<LoginScreen> {
     print(emailreset);
 
     http.post(
-      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/user_password/forgot_password.php"),
+      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/forgot_password.php"),
       body: {
         "email":emailreset,
       }).then(

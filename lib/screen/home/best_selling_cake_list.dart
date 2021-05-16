@@ -25,17 +25,17 @@ class BestSellingCakeList extends StatelessWidget {
               tag:productList[index].code,
               child: InkWell(
                 onTap: (){
-              Navigator.push(
-                context,MaterialPageRoute(builder: (context)=>ProductDetailsScreen(
+                  Navigator.push(
+                    context,MaterialPageRoute(builder: (context)=>ProductDetailsScreen(
 
-                  product_code: productList[index].code,
-                  product_name: productList[index].name,
-                  product_picture: productList[index].image,
-                  product_old_price: productList[index].oldprice.round(),
-                  product_new_price: productList[index].newprice.round(),
-                ))
-              );
-            },
+                      product_code: productList[index].code,
+                      product_name: productList[index].name,
+                      product_picture: productList[index].image,
+                      product_old_price: productList[index].oldprice.round(),
+                      product_new_price: productList[index].newprice.round(),
+                    ))
+                  );
+                },
                 child: Container(
                   height: 260,
                   width: 150,

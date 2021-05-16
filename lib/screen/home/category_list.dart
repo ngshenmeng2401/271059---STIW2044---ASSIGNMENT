@@ -12,7 +12,8 @@ class HorizontalList extends StatelessWidget {
           Category(
             image_location:'assets/images/birthday-cake.png',
             image_caption: 'Cake',
-            press: (){},
+            press: (){
+            },
           ),
           Category(
             image_location:'assets/images/bento-cake.png',

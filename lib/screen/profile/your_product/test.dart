@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:little_cake_story/model/user.dart';
 import 'package:little_cake_story/screen/profile/your_product/cup_cake_list.dart';
-import 'package:little_cake_story/screen/profile/your_product/puffs_list.dart';
+import 'package:little_cake_story/screen/profile/your_product/puff_list.dart';
 import 'package:little_cake_story/screen/profile/your_product/tarts_list.dart';
 import 'cake_list.dart';
 import 'bento_cake_list.dart';
 
 class ProductDashboardScreen extends StatefulWidget {
+
+  final User user;
+
+  const ProductDashboardScreen({Key key, this.user}) : super(key: key);
+
   @override
   _ProductDashboardScreenState createState() => _ProductDashboardScreenState();
 }
@@ -29,7 +35,7 @@ class _ProductDashboardScreenState extends State<ProductDashboardScreen> {
               GestureDetector(
                 onTap: (){
                   Navigator.push(
-                    context, MaterialPageRoute(builder: (context)=>CakeListScreen())
+                    context, MaterialPageRoute(builder: (context)=>CakeListScreen(user: widget.user,))
                   );
                 },
                 child: Container(
@@ -64,7 +70,7 @@ class _ProductDashboardScreenState extends State<ProductDashboardScreen> {
               GestureDetector(
                 onTap: (){
                   Navigator.push(
-                    context, MaterialPageRoute(builder: (context)=>BentoCakeListScreen())
+                    context, MaterialPageRoute(builder: (context)=>BentoCakeListScreen(user: widget.user,))
                   );
                 },
                 child: Container(
@@ -99,7 +105,7 @@ class _ProductDashboardScreenState extends State<ProductDashboardScreen> {
               GestureDetector(
                 onTap: (){
                   Navigator.push(
-                    context, MaterialPageRoute(builder: (context)=>CupCakeListScreen())
+                    context, MaterialPageRoute(builder: (context)=>CupCakeListScreen(user: widget.user,))
                   );
                 },
                 child: Container(
@@ -134,7 +140,7 @@ class _ProductDashboardScreenState extends State<ProductDashboardScreen> {
               GestureDetector(
                 onTap: (){
                   Navigator.push(
-                    context, MaterialPageRoute(builder: (context)=>TartsListScreen())
+                    context, MaterialPageRoute(builder: (context)=>TartsListScreen(user: widget.user,))
                   );
                 },
                 child: Container(
@@ -169,7 +175,7 @@ class _ProductDashboardScreenState extends State<ProductDashboardScreen> {
               GestureDetector(
                 onTap: (){
                   Navigator.push(
-                    context, MaterialPageRoute(builder: (context)=>PuffsListScreen())
+                    context, MaterialPageRoute(builder: (context)=>PuffsListScreen(user: widget.user,))
                   );
                 },
                 child: Container(

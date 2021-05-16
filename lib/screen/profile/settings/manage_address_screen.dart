@@ -61,7 +61,8 @@ class _ManageAddressScreenState extends State<ManageAddressScreen> {
       body: SingleChildScrollView(
         child: Center(
           child: Container(
-            height: 600,
+            height: screenHeight,
+            width: screenWidth,
             child:Column(
               children:[
                 useraddressList == null 
@@ -123,7 +124,7 @@ class _ManageAddressScreenState extends State<ManageAddressScreen> {
   void _loadAddress() {
 
     http.post(
-      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/user_address/load_address.php"),
+      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/load_address.php"),
       body: {
         "email":widget.user.email,
       }).then(
@@ -155,7 +156,5 @@ class _ManageAddressScreenState extends State<ManageAddressScreen> {
     Navigator.pushReplacement(
       context,MaterialPageRoute(builder: (context)=> EditAddressScreen(addressList: addressList,user: widget.user,))
     );
-
-    // _loadAddress();
   }
 }

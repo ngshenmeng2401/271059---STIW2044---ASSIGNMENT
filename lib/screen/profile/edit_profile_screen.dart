@@ -248,7 +248,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           content: new Container(
             padding: EdgeInsets.all(0),
             width: screenWidth/4,
-            height: screenHeight/8,
+            height: screenHeight/5.5,
             child: Column(
               children:<Widget> [
                 ListTile(
@@ -344,7 +344,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
     setState(() {
       http.post(
-      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/update_profile.php"),
+      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/edit_profile.php"),
       body: {
         "email":email,
         "firstname":firstname,

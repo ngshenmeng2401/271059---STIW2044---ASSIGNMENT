@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:little_cake_story/model/user.dart';
 import 'package:little_cake_story/screen/profile/payment/payment_selection.dart';
+import 'package:little_cake_story/screen/profile/your_product/product_dashboard.dart';
 import '../login_screen.dart';
 import 'settings/setting_screen.dart';
 import 'edit_profile_screen.dart';
-import 'your_product/product_list_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   
@@ -22,7 +22,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   double screenHeight, screenWidth;
   String pathAsset='assets/images/profile.png';
   File _image;
-  TextEditingController _descCtrl = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +115,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           text: "Your Product",
                           press: (){
                             Navigator.push(
-                              context, MaterialPageRoute(builder: (context)=>ProductDashboardScreen())
+                              context, MaterialPageRoute(builder: (context)=>ProductMenu(user: widget.user,))
                             );
                           },
                         ),
