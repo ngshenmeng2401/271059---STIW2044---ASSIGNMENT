@@ -1,25 +1,26 @@
 import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:little_cake_story/model/tart_list.dart';
+import 'package:little_cake_story/model/cup_cake.dart';
 import 'package:little_cake_story/model/user.dart';
-import 'package:little_cake_story/screen/profile/your_product/tart_details.dart';
-import 'add_tart_screen.dart';
+import 'add_cup_cake_screen.dart';
+import 'my_cup_cake_details.dart';
 
-class TartsListScreen extends StatefulWidget {
+class MyCupCakeListScreen extends StatefulWidget {
 
   final User user;
-  final TartList tartList;
-  const TartsListScreen({Key key, this.user, this.tartList}) : super(key: key);
+  final CupCakeList cupCakeList;
+  const MyCupCakeListScreen({Key key, this.user, this.cupCakeList}) : super(key: key);
 
   @override
-  _TartsListScreenState createState() => _TartsListScreenState();
+  _MyCupCakeListScreenState createState() => _MyCupCakeListScreenState();
 }
 
-class _TartsListScreenState extends State<TartsListScreen> {
+class _MyCupCakeListScreenState extends State<MyCupCakeListScreen> {
 
-  List _tartList;
+  List _cupCakeList;
   String titleCenter = "Loading...";
   double screenHeight, screenWidth;
 
@@ -27,7 +28,7 @@ class _TartsListScreenState extends State<TartsListScreen> {
   void initState() {
 
     super.initState();
-    _loadTarts();
+    _loadMyCupCake();
   }
 
   @override
@@ -38,14 +39,14 @@ class _TartsListScreenState extends State<TartsListScreen> {
 
     return Scaffold(
       appBar:AppBar(
-        title: Text('Tarts',style: TextStyle(fontFamily: 'Arial')),
+        title: Text('Cup Cakes',style: TextStyle(fontFamily: 'Arial')),
         actions: [
           IconButton(
               icon: Icon(Icons.add), 
               color: Colors.white,
               onPressed: (){
                 Navigator.pushReplacement(
-                  context, MaterialPageRoute(builder: (context)=>AddTartScreen(user: widget.user,))
+                  context, MaterialPageRoute(builder: (context)=>AddCupCakeScreen(user: widget.user,))
                 );
           }),
         ],
@@ -53,7 +54,7 @@ class _TartsListScreenState extends State<TartsListScreen> {
       body: Center(
         child: Column(
           children: [
-            _tartList == null 
+            _cupCakeList == null 
             ? Flexible(
                 child: Center(
                   child: Text(titleCenter)),
@@ -63,7 +64,7 @@ class _TartsListScreenState extends State<TartsListScreen> {
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                     child: GridView.builder(
-                      itemCount: _tartList.length,
+                      itemCount: _cupCakeList.length,
                       gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                         mainAxisSpacing: 5,
@@ -73,7 +74,7 @@ class _TartsListScreenState extends State<TartsListScreen> {
                           return Card(
                             child: InkWell(
                               onTap: (){
-                                _tartDetails(index);
+                                _cupCakeDetails(index);
                               },
                               child: Container(
                                 decoration: BoxDecoration(
@@ -95,14 +96,14 @@ class _TartsListScreenState extends State<TartsListScreen> {
                                       topLeft:Radius.circular(10),
                                       topRight:Radius.circular(10),),
                                       child: CachedNetworkImage(
-                                        imageUrl: "https://javathree99.com/s271059/littlecakestory/images/product_tart/${_tartList[index]['tart_no']}.png",
+                                        imageUrl: "https://javathree99.com/s271059/littlecakestory/images/product_cup_cake/${_cupCakeList[index]['cup_cake_no']}.png",
                                         height: 185,
                                         width: 185,)),
                                     Row(
                                       children:[
                                         Padding(
                                         padding: const EdgeInsets.fromLTRB(5, 15, 5, 0),
-                                        child: Text(_tartList[index]['tart_name'],
+                                        child: Text(_cupCakeList[index]['cup_cake_name'],
                                             overflow: TextOverflow.ellipsis,
                                             textAlign: TextAlign.left,
                                             style: Theme.of(context).appBarTheme.textTheme.headline2),
@@ -114,11 +115,15 @@ class _TartsListScreenState extends State<TartsListScreen> {
                                       children: [
                                         Padding(
                                           padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                          child: Text("RM${_tartList[index]['original_price']}",
+                                          child: Text(_cupCakeList[index]['offered_price'] == "0"
+                                            ? "RM${_cupCakeList[index]['original_price']}"
+                                            : "RM${_cupCakeList[index]['offered_price']}",
                                           style: TextStyle(fontSize:16,),),
                                         ),
                                         SizedBox(width:10),
-                                        Text("RM${_tartList[index]['original_price']}",
+                                        Text(_cupCakeList[index]['offered_price'] == "0"
+                                            ? ""
+                                            : "RM${_cupCakeList[index]['original_price']}",
                                           style: Theme.of(context).appBarTheme.textTheme.headline3,)
                                       ],),
                                     SizedBox(height:6),
@@ -126,7 +131,7 @@ class _TartsListScreenState extends State<TartsListScreen> {
                                       children: [
                                         Padding(
                                           padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                          child: Text(_tartList[index]['rating'],
+                                          child: Text(_cupCakeList[index]['rating'],
                                           style: TextStyle(fontSize:12,color: Colors.orange),),
                                         ),
                                         SizedBox(width: 5),
@@ -143,7 +148,7 @@ class _TartsListScreenState extends State<TartsListScreen> {
                             ),
                           );
                         },
-                ),
+                    ),
                   ),
               )
             )
@@ -153,10 +158,10 @@ class _TartsListScreenState extends State<TartsListScreen> {
     );
   }
 
-  void _loadTarts() {
+  void _loadMyCupCake() {
 
     http.post(
-      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/load_tart.php"),
+      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/load_my_cup_cake.php"),
       body: {
         "email":widget.user.email,
       }).then(
@@ -166,28 +171,28 @@ class _TartsListScreenState extends State<TartsListScreen> {
             return;
           }else{
             var jsondata = json.decode(response.body);
-            _tartList = jsondata["tart"];
+            _cupCakeList = jsondata["cupcake"];
             titleCenter = "Contain Data";
             setState(() {});
-            print(_tartList);
+            print(_cupCakeList);
           }
       }
     );
   }
 
-  void _tartDetails(int index) {
-    print(_tartList[index]['tart_no']);
-    TartList tartList = new TartList(
-      tartNo: _tartList[index]['tart_no'],
-      tartName: _tartList[index]['tart_name'],
-      oriPrice: _tartList[index]['original_price'],
-      offeredPrice: _tartList[index]['offered_price'],
-      rating: _tartList[index]['rating'],
-      details: _tartList[index]['tart_detail'],
+  void _cupCakeDetails(int index) {
+    print(_cupCakeList[index]['cup_cake_no']);
+    CupCakeList cupCakeList = new CupCakeList(
+      cupCakeNo: _cupCakeList[index]['cup_cake_no'],
+      cupCakeName: _cupCakeList[index]['cup_cake_name'],
+      oriPrice: _cupCakeList[index]['original_price'],
+      offeredPrice: _cupCakeList[index]['offered_price'],
+      rating: _cupCakeList[index]['rating'],
+      details: _cupCakeList[index]['cup_cake_detail'],
     );
 
     Navigator.pushReplacement(
-      context,MaterialPageRoute(builder: (context)=> TartDetails(tartList: tartList,user: widget.user,))
+      context,MaterialPageRoute(builder: (context)=> MyCupCakeDetails(cupCakeList:cupCakeList,user: widget.user,))
     );
   }
 }

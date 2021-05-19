@@ -2,24 +2,24 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:little_cake_story/model/bento_cake_list.dart';
+import 'package:little_cake_story/model/tart.dart';
 import 'package:little_cake_story/model/user.dart';
-import 'package:little_cake_story/screen/profile/your_product/bento_cake_details.dart';
-import 'add_bento_cake_screen.dart';
+import 'package:little_cake_story/screen/profile/my_product/my_tart_details.dart';
+import 'add_tart_screen.dart';
 
-class BentoCakeListScreen extends StatefulWidget {
+class MyTartsListScreen extends StatefulWidget {
 
-  final BentoCakeList bentoCakeList;
   final User user;
-  const BentoCakeListScreen({Key key,this.user, this.bentoCakeList}):super(key: key);
+  final TartList tartList;
+  const MyTartsListScreen({Key key, this.user, this.tartList}) : super(key: key);
 
   @override
-  _BentoCakeListScreenState createState() => _BentoCakeListScreenState();
+  _MyTartsListScreenState createState() => _MyTartsListScreenState();
 }
 
-class _BentoCakeListScreenState extends State<BentoCakeListScreen> {
+class _MyTartsListScreenState extends State<MyTartsListScreen> {
 
-  List _bentoCakeList;
+  List _tartList;
   String titleCenter = "Loading...";
   double screenHeight, screenWidth;
 
@@ -27,7 +27,7 @@ class _BentoCakeListScreenState extends State<BentoCakeListScreen> {
   void initState() {
 
     super.initState();
-    _loadBentoCake();
+    _loadMyTarts();
   }
 
   @override
@@ -38,14 +38,14 @@ class _BentoCakeListScreenState extends State<BentoCakeListScreen> {
 
     return Scaffold(
       appBar:AppBar(
-        title: Text('Bento Cakes',style: TextStyle(fontFamily: 'Arial')),
+        title: Text('Tarts',style: TextStyle(fontFamily: 'Arial')),
         actions: [
           IconButton(
               icon: Icon(Icons.add), 
               color: Colors.white,
               onPressed: (){
                 Navigator.pushReplacement(
-                  context, MaterialPageRoute(builder: (context)=>AddBentoCakeScreen(user: widget.user,))
+                  context, MaterialPageRoute(builder: (context)=>AddTartScreen(user: widget.user,))
                 );
           }),
         ],
@@ -53,7 +53,7 @@ class _BentoCakeListScreenState extends State<BentoCakeListScreen> {
       body: Center(
         child: Column(
           children: [
-            _bentoCakeList == null 
+            _tartList == null 
             ? Flexible(
                 child: Center(
                   child: Text(titleCenter)),
@@ -63,7 +63,7 @@ class _BentoCakeListScreenState extends State<BentoCakeListScreen> {
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                     child: GridView.builder(
-                      itemCount: _bentoCakeList.length,
+                      itemCount: _tartList.length,
                       gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                         mainAxisSpacing: 5,
@@ -73,7 +73,7 @@ class _BentoCakeListScreenState extends State<BentoCakeListScreen> {
                           return Card(
                             child: InkWell(
                               onTap: (){
-                                _bentoCakeDetails(index);
+                                _tartDetails(index);
                               },
                               child: Container(
                                 decoration: BoxDecoration(
@@ -95,14 +95,14 @@ class _BentoCakeListScreenState extends State<BentoCakeListScreen> {
                                       topLeft:Radius.circular(10),
                                       topRight:Radius.circular(10),),
                                       child: CachedNetworkImage(
-                                        imageUrl: "https://javathree99.com/s271059/littlecakestory/images/product_bento_cake/${_bentoCakeList[index]['bento_cake_no']}.png",
+                                        imageUrl: "https://javathree99.com/s271059/littlecakestory/images/product_tart/${_tartList[index]['tart_no']}.png",
                                         height: 185,
                                         width: 185,)),
                                     Row(
                                       children:[
                                         Padding(
                                         padding: const EdgeInsets.fromLTRB(5, 15, 5, 0),
-                                        child: Text(_bentoCakeList[index]['bento_cake_name'],
+                                        child: Text(_tartList[index]['tart_name'],
                                             overflow: TextOverflow.ellipsis,
                                             textAlign: TextAlign.left,
                                             style: Theme.of(context).appBarTheme.textTheme.headline2),
@@ -114,11 +114,15 @@ class _BentoCakeListScreenState extends State<BentoCakeListScreen> {
                                       children: [
                                         Padding(
                                           padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                          child: Text("RM${_bentoCakeList[index]['original_price']}",
+                                          child: Text(_tartList[index]['offered_price'] == "0"
+                                            ? "RM${_tartList[index]['original_price']}"
+                                            : "RM${_tartList[index]['offered_price']}",
                                           style: TextStyle(fontSize:16,),),
                                         ),
                                         SizedBox(width:10),
-                                        Text("RM${_bentoCakeList[index]['original_price']}",
+                                        Text(_tartList[index]['offered_price'] == "0"
+                                            ? ""
+                                            : "RM${_tartList[index]['original_price']}",
                                           style: Theme.of(context).appBarTheme.textTheme.headline3,)
                                       ],),
                                     SizedBox(height:6),
@@ -126,7 +130,7 @@ class _BentoCakeListScreenState extends State<BentoCakeListScreen> {
                                       children: [
                                         Padding(
                                           padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                          child: Text(_bentoCakeList[index]['rating'],
+                                          child: Text(_tartList[index]['rating'],
                                           style: TextStyle(fontSize:12,color: Colors.orange),),
                                         ),
                                         SizedBox(width: 5),
@@ -153,10 +157,10 @@ class _BentoCakeListScreenState extends State<BentoCakeListScreen> {
     );
   }
 
-  void _loadBentoCake() {
+  void _loadMyTarts() {
 
     http.post(
-      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/load_bento_cake.php"),
+      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/load_my_tart.php"),
       body: {
         "email":widget.user.email,
       }).then(
@@ -166,28 +170,28 @@ class _BentoCakeListScreenState extends State<BentoCakeListScreen> {
             return;
           }else{
             var jsondata = json.decode(response.body);
-            _bentoCakeList = jsondata["bentocake"];
+            _tartList = jsondata["tart"];
             titleCenter = "Contain Data";
             setState(() {});
-            print(_bentoCakeList);
+            print(_tartList);
           }
       }
     );
   }
 
-  void _bentoCakeDetails(int index) {
-    print(_bentoCakeList[index]['bento_cake_no']);
-    BentoCakeList bentoCakeList = new BentoCakeList(
-      bentoCakeNo: _bentoCakeList[index]['bento_cake_no'],
-      bentoCakeName: _bentoCakeList[index]['bento_cake_name'],
-      oriPrice: _bentoCakeList[index]['original_price'],
-      offeredPrice: _bentoCakeList[index]['offered_price'],
-      rating: _bentoCakeList[index]['rating'],
-      details: _bentoCakeList[index]['bento_cake_detail'],
+  void _tartDetails(int index) {
+    print(_tartList[index]['tart_no']);
+    TartList tartList = new TartList(
+      tartNo: _tartList[index]['tart_no'],
+      tartName: _tartList[index]['tart_name'],
+      oriPrice: _tartList[index]['original_price'],
+      offeredPrice: _tartList[index]['offered_price'],
+      rating: _tartList[index]['rating'],
+      details: _tartList[index]['tart_detail'],
     );
 
     Navigator.pushReplacement(
-      context,MaterialPageRoute(builder: (context)=> BentoCakeDetails(bentocakeList:bentoCakeList,user: widget.user,))
+      context,MaterialPageRoute(builder: (context)=> MyTartDetails(tartList: tartList,user: widget.user,))
     );
   }
 }

@@ -17,31 +17,31 @@ class _BestSellingCakesState extends State<BestSellingCakes> {
       child: ListView(
         scrollDirection:Axis.horizontal,
         children:<Widget>[
-          CakeList(
+          TestCakeList(
             productPicture: "assets/images/product1.jpg",
             productName: "Chinese Birthday Cake",
             oldPrice: 119,
             newPrice: 89,
           ),
-          CakeList(
+          TestCakeList(
             productPicture: "assets/images/product2.jpg",
             productName: "Birthday Cake 1",
             oldPrice: 109,
             newPrice: 89,
           ),
-          CakeList(
+          TestCakeList(
             productPicture: "assets/images/product3.jpg",
             productName: "Birthday Cake 2",
             oldPrice: 129,
             newPrice: 99,
           ),
-          CakeList(
+          TestCakeList(
             productPicture: "assets/images/product4.jpg",
             productName: "Birthday Cake 3",
             oldPrice: 139,
             newPrice: 99,
           ),
-          CakeList(
+          TestCakeList(
             productPicture: "assets/images/product5.jpg",
             productName: "Happy Mother Day Cake",
             oldPrice: 119,
@@ -53,14 +53,14 @@ class _BestSellingCakesState extends State<BestSellingCakes> {
   }
 }
 
-class CakeList extends StatelessWidget {
+class TestCakeList extends StatelessWidget {
 
   final productName;
   final productPicture;
   final oldPrice;
   final newPrice;
 
-  const CakeList({Key key, this.productName, this.productPicture, this.oldPrice, this.newPrice
+  const TestCakeList({Key key, this.productName, this.productPicture, this.oldPrice, this.newPrice
   }) : super(key: key);
 
   @override
@@ -93,7 +93,6 @@ class CakeList extends StatelessWidget {
                 subtitle: Padding(
                   padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
                   child: RichText(
-                      // overflow: TextOverflow.ellipsis,
                     text: TextSpan(
                       children:<TextSpan>[
                         TextSpan(text:productName,style: Theme.of(context).textTheme.bodyText2),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'product.dart';
 import 'package:little_cake_story/model/user.dart';
-import 'category_list.dart';
+import 'caterogries/category_list.dart';
 import 'best_selling_cake_list.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -57,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 margin: const EdgeInsets.fromLTRB(0,20,300,10),
                 child: Text('Categories',style: Theme.of(context).textTheme.bodyText1,)
               ),
-              HorizontalList(),
+              CategoryList(user: widget.user,),
               Container(
                 margin: const EdgeInsets.fromLTRB(0,20,235,10),
                 child: Text('Most Selling Cakes',style: Theme.of(context).textTheme.bodyText1,)

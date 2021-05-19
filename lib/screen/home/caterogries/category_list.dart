@@ -1,6 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:little_cake_story/model/cake.dart';
+import 'package:little_cake_story/model/user.dart';
 
-class HorizontalList extends StatelessWidget {
+import 'cake_list.dart';
+
+class CategoryList extends StatelessWidget {
+
+  final User user;
+  final CakeList cakeList;
+  const CategoryList({Key key, this.user, this.cakeList}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -13,6 +22,9 @@ class HorizontalList extends StatelessWidget {
             image_location:'assets/images/birthday-cake.png',
             image_caption: 'Cake',
             press: (){
+              Navigator.push(
+                context,MaterialPageRoute(builder: (context)=> CakeListScreen(user: user,))
+              );
             },
           ),
           Category(

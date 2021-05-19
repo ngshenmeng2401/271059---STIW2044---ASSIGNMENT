@@ -6,7 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:little_cake_story/model/user.dart';
-import 'puff_list.dart';
+import 'my_puff_list.dart';
 
 class AddPuffScreen extends StatefulWidget {
 
@@ -41,7 +41,7 @@ class _AddPuffScreenState extends State<AddPuffScreen> {
           color: Colors.white,
           onPressed: (){
           Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context)=>PuffsListScreen(user: widget.user,))
+            context, MaterialPageRoute(builder: (context)=>MyPuffsListScreen(user: widget.user,))
           );
         }),
         title: Text('Add Puff',style: TextStyle(fontFamily: 'Arial')),
@@ -138,6 +138,8 @@ class _AddPuffScreenState extends State<AddPuffScreen> {
                       ListTile(
                         title: TextField(
                           controller: _detailsController,
+                          keyboardType: TextInputType.multiline,
+                          maxLines: null,
                           decoration: InputDecoration(
                             labelText: "Details:",
                           ),
@@ -179,7 +181,7 @@ class _AddPuffScreenState extends State<AddPuffScreen> {
     String _rating = _ratingController.text.toString();
     String _details = _detailsController.text.toString();
 
-    if(_name.isEmpty && _price.isEmpty && _rating.isEmpty && _details.isEmpty ){
+    if(_image==null && _name.isEmpty && _price.isEmpty && _rating.isEmpty && _details.isEmpty ){
       Fluttertoast.showToast(
         msg: "Please fill in all textfield",
         toastLength: Toast.LENGTH_SHORT,
@@ -223,6 +225,16 @@ class _AddPuffScreenState extends State<AddPuffScreen> {
     }else if(_details.isEmpty){
       Fluttertoast.showToast(
         msg: "Details is empty",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red[200],
+        textColor: Colors.white,
+        fontSize: 16.0);
+      return;
+    }else if(_image==null ){
+      Fluttertoast.showToast(
+        msg: "Please select photo",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,

@@ -198,110 +198,38 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
 
   void _onUpdate() {
 
-    String _streetAddress = _addressController.text.toString();
-    String _postalCode = _postCodeController.text.toString();
-    String _city = _cityController.text.toString();
-    String _state = _stateController.text.toString();
+    setState(() {
 
-    if(_streetAddress.isEmpty && _postalCode.isNotEmpty && _city.isNotEmpty && _state.isNotEmpty ){
-      
-      _streetAddress=widget.addressList.streetAddress;
-      _updateDialog(_streetAddress, _postalCode, _city, _state);
+      String _streetAddress = _addressController.text.toString();
+      String _postalCode = _postCodeController.text.toString();
+      String _city = _cityController.text.toString();
+      String _state = _stateController.text.toString();
 
-    }else if(_streetAddress.isNotEmpty && _postalCode.isEmpty && _city.isNotEmpty && _state.isNotEmpty ){
+      if(_streetAddress.isEmpty && _postalCode.isEmpty && _city.isEmpty && _state.isEmpty ){
+          Fluttertoast.showToast(
+            msg: "Do not have any update",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red[200],
+            textColor: Colors.white,
+            fontSize: 16.0);
+        }
+      else{
+        _streetAddress = (_addressController.text.toString() == "") 
+        ? widget.addressList.streetAddress
+        : _addressController.text.toString();
+      _postalCode = (_postCodeController.text.toString() == "")
+        ? widget.addressList.postalCode
+        : _postCodeController.text.toString();
+      _city = (_cityController.text.toString() == "")
+        ? widget.addressList.city
+        : _cityController.text.toString();
+      _state = (_stateController.text.toString() == "")
+        ? widget.addressList.state
+        : _stateController.text.toString();
 
-      _postalCode=widget.addressList.postalCode;
-      _updateDialog(_streetAddress, _postalCode, _city, _state);
-      
-    }else if(_streetAddress.isNotEmpty && _postalCode.isNotEmpty && _city.isEmpty && _state.isNotEmpty ){
-
-      _city=widget.addressList.city;
-      _updateDialog(_streetAddress, _postalCode, _city, _state);
-
-    }else if(_streetAddress.isNotEmpty && _postalCode.isNotEmpty && _city.isNotEmpty && _state.isEmpty ){
-
-      _state=widget.addressList.state;
-      _updateDialog(_streetAddress, _postalCode, _city, _state);
-
-    }else if(_streetAddress.isEmpty && _postalCode.isEmpty && _city.isNotEmpty && _state.isNotEmpty ){
-
-      _streetAddress=widget.addressList.streetAddress;
-      _postalCode=widget.addressList.postalCode;
-      _updateDialog(_streetAddress, _postalCode, _city, _state);  
-
-    }else if(_streetAddress.isEmpty && _postalCode.isNotEmpty && _city.isEmpty && _state.isEmpty ){
-
-      _streetAddress=widget.addressList.streetAddress;
-      _city=widget.addressList.city;
-      _updateDialog(_streetAddress, _postalCode, _city, _state);  
-          
-    }else if(_streetAddress.isEmpty && _postalCode.isNotEmpty && _city.isNotEmpty && _state.isEmpty ){
-
-      _streetAddress=widget.addressList.streetAddress;
-      _state=widget.addressList.state;
-      _updateDialog(_streetAddress, _postalCode, _city, _state);  
-          
-    }else if(_streetAddress.isNotEmpty && _postalCode.isEmpty && _city.isEmpty && _state.isNotEmpty ){
-
-      _postalCode=widget.addressList.postalCode;
-      _city=widget.addressList.city;
-      _updateDialog(_streetAddress, _postalCode, _city, _state);  
-          
-    }else if(_streetAddress.isNotEmpty && _postalCode.isEmpty && _city.isNotEmpty && _state.isEmpty ){
-
-      _postalCode=widget.addressList.postalCode;
-      _state=widget.addressList.state;
-      _updateDialog(_streetAddress, _postalCode, _city, _state);  
-          
-    }else if(_streetAddress.isNotEmpty && _postalCode.isNotEmpty && _city.isEmpty && _state.isEmpty ){
-
-      _city=widget.addressList.city;
-      _state=widget.addressList.state;
-      _updateDialog(_streetAddress, _postalCode, _city, _state);  
-          
-    }else if(_streetAddress.isEmpty && _postalCode.isEmpty && _city.isEmpty && _state.isNotEmpty ){
-
-      _streetAddress=widget.addressList.streetAddress;
-      _postalCode=widget.addressList.postalCode;
-      _city=widget.addressList.city;
-      _updateDialog(_streetAddress, _postalCode, _city, _state);  
-          
-    }else if(_streetAddress.isEmpty && _postalCode.isEmpty && _city.isNotEmpty && _state.isEmpty ){
-
-      _streetAddress=widget.addressList.streetAddress;
-      _postalCode=widget.addressList.postalCode;
-      _state=widget.addressList.state;
-      _updateDialog(_streetAddress, _postalCode, _city, _state);  
-          
-    }else if(_streetAddress.isEmpty && _postalCode.isNotEmpty && _city.isEmpty && _state.isEmpty ){
-
-      _streetAddress=widget.addressList.streetAddress;
-      _city=widget.addressList.city;
-      _state=widget.addressList.state;
-      _updateDialog(_streetAddress, _postalCode, _city, _state);  
-          
-    }
-    else if(_streetAddress.isNotEmpty && _postalCode.isEmpty && _city.isEmpty && _state.isEmpty ){
-
-      _postalCode=widget.addressList.postalCode;
-      _city=widget.addressList.city;
-      _state=widget.addressList.state;
-      _updateDialog(_streetAddress, _postalCode, _city, _state);  
-          
-    }else {
-      Fluttertoast.showToast(
-        msg: "Do not have any update",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red[200],
-        textColor: Colors.white,
-        fontSize: 16.0);
-    }
-  }
-
-  void _updateDialog(String streetAddress, String postalCode, String city, String state) {
-    showDialog(
+      showDialog(
       context: context, 
       builder: (BuildContext context){
         return AlertDialog(
@@ -313,7 +241,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
             TextButton(
               child:(Text('Yes',style: Theme.of(context).textTheme.bodyText2)),
               onPressed: (){
-                _updateAddress(streetAddress,postalCode,city,state);
+                _updateAddress(_streetAddress,_postalCode,_city,_state);
                 Navigator.of(context).pop();
               },),
             TextButton(
@@ -324,6 +252,9 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
           ],
         );
       });
+      }
+      
+    });
   }
 
   void _updateAddress(String streetAddress, String postalCode, String city, String state) {

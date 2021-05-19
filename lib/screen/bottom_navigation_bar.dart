@@ -22,8 +22,8 @@ class BottomNavigationWidgetState extends State<BottomNavigationWidget> {
   @override
   void initState() {
     list = [
-      HomeScreen(),
-      SearchScreen(),
+      HomeScreen(user: widget.user,),
+      SearchScreen(user: widget.user,),
       CartScreen(user: widget.user,),
       ProfileScreen(user: widget.user,)
     ];

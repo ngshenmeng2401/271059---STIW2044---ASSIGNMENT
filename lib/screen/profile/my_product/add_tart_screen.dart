@@ -6,7 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:little_cake_story/model/user.dart';
-import 'tarts_list.dart';
+import 'my_tarts_list.dart';
 
 class AddTartScreen extends StatefulWidget {
 
@@ -40,7 +40,7 @@ class _AddTartScreenState extends State<AddTartScreen> {
             color: Colors.white,
             onPressed: () {
               Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => TartsListScreen(user: widget.user,)));
+                  MaterialPageRoute(builder: (context) => MyTartsListScreen(user: widget.user,)));
             }),
         title: Text('Add Tart', style: TextStyle(fontFamily: 'Arial')),
       ),
@@ -136,6 +136,8 @@ class _AddTartScreenState extends State<AddTartScreen> {
                       ListTile(
                         title: TextField(
                           controller: _detailsController,
+                          keyboardType: TextInputType.multiline,
+                          maxLines: null,
                           decoration: InputDecoration(
                             labelText: "Details:",
                           ),
@@ -177,7 +179,7 @@ class _AddTartScreenState extends State<AddTartScreen> {
     String _rating = _ratingController.text.toString();
     String _details = _detailsController.text.toString();
 
-    if(_name.isEmpty && _price.isEmpty && _rating.isEmpty && _details.isEmpty ){
+    if(_image==null && _name.isEmpty && _price.isEmpty && _rating.isEmpty && _details.isEmpty ){
       Fluttertoast.showToast(
         msg: "Please fill in all textfield",
         toastLength: Toast.LENGTH_SHORT,
@@ -221,6 +223,16 @@ class _AddTartScreenState extends State<AddTartScreen> {
     }else if(_details.isEmpty){
       Fluttertoast.showToast(
         msg: "Details is empty",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red[200],
+        textColor: Colors.white,
+        fontSize: 16.0);
+      return;
+    }else if(_image==null ){
+      Fluttertoast.showToast(
+        msg: "Please select photo",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
@@ -357,11 +369,11 @@ class _AddTartScreenState extends State<AddTartScreen> {
     
     String base64Image = base64Encode(_image.readAsBytesSync());
     print(base64Image);
-    // print(name);
-    // print(price);
-    // print(rating);
-    // print(details);
-    // print(email);add_tart
+    print(name);
+    print(price);
+    print(rating);
+    print(details);
+    print(email);
 
     http.post(
       Uri.parse("https://javathree99.com/s271059/littlecakestory/php/add_tart.php"),

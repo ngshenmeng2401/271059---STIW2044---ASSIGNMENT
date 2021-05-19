@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:little_cake_story/model/user.dart';
 import 'package:little_cake_story/screen/profile/payment/payment_selection.dart';
-import 'package:little_cake_story/screen/profile/your_product/product_dashboard.dart';
+import 'package:little_cake_story/screen/profile/my_product/product_dashboard.dart';
 import '../login_screen.dart';
 import 'settings/setting_screen.dart';
 import 'edit_profile_screen.dart';

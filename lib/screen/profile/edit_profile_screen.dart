@@ -155,63 +155,36 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   void onUpdate() {
 
-    String _firstname = _firstNameController.text.toString();
-    String _lastname = _lastNameController.text.toString();
-    String _phoneno = _phoneNoController.text.toString();
 
-    if(_firstname.isEmpty && _lastname.isNotEmpty && _phoneno.isNotEmpty ){
 
-      _firstname=widget.user.firstName;
+    setState(() {
 
-      _showConfirmMessage( _firstname, _lastname, _phoneno);
+      String _firstname = _firstNameController.text.toString();
+      String _lastname = _lastNameController.text.toString();
+      String _phoneno = _phoneNoController.text.toString();
 
-    }else if(_firstname.isNotEmpty && _lastname.isEmpty && _phoneno.isNotEmpty ){
+      if(_firstname.isEmpty && _lastname.isEmpty && _phoneno.isEmpty ){
+          Fluttertoast.showToast(
+            msg: "Do not have any update",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red[200],
+            textColor: Colors.white,
+            fontSize: 16.0);
+      }else{
 
-      _lastname=widget.user.lastName;
+        _firstname = (_firstNameController.text.toString() == "")
+      ? widget.user.firstName
+      : _firstNameController.text.toString();
+      _lastname = (_lastNameController.text.toString() == "")
+      ? widget.user.lastName
+      : _lastNameController.text.toString();
+      _phoneno = (_phoneNoController.text.toString() == "")
+      ? widget.user.phoneNo
+      : _phoneNoController.text.toString();
 
-      _showConfirmMessage( _firstname, _lastname, _phoneno);
-
-    }else if(_firstname.isNotEmpty && _lastname.isNotEmpty && _phoneno.isEmpty){
-
-      _phoneno=widget.user.phoneNo;
-      
-      _showConfirmMessage( _firstname, _lastname, _phoneno);
-
-    }else if(_firstname.isNotEmpty && _lastname.isNotEmpty && _phoneno.isNotEmpty){
-
-      _showConfirmMessage( _firstname, _lastname, _phoneno);
-
-    }else if(_firstname.isEmpty && _lastname.isEmpty && _phoneno.isNotEmpty){
-
-      _firstname=widget.user.firstName;
-      _lastname=widget.user.lastName;
-      _showConfirmMessage( _firstname, _lastname, _phoneno);
-
-    }else if(_firstname.isNotEmpty && _lastname.isEmpty && _phoneno.isEmpty){
-
-      _lastname=widget.user.lastName;
-      _phoneno=widget.user.phoneNo;
-      _showConfirmMessage( _firstname, _lastname, _phoneno);
-
-    }else if(_firstname.isEmpty && _lastname.isNotEmpty && _phoneno.isEmpty){
-
-      _firstname=widget.user.firstName;
-      _phoneno=widget.user.phoneNo;
-      _showConfirmMessage( _firstname, _lastname, _phoneno);
-
-    }else if(_firstname.isEmpty && _lastname.isEmpty && _phoneno.isEmpty){
-
-      _firstname=widget.user.firstName;
-      _lastname=widget.user.lastName;
-      _phoneno=widget.user.phoneNo;
-      _showConfirmMessage( _firstname, _lastname, _phoneno);
-    }
-      
-  }
-
-  void _showConfirmMessage(String _firstname, String _lastname, String _phoneno){
-
-    showDialog(
+      showDialog(
       context: context, 
       builder: (BuildContext context){
         return AlertDialog(
@@ -234,8 +207,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           ],
         );
       });
-
-  }
+      }
+    });
+}
 
   void _onPictureSelectionDialog() {
 

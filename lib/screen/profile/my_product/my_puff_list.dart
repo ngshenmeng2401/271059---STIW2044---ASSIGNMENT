@@ -2,22 +2,22 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:little_cake_story/model/puff_list.dart';
+import 'package:little_cake_story/model/puff.dart';
 import 'package:little_cake_story/model/user.dart';
-import 'package:little_cake_story/screen/profile/your_product/puff_details.dart';
+import 'package:little_cake_story/screen/profile/my_product/my_puff_details.dart';
 import 'add_puff_screen.dart';
 
-class PuffsListScreen extends StatefulWidget {
+class MyPuffsListScreen extends StatefulWidget {
 
   final PuffList puffList;
   final User user;
-  const PuffsListScreen({Key key, this.user, this.puffList}) : super(key: key);
+  const MyPuffsListScreen({Key key, this.user, this.puffList}) : super(key: key);
 
   @override
-  _PuffsListScreenState createState() => _PuffsListScreenState();
+  _MyPuffsListScreenState createState() => _MyPuffsListScreenState();
 }
 
-class _PuffsListScreenState extends State<PuffsListScreen> {
+class _MyPuffsListScreenState extends State<MyPuffsListScreen> {
 
   List _puffList;
   String titleCenter = "Loading...";
@@ -27,7 +27,7 @@ class _PuffsListScreenState extends State<PuffsListScreen> {
   void initState() {
 
     super.initState();
-    _loadPuff();
+    _loadMyPuff();
   }
 
   @override
@@ -114,11 +114,15 @@ class _PuffsListScreenState extends State<PuffsListScreen> {
                                       children: [
                                         Padding(
                                           padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                          child: Text("RM${_puffList[index]['original_price']}",
+                                          child: Text(_puffList[index]['offered_price'] == "0"
+                                            ? "RM${_puffList[index]['original_price']}"
+                                            : "RM${_puffList[index]['offered_price']}",
                                           style: TextStyle(fontSize:16,),),
                                         ),
                                         SizedBox(width:10),
-                                        Text("RM${_puffList[index]['original_price']}",
+                                        Text(_puffList[index]['offered_price'] == "0"
+                                            ? ""
+                                            : "RM${_puffList[index]['original_price']}",
                                           style: Theme.of(context).appBarTheme.textTheme.headline3,)
                                       ],),
                                     SizedBox(height:6),
@@ -153,10 +157,10 @@ class _PuffsListScreenState extends State<PuffsListScreen> {
     );
   }
 
-  void _loadPuff() {
+  void _loadMyPuff() {
 
     http.post(
-      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/load_puff.php"),
+      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/load_my_puff.php"),
       body: {
         "email":widget.user.email,
       }).then(
@@ -187,7 +191,7 @@ class _PuffsListScreenState extends State<PuffsListScreen> {
     );
 
     Navigator.pushReplacement(
-      context,MaterialPageRoute(builder: (context)=> PuffDetails(puffList:puffList,user: widget.user,))
+      context,MaterialPageRoute(builder: (context)=> MyPuffDetails(puffList:puffList,user: widget.user,))
     );
   }
 }

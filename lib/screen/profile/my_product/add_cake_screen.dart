@@ -2,23 +2,24 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:little_cake_story/model/user.dart';
-import 'cup_cake_list.dart';
+import 'my_cake_list.dart';
 
-class AddCupCakeScreen extends StatefulWidget {
+class AddCakeScreen extends StatefulWidget {
 
   final User user;
 
-  const AddCupCakeScreen({Key key, this.user}) : super(key: key);
+  const AddCakeScreen({Key key, this.user}) : super(key: key);
 
   @override
-  _AddCupCakeScreenState createState() => _AddCupCakeScreenState();
+  _AddCakeScreenState createState() => _AddCakeScreenState();
 }
 
-class _AddCupCakeScreenState extends State<AddCupCakeScreen> {
+class _AddCakeScreenState extends State<AddCakeScreen> {
 
   double screenHeight,screenWidth;
   TextEditingController _nameController = new TextEditingController();
@@ -27,6 +28,7 @@ class _AddCupCakeScreenState extends State<AddCupCakeScreen> {
   TextEditingController _detailsController = new TextEditingController();
   File _image;
   String pathAsset='assets/images/cake.jpg';
+  bool selected_slice=false, selected_6Inch=false,selected_8Inch=false,selected_10Inch=false;
 
   @override
   Widget build(BuildContext context) {
@@ -41,10 +43,10 @@ class _AddCupCakeScreenState extends State<AddCupCakeScreen> {
           color: Colors.white,
           onPressed: (){
           Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context)=>CupCakeListScreen(user: widget.user,))
+            context, MaterialPageRoute(builder: (context)=>MyCakeListScreen(user: widget.user,))
           );
         }),
-        title: Text('Add Cup Cake',style: TextStyle(fontFamily: 'Arial')),
+        title: Text('Add Cake',style: TextStyle(fontFamily: 'Arial')),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -64,7 +66,7 @@ class _AddCupCakeScreenState extends State<AddCupCakeScreen> {
                         )
                       ),
                     ),
-                    ),
+                  ),
                   Align(
                     alignment: Alignment.bottomRight,
                     child: Container(
@@ -83,7 +85,7 @@ class _AddCupCakeScreenState extends State<AddCupCakeScreen> {
                           _onPictureSelectionDialog();
                         },)
                         ),
-                    )
+                      )
                 ]
             ),
             ),
@@ -93,7 +95,8 @@ class _AddCupCakeScreenState extends State<AddCupCakeScreen> {
               child: Card(
                 child: Container(
                   padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
-                  width: screenWidth/1.1,
+                  // height: 500,
+                  width: 400,
                   decoration: BoxDecoration(
                     boxShadow: [
                       BoxShadow(
@@ -113,7 +116,7 @@ class _AddCupCakeScreenState extends State<AddCupCakeScreen> {
                           controller: _nameController,
                           keyboardType: TextInputType.name,
                           decoration: InputDecoration(
-                            labelText: "Name:",
+                            labelText: "Cake Name:",
                           ),
                         ),
                       ),
@@ -138,9 +141,65 @@ class _AddCupCakeScreenState extends State<AddCupCakeScreen> {
                       ListTile(
                         title: TextField(
                           controller: _detailsController,
+                          keyboardType: TextInputType.multiline,
+                          maxLines: null,
                           decoration: InputDecoration(
-                            labelText: "Details:",
+                            labelText: "Cake Details:",
                           ),
+                        ),
+                      ),
+                      SizedBox(height:20),
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(0, 0, 315, 0),
+                        child: Text("Size",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(fontFamily: 'Calibri',fontSize:22),)),
+                      ListTile(
+                        title: Text("6 inch",style: TextStyle(fontFamily: 'Calibri',)),
+                        trailing: Checkbox(
+                          value: selected_slice,
+                          onChanged: (value){
+                            setState(() {
+                              selected_slice = value;
+                              print(selected_slice);
+                            });
+                          },
+                        ),
+                      ),
+                      ListTile(
+                        title: Text("6 inch",style: TextStyle(fontFamily: 'Calibri',)),
+                        trailing: Checkbox(
+                          value: selected_6Inch,
+                          onChanged: (value){
+                            setState(() {
+                              selected_6Inch = value;
+                              print(selected_6Inch);
+                            });
+                          },
+                        ),
+                      ),
+                      ListTile(
+                        title: Text("8 inch",style: TextStyle(fontFamily: 'Calibri',)),
+                        trailing: Checkbox(
+                          value: selected_8Inch,
+                          onChanged: (value){
+                            setState(() {
+                              selected_8Inch = value;
+                              print(selected_8Inch);
+                            });
+                          },
+                        ),
+                      ),
+                      ListTile(
+                        title: Text("10 inch",style: TextStyle(fontFamily: 'Calibri',)),
+                        trailing: Checkbox(
+                          value: selected_10Inch,
+                          onChanged: (value){
+                            setState(() {
+                              selected_10Inch = value;
+                              print(selected_10Inch);
+                            });
+                          },
                         ),
                       ),
                     ],
@@ -153,14 +212,15 @@ class _AddCupCakeScreenState extends State<AddCupCakeScreen> {
               child: Container(
                   child:MaterialButton(
                     shape:RoundedRectangleBorder(
-                      borderRadius:BorderRadius.circular(20),
+                      borderRadius:BorderRadius.circular(10),
                     ),
                     minWidth: screenWidth/1.1,
                     height: screenHeight/16,
-                    child: Text('Add',
+                    child: Text('Submit',
                     style: TextStyle(fontSize: 20,color: Colors.white,fontFamily: 'Arial'),),
                     onPressed: (){
-                      onAddProduct();
+                      addProductDialog();
+                      print("submit");
                     },
                     color: Colors.red[200],
                   ),
@@ -172,14 +232,24 @@ class _AddCupCakeScreenState extends State<AddCupCakeScreen> {
     );
   }
 
-  void onAddProduct() {
+  void addProductDialog() {
 
     String _name = _nameController.text.toString();
     String _price = _priceController.text.toString();
     String _rating = _ratingController.text.toString();
     String _details = _detailsController.text.toString();
 
-    if(_name.isEmpty && _price.isEmpty && _rating.isEmpty && _details.isEmpty ){
+    if(_image==null && _name.isEmpty && _price.isEmpty && _rating.isEmpty && _details.isEmpty && selected_slice==false && selected_6Inch==false && selected_8Inch==false && selected_10Inch==false ){
+      Fluttertoast.showToast(
+        msg: "Please fill in all textfield and select the size and photo",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 3,
+        backgroundColor: Colors.red[200],
+        textColor: Colors.white,
+        fontSize: 16.0);
+      return;
+    }else if(_name.isEmpty && _price.isEmpty && _rating.isEmpty && _details.isEmpty ){
       Fluttertoast.showToast(
         msg: "Please fill in all textfield",
         toastLength: Toast.LENGTH_SHORT,
@@ -189,8 +259,17 @@ class _AddCupCakeScreenState extends State<AddCupCakeScreen> {
         textColor: Colors.white,
         fontSize: 16.0);
       return;
-    }
-    else if(_name.isEmpty ){
+    }else if(selected_slice==false && selected_6Inch==false && selected_8Inch==false && selected_10Inch==false ){
+      Fluttertoast.showToast(
+        msg: "Please select the size of cake",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red[200],
+        textColor: Colors.white,
+        fontSize: 16.0);
+      return;
+    }else if(_name.isEmpty ){
       Fluttertoast.showToast(
         msg: "Name is empty",
         toastLength: Toast.LENGTH_SHORT,
@@ -230,6 +309,16 @@ class _AddCupCakeScreenState extends State<AddCupCakeScreen> {
         textColor: Colors.white,
         fontSize: 16.0);
       return;
+    }else if(_image==null ){
+      Fluttertoast.showToast(
+        msg: "Please select photo",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red[200],
+        textColor: Colors.white,
+        fontSize: 16.0);
+      return;
     }
 
     showDialog(
@@ -244,7 +333,7 @@ class _AddCupCakeScreenState extends State<AddCupCakeScreen> {
             TextButton(
               child:(Text('Yes',style: Theme.of(context).textTheme.bodyText2)),
               onPressed: (){
-                _addProduct(_name,_price,_rating,_details,widget.user.email);
+                _addProduct(_name,_price,_rating,_details);
                 Navigator.of(context).pop();
               },),
             TextButton(
@@ -355,25 +444,32 @@ class _AddCupCakeScreenState extends State<AddCupCakeScreen> {
     }
   }
 
-  void _addProduct(String name, String price, String rating, String details,String email) {
+  void _addProduct(String name, String price, String rating, String details) {
     
     String base64Image = base64Encode(_image.readAsBytesSync());
-    print(base64Image);
+    // print(base64Image);
     // print(name);
     // print(price);
     // print(rating);
     // print(details);
-    // print(email);
+    // print(widget.user.email);
+    // print("6 inch: $selected_6Inch");
+    // print("8 inch: $selected_8Inch");
+    // print("10 inch: $selected_10Inch");
 
     http.post(
-      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/add_cup_cake.php"),
+      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/add_cake.php"),
       body: {
+        "encoded_string":base64Image,
         "name":name,
         "price":price,
         "rating":rating,
         "details":details,
-        "email":email,
-        "encoded_string":base64Image,
+        "email":widget.user.email,
+        "selected_slice":selected_slice.toString(),
+        "selected_6Inch":selected_6Inch.toString(),
+        "selected_8Inch":selected_8Inch.toString(),
+        "selected_10Inch":selected_10Inch.toString(),
       }).then(
         (response){
           print(response.body);
