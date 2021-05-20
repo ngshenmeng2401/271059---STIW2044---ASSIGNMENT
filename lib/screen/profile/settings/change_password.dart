@@ -77,13 +77,17 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                               TextField(
                                 controller: _currentpasswordController,
                                 decoration: InputDecoration(
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(color: Theme.of(context).accentColor)
+                                  ),
                                     icon: Icon(
                                       Icons.lock,
                                       color: Colors.red[200],
                                     ),
                                     labelText: 'Current Password',
                                     labelStyle: TextStyle(
-                                        fontSize: 18, fontFamily: 'Calibri'),
+                                        fontSize: 18, fontFamily: 'Calibri',
+                                        color: Colors.red[200]),
                                     suffixIcon: GestureDetector(
                                         onTap: () {
                                           setState(() {
@@ -92,20 +96,24 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                         },
                                         child: Icon(hiddenPassword1
                                             ? Icons.visibility_off
-                                            : Icons.visibility))),
+                                            : Icons.visibility,color: Colors.red[200]))),
                                 obscureText: hiddenPassword1,
                               ),
                               SizedBox(height: 20),
                               TextField(
                                 controller: _newpasswordController,
                                 decoration: InputDecoration(
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(color: Theme.of(context).accentColor)
+                                  ),
                                     icon: Icon(
                                       Icons.lock,
                                       color: Colors.red[200],
                                     ),
                                     labelText: 'New Password',
                                     labelStyle: TextStyle(
-                                        fontSize: 18, fontFamily: 'Calibri'),
+                                        fontSize: 18, fontFamily: 'Calibri',
+                                        color: Colors.red[200]),
                                     suffixIcon: GestureDetector(
                                         onTap: () {
                                           setState(() {
@@ -114,7 +122,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                         },
                                         child: Icon(hiddenPassword2
                                             ? Icons.visibility_off
-                                            : Icons.visibility))),
+                                            : Icons.visibility,color: Colors.red[200]))),
                                 obscureText: hiddenPassword2,
                                 onChanged: (value) {
                                   setState(() {});
@@ -133,13 +141,17 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                               TextField(
                                 controller: _confirmPasswordController,
                                 decoration: InputDecoration(
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(color: Theme.of(context).accentColor)
+                                  ),
                                     icon: Icon(
                                       Icons.lock,
                                       color: Colors.red[200],
                                     ),
                                     labelText: 'Confirm Password',
                                     labelStyle: TextStyle(
-                                        fontSize: 18, fontFamily: 'Calibri'),
+                                        fontSize: 18, fontFamily: 'Calibri',
+                                        color: Colors.red[200]),
                                     suffixIcon: GestureDetector(
                                         onTap: () {
                                           setState(() {
@@ -148,7 +160,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                         },
                                         child: Icon(hiddenPassword3
                                             ? Icons.visibility_off
-                                            : Icons.visibility))),
+                                            : Icons.visibility,color: Colors.red[200]))),
                                 obscureText: hiddenPassword3,
                                 onChanged: (value) {
                                   setState(() {});

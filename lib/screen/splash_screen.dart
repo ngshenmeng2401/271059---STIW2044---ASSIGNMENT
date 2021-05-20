@@ -30,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
               margin: EdgeInsets.fromLTRB(20, 10, 20, 15),
               child: Column(
                 children: [
-                  CircularProgressIndicator(),
+                  CircularProgressIndicator(color: Colors.red[200],),
                 ],
               ), 
             ),

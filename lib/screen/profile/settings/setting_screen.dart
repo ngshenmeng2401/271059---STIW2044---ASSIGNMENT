@@ -35,7 +35,7 @@ class _SettingScreenState extends State<SettingScreen> {
               child: Column(
                 children:[
                   ListTile(
-                    leading: Icon(Icons.notifications),
+                    leading: Icon(Icons.notifications,color: Colors.red[200]),
                     title: Text("Notifications",style: Theme.of(context).textTheme.bodyText1,),
                     trailing: Icon(Icons.keyboard_arrow_right),
                     onTap: (){
@@ -45,7 +45,7 @@ class _SettingScreenState extends State<SettingScreen> {
                     },
                   ),
                   ListTile(
-                    leading: Icon(Icons.location_city),
+                    leading: Icon(Icons.location_city,color: Colors.red[200]),
                     title: Text("Manage Address",style: Theme.of(context).textTheme.bodyText1,),
                     trailing: Icon(Icons.keyboard_arrow_right),
                     onTap: (){
@@ -55,7 +55,7 @@ class _SettingScreenState extends State<SettingScreen> {
                     },
                   ),
                   ListTile(
-                    leading: Icon(Icons.lock),
+                    leading: Icon(Icons.lock,color: Colors.red[200]),
                     title: Text("Change Password",style: Theme.of(context).textTheme.bodyText1,),
                     trailing: Icon(Icons.keyboard_arrow_right),
                     onTap: (){
@@ -65,7 +65,7 @@ class _SettingScreenState extends State<SettingScreen> {
                     },
                   ),
                   ListTile(
-                    leading: Icon(Icons.language),
+                    leading: Icon(Icons.language,color: Colors.red[200]),
                     title: Text("Change Language",style: Theme.of(context).textTheme.bodyText1,),
                     trailing: Icon(Icons.keyboard_arrow_right),
                     onTap: (){
@@ -75,7 +75,7 @@ class _SettingScreenState extends State<SettingScreen> {
                     },
                   ),
                   ListTile(
-                    leading: Icon(Icons.format_paint),
+                    leading: Icon(Icons.format_paint,color: Colors.red[200]),
                     title: Text("Change Theme",style: Theme.of(context).textTheme.bodyText1,),
                     trailing: Icon(Icons.keyboard_arrow_right),
                     onTap: (){
@@ -85,7 +85,7 @@ class _SettingScreenState extends State<SettingScreen> {
                     },
                   ),
                   ListTile(
-                    leading: Icon(Icons.info),
+                    leading: Icon(Icons.info,color: Colors.red[200]),
                     title: Text("About",style: Theme.of(context).textTheme.bodyText1,),
                     trailing: Icon(Icons.keyboard_arrow_right),
                     onTap: (){
@@ -95,7 +95,7 @@ class _SettingScreenState extends State<SettingScreen> {
                     },
                   ),
                   ListTile(
-                    leading: Icon(Icons.help),
+                    leading: Icon(Icons.help,color: Colors.red[200],),
                     title: Text("Help & Support",style: Theme.of(context).textTheme.bodyText1,),
                     trailing: Icon(Icons.keyboard_arrow_right),
                     onTap: (){

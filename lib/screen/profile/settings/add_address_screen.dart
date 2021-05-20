@@ -92,26 +92,54 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                       TextField(
                         controller: _addressController,
                         decoration: InputDecoration(
+                          focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Theme.of(context).accentColor)
+                          ),
                           labelText: 'Street Address',
+                          labelStyle: TextStyle(
+                            fontFamily: 'Calibri',
+                            color: Colors.red[200]
+                          )
                         ),
                       ),
                       TextField(
                         controller: _postCodeController,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
+                          focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Theme.of(context).accentColor)
+                          ),
                           labelText: 'Postal Code',
+                          labelStyle: TextStyle(
+                            fontFamily: 'Calibri',
+                            color: Colors.red[200]
+                          )
                         ),
                       ),
                       TextField(
                         controller: _cityController,
                         decoration: InputDecoration(
+                          focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Theme.of(context).accentColor)
+                          ),
                           labelText: 'City',
+                          labelStyle: TextStyle(
+                            fontFamily: 'Calibri',
+                            color: Colors.red[200]
+                          )
                         ),
                       ),
                       TextField(
                         controller: _stateController,
                         decoration: InputDecoration(
+                          focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Theme.of(context).accentColor)
+                          ),
                           labelText: 'State',
+                          labelStyle: TextStyle(
+                            fontFamily: 'Calibri',
+                            color: Colors.red[200]
+                          )
                         ),
                       ),
                       SizedBox(height:15),

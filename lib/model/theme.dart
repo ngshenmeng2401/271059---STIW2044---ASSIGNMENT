@@ -7,8 +7,8 @@ class CustomTheme {
     return ThemeData(
         brightness: Brightness.dark,
         primaryColor: Colors.black,
-        accentColor: Colors.red[100],
-        focusColor: Colors.red[100],
+        accentColor: Colors.red[200],
+        focusColor: Colors.red[200],
         fontFamily: 'Georgia',
         textSelectionTheme: TextSelectionThemeData(
             selectionHandleColor: Colors.blueGrey[400], 

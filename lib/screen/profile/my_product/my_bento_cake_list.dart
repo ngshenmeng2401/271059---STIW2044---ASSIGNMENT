@@ -39,16 +39,6 @@ class _MyBentoCakeListScreenState extends State<MyBentoCakeListScreen> {
     return Scaffold(
       appBar:AppBar(
         title: Text('Bento Cakes',style: TextStyle(fontFamily: 'Arial')),
-        actions: [
-          IconButton(
-              icon: Icon(Icons.add), 
-              color: Colors.white,
-              onPressed: (){
-                Navigator.pushReplacement(
-                  context, MaterialPageRoute(builder: (context)=>AddBentoCakeScreen(user: widget.user,))
-                );
-          }),
-        ],
       ),
       body: Center(
         child: Column(
@@ -151,6 +141,16 @@ class _MyBentoCakeListScreenState extends State<MyBentoCakeListScreen> {
             )
           ]
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context)=>AddBentoCakeScreen(user: widget.user,))
+          );
+        },
+        child:Icon(Icons.add,
+          color: Colors.white,
+        )
       ),
     );
   }

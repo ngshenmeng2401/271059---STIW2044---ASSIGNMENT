@@ -1,28 +1,28 @@
-import 'dart:convert';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:little_cake_story/model/cake.dart';
+import 'dart:convert';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:little_cake_story/model/bento_cake.dart';
 import 'package:little_cake_story/model/user.dart';
 
-import 'cake_details.dart';
+import 'bento_cake_details.dart';
 
-class CakeListScreen extends StatefulWidget {
+class BentoCakeListScreen extends StatefulWidget {
 
   final User user;
-  final CakeList cakeList;
-  const CakeListScreen({Key key, this.user, this.cakeList}) : super(key: key);
+  final BentoCakeListScreen bentoCakeList;
+
+  const BentoCakeListScreen({Key key, this.user, this.bentoCakeList}) : super(key: key);
 
   @override
-  _CakeListScreenState createState() => _CakeListScreenState();
+  _BentoCakeListScreenState createState() => _BentoCakeListScreenState();
 }
 
-class _CakeListScreenState extends State<CakeListScreen> {
+class _BentoCakeListScreenState extends State<BentoCakeListScreen> {
 
-  List _cakeList;
+  List _bentoCakeList;
   String titleCenter = "Loading...",searchText="Search";
   double screenHeight, screenWidth;
-  bool selected_slice, selected_6inch, selected_8inch, selected_10inch, selected_12inch;
   TextEditingController _searchCakeController = new TextEditingController();
   int sortButton=1;
 
@@ -30,7 +30,7 @@ class _CakeListScreenState extends State<CakeListScreen> {
   void initState() {
 
     super.initState();
-    _loadCake();
+    _loadBentoCake();
   }
   
   @override
@@ -41,12 +41,12 @@ class _CakeListScreenState extends State<CakeListScreen> {
 
     return Scaffold(
       appBar:AppBar(
-        title: Text('Cakes',style: TextStyle(fontFamily: 'Arial')),
+        title: Text('Bento Cakes',style: TextStyle(fontFamily: 'Arial')),
       ),
       body: Center(
         child: Column(
           children: [
-            _cakeList == null 
+            _bentoCakeList == null 
             ? Flexible(
                 child: Center(
                   child: Text(titleCenter)),
@@ -61,7 +61,7 @@ class _CakeListScreenState extends State<CakeListScreen> {
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                           child: GridView.builder(
-                            itemCount: _cakeList.length,
+                            itemCount: _bentoCakeList.length,
                             gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
                               mainAxisSpacing: 5,
@@ -95,7 +95,7 @@ class _CakeListScreenState extends State<CakeListScreen> {
                                             topLeft:Radius.circular(10),
                                             topRight:Radius.circular(10),),
                                             child: CachedNetworkImage(
-                                              imageUrl: "https://javathree99.com/s271059/littlecakestory/images/product_cake/${_cakeList[index]['cake_no']}.png",
+                                              imageUrl: "https://javathree99.com/s271059/littlecakestory/images/product_bento_cake/${_bentoCakeList[index]['bento_cake_no']}.png",
                                               height: 185,
                                               width: 185,
                                               fit: BoxFit.cover,
@@ -113,7 +113,7 @@ class _CakeListScreenState extends State<CakeListScreen> {
                                           ),
                                           Padding(
                                           padding: const EdgeInsets.fromLTRB(5, 15, 5, 0),
-                                          child: Text(_cakeList[index]['cake_name'],
+                                          child: Text(_bentoCakeList[index]['bento_cake_name'],
                                               overflow: TextOverflow.ellipsis,
                                               textAlign: TextAlign.left,
                                               style: Theme.of(context).appBarTheme.textTheme.headline2),
@@ -123,15 +123,15 @@ class _CakeListScreenState extends State<CakeListScreen> {
                                             children: [
                                               Padding(
                                                 padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                                child: Text(_cakeList[index]['offered_price'] == "0" 
-                                                ? "RM ${_cakeList[index]['original_price']}"
-                                                : "RM ${_cakeList[index]['offered_price']}",
+                                                child: Text(_bentoCakeList[index]['offered_price'] == "0" 
+                                                ? "RM ${_bentoCakeList[index]['original_price']}"
+                                                : "RM ${_bentoCakeList[index]['offered_price']}",
                                                 style: TextStyle(fontSize:16,),),
                                               ),
                                               SizedBox(width:10),
-                                              Text(_cakeList[index]['offered_price'] == "0" 
+                                              Text(_bentoCakeList[index]['offered_price'] == "0" 
                                                 ? ""
-                                                : "RM ${_cakeList[index]['original_price']}",
+                                                : "RM ${_bentoCakeList[index]['original_price']}",
                                                 style: Theme.of(context).appBarTheme.textTheme.headline3,)
                                             ],),
                                           SizedBox(height:6),
@@ -139,7 +139,7 @@ class _CakeListScreenState extends State<CakeListScreen> {
                                             children: [
                                               Padding(
                                                 padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                                child: Text(_cakeList[index]['rating'],
+                                                child: Text(_bentoCakeList[index]['rating'],
                                                 style: TextStyle(fontSize:12,color: Colors.orange),),
                                               ),
                                               SizedBox(width: 5),
@@ -178,10 +178,10 @@ class _CakeListScreenState extends State<CakeListScreen> {
     );
   }
 
-  void _loadCake() {
+  void _loadBentoCake() {
 
     http.post(
-      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/load_cake.php"),
+      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/load_bento_cake.php"),
       body: {
         "email":widget.user.email,
       }).then(
@@ -191,10 +191,10 @@ class _CakeListScreenState extends State<CakeListScreen> {
             return;
           }else{
             var jsondata = json.decode(response.body);
-            _cakeList = jsondata["cake"];
+            _bentoCakeList = jsondata["bentocake"];
             titleCenter = "Contain Data";
             setState(() {});
-            print(_cakeList);
+            print(_bentoCakeList);
           }
       }
     );
@@ -202,44 +202,18 @@ class _CakeListScreenState extends State<CakeListScreen> {
 
   void _cakeDetails(int index) {
 
-    _cakeList[index]['size_slice']=="true" 
-      ? selected_slice=true
-      : selected_slice=false;
-
-    _cakeList[index]['size6_inch']=="true" 
-      ? selected_6inch=true
-      : selected_6inch=false;
-    
-    _cakeList[index]['size8_inch']=="true" 
-      ? selected_8inch=true
-      : selected_8inch=false;
-
-    _cakeList[index]['size10_inch']=="true" 
-      ? selected_10inch=true
-      : selected_10inch=false;
-
-    _cakeList[index]['size12_inch']=="true" 
-      ? selected_12inch=true
-      : selected_12inch=false;
-    
-    print(selected_12inch);
-
-    print(_cakeList[index]['cake_no']);
-    CakeList cakeList = new CakeList(
-      cakeNo: _cakeList[index]['cake_no'],
-      cakeName: _cakeList[index]['cake_name'],
-      oriPrice: _cakeList[index]['original_price'],
-      offeredPrice: _cakeList[index]['offered_price'],
-      rating: _cakeList[index]['rating'],
-      details: _cakeList[index]['cake_detail'],
-      slice: selected_slice,
-      inch_6: selected_6inch,
-      inch_8: selected_8inch,
-      inch_10: selected_10inch,
+    print(_bentoCakeList[index]['cake_no']);
+    BentoCakeList bentoCakeList = new BentoCakeList(
+      bentoCakeNo: _bentoCakeList[index]['bento_cake_no'],
+      bentoCakeName: _bentoCakeList[index]['bento_cake_name'],
+      oriPrice: _bentoCakeList[index]['original_price'],
+      offeredPrice: _bentoCakeList[index]['offered_price'],
+      rating: _bentoCakeList[index]['rating'],
+      details: _bentoCakeList[index]['bento_cake_detail'],
     );
 
     Navigator.push(
-      context,MaterialPageRoute(builder: (context)=> CakeDetailsScreen(cakeList:cakeList,user: widget.user,))
+      context,MaterialPageRoute(builder: (context)=> BentoCakeDetailsScreen(bentoCakeList:bentoCakeList,user: widget.user,))
     );
   }
 
@@ -305,7 +279,7 @@ class _CakeListScreenState extends State<CakeListScreen> {
                   child: (Text('OK',
                       style: Theme.of(context).textTheme.bodyText2)),
                   onPressed: () {
-                    _sortCakePrice(sortButton);
+                    _sortBentoCakePrice(sortButton);
                     Navigator.of(context).pop();
                   },
                 ),
@@ -322,15 +296,15 @@ class _CakeListScreenState extends State<CakeListScreen> {
         });
   }
 
-  void _sortCakePrice(int sortButton) {
+  void _sortBentoCakePrice(int sortButton) {
 
     print(sortButton);
 
     if(sortButton == 1){
-      _loadCake();
+      _loadBentoCake();
     }
     http.post(
-      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/sort_cake_price.php"),
+      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/sort_bento_cake_price.php"),
       body: {
         "email":widget.user.email,
         "sort_value":sortButton.toString(),
@@ -338,7 +312,7 @@ class _CakeListScreenState extends State<CakeListScreen> {
         (response){
           setState(() {
             var jsondata = json.decode(response.body);
-            _cakeList = jsondata["cake"];
+            _bentoCakeList = jsondata["bentocake"];
             FocusScope.of(context).requestFocus(new FocusNode());
           });
       }

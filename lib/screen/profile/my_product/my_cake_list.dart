@@ -42,16 +42,6 @@ class _MyCakeListScreenState extends State<MyCakeListScreen> {
     return Scaffold(
       appBar:AppBar(
         title: Text('Cakes',style: TextStyle(fontFamily: 'Arial')),
-        actions: [
-          IconButton(
-              icon: Icon(Icons.add), 
-              color: Colors.white,
-              onPressed: (){
-                Navigator.pushReplacement(
-                  context, MaterialPageRoute(builder: (context)=>AddCakeScreen(user: widget.user,))
-                );
-          }),
-        ],
       ),
       body: Center(
         child: Column(
@@ -157,22 +147,22 @@ class _MyCakeListScreenState extends State<MyCakeListScreen> {
                           ),
                         ),
                       ),
-                      // Container(
-                      //   height: 30,
-                      //   alignment: Alignment.center,
-                      //   child: GestureDetector(
-                      //     onTap: updatePage,
-                      //     child: Text(
-                      //       "Load More (current page $_pageno / $pagenum)"
-                      //       )
-                      //     )
-                      // )
                     ],
                   ),
                 ),
             )
           ]
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context)=>AddCakeScreen(user: widget.user,))
+          );
+        },
+        child:Icon(Icons.add,
+          color: Colors.white,
+        )
       ),
     );
   }

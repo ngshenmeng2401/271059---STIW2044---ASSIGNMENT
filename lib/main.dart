@@ -1,3 +1,4 @@
+
 import 'model/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -6,6 +7,7 @@ import 'screen/splash_screen.dart';
 void main() => runApp(MyApp());
  
 class MyApp extends StatefulWidget {
+  
   @override
   _MyAppState createState() => _MyAppState();
 } 

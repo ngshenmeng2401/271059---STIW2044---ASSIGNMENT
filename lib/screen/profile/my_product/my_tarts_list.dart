@@ -39,16 +39,6 @@ class _MyTartsListScreenState extends State<MyTartsListScreen> {
     return Scaffold(
       appBar:AppBar(
         title: Text('Tarts',style: TextStyle(fontFamily: 'Arial')),
-        actions: [
-          IconButton(
-              icon: Icon(Icons.add), 
-              color: Colors.white,
-              onPressed: (){
-                Navigator.pushReplacement(
-                  context, MaterialPageRoute(builder: (context)=>AddTartScreen(user: widget.user,))
-                );
-          }),
-        ],
       ),
       body: Center(
         child: Column(
@@ -147,12 +137,22 @@ class _MyTartsListScreenState extends State<MyTartsListScreen> {
                             ),
                           );
                         },
-                ),
+                    ),
                   ),
               )
             )
           ]
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context)=>AddTartScreen(user: widget.user,))
+          );
+        },
+        child:Icon(Icons.add,
+          color: Colors.white,
+        )
       ),
     );
   }

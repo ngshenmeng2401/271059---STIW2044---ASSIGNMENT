@@ -39,7 +39,7 @@ class _ThemeSettingScreenState extends State<ThemeSettingScreen> {
                         },
                       ),
                       selected: true,
-                  ),
+                      ),
                     ),
                   Consumer<ThemeNotifier>(
                     builder:(context, notifier, child)=> ListTile(

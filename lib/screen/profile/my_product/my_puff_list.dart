@@ -39,16 +39,6 @@ class _MyPuffsListScreenState extends State<MyPuffsListScreen> {
     return Scaffold(
       appBar:AppBar(
         title: Text('Puffs',style: TextStyle(fontFamily: 'Arial')),
-        actions: [
-          IconButton(
-              icon: Icon(Icons.add), 
-              color: Colors.white,
-              onPressed: (){
-                Navigator.pushReplacement(
-                  context, MaterialPageRoute(builder: (context)=>AddPuffScreen(user: widget.user,))
-                );
-          }),
-        ],
       ),
       body: Center(
         child: Column(
@@ -153,6 +143,16 @@ class _MyPuffsListScreenState extends State<MyPuffsListScreen> {
             )
           ]
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context)=>AddPuffScreen(user: widget.user,))
+          );
+        },
+        child:Icon(Icons.add,
+          color: Colors.white,
+        )
       ),
     );
   }

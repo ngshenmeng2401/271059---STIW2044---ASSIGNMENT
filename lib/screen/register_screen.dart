@@ -56,6 +56,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       controller: _firstNameController,
                       keyboardType: TextInputType.name,
                       decoration: InputDecoration(
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Theme.of(context).accentColor)
+                        ),
                       icon:Icon(Icons.email,
                       color: Colors.red[200],),
                       labelText: 'First Name',
@@ -65,6 +68,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       controller: _lastNameController,
                       keyboardType: TextInputType.name,
                       decoration: InputDecoration(
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Theme.of(context).accentColor)
+                        ),
                       icon:Icon(Icons.people,
                       color: Colors.red[200],),
                       labelText: 'Last Name',
@@ -74,6 +80,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       controller: _phoneNoController,
                       keyboardType: TextInputType.phone,
                       decoration: InputDecoration(
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Theme.of(context).accentColor)
+                        ),
                       icon:Icon(Icons.phone,
                       color: Colors.red[200],),
                       labelText: 'Phone No',
@@ -83,6 +92,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Theme.of(context).accentColor)
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Theme.of(context).accentColor)
+                        ),
+                        border: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Theme.of(context).accentColor),
+                        ),
                       icon:Icon(Icons.people,
                       color: Colors.red[200],),
                       labelText: 'Email',
@@ -93,6 +111,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         TextField(
                           controller: _passwordController,
                           decoration: InputDecoration(
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Theme.of(context).accentColor)
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Theme.of(context).accentColor)
+                            ),
+                            border: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Theme.of(context).accentColor),
+                            ),
                             icon: Icon(Icons.lock,
                             color: Colors.red[200],),
                             labelText: 'Password',
@@ -103,7 +130,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 });
                               },
                               child: Icon(
-                                hiddenPassword1 ? Icons.visibility_off : Icons.visibility))
+                                hiddenPassword1 ? Icons.visibility_off : Icons.visibility,color: Colors.red[200]))
                           ),
                           obscureText: hiddenPassword1,
                           onChanged: (value) {
@@ -126,9 +153,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         TextField(
                           controller: _confirmPasswordController,
                           decoration: InputDecoration(
+                            // enabledBorder: UnderlineInputBorder(
+                            //   borderSide: BorderSide(color: Theme.of(context).accentColor)
+                            // ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Theme.of(context).accentColor)
+                            ),
+                            // border: UnderlineInputBorder(
+                            //   borderSide: BorderSide(color: Theme.of(context).accentColor),
+                            // ),
                             icon: Icon(Icons.lock,
                             color: Colors.red[200],),
-                            labelText: 'Confirm Password',
+                            labelText: 'Confirm Password',labelStyle: TextStyle(color:Colors.red[200]),
                             suffixIcon:GestureDetector(
                               onTap: (){
                                 setState(() {
@@ -136,7 +172,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 });
                               },
                               child: Icon(
-                                hiddenPassword2 ? Icons.visibility_off : Icons.visibility))
+                                hiddenPassword2 ? Icons.visibility_off : Icons.visibility,color: Colors.red[200],))
                           ),
                           obscureText: hiddenPassword2,
                           onChanged: (value) {

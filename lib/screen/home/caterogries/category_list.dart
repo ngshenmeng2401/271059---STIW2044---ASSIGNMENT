@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:little_cake_story/model/cake.dart';
 import 'package:little_cake_story/model/user.dart';
+import 'package:little_cake_story/screen/home/caterogries/puff_list.dart';
 
+import 'bento_cake_list.dart';
 import 'cake_list.dart';
+import 'cup_cake_list.dart';
+import 'tart_list.dart';
 
 class CategoryList extends StatelessWidget {
 
@@ -30,22 +34,38 @@ class CategoryList extends StatelessWidget {
           Category(
             image_location:'assets/images/bento-cake.png',
             image_caption: 'Bento Cake',
-            press: (){},
+            press: (){
+              Navigator.push(
+                context,MaterialPageRoute(builder: (context)=> BentoCakeListScreen(user: user,))
+              );
+            },
           ),
           Category(
             image_location:'assets/images/cupcake.png',
             image_caption: 'Cup Cake',
-            press: (){},
+            press: (){
+              Navigator.push(
+                context,MaterialPageRoute(builder: (context)=> CupCakeListScreen(user: user,))
+              );
+            },
           ),
           Category(
             image_location:'assets/images/egg-tart.png',
             image_caption: 'Tart',
-            press: (){},
+            press: (){
+              Navigator.push(
+                context,MaterialPageRoute(builder: (context)=> TartListScreen(user: user,))
+              );
+            },
           ),
           Category(
             image_location:'assets/images/puff.png',
             image_caption: 'Cream Puff',
-            press: (){},
+            press: (){
+              Navigator.push(
+                context,MaterialPageRoute(builder: (context)=> PuffListScreen(user: user,))
+              );
+            },
           ),
         ]
       ),

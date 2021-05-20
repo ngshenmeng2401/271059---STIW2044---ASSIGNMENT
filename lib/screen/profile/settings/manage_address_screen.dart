@@ -48,14 +48,6 @@ class _ManageAddressScreenState extends State<ManageAddressScreen> {
                   context, MaterialPageRoute(builder: (context)=>MapScreen())
                 );
           }),
-          IconButton(
-              icon: Icon(Icons.add), 
-              color: Colors.white,
-              onPressed: (){
-                Navigator.pushReplacement(
-                  context, MaterialPageRoute(builder: (context)=>AddAddressScreen(user: widget.user))
-                );
-          }),
         ],
       ),
       body: SingleChildScrollView(
@@ -117,7 +109,17 @@ class _ManageAddressScreenState extends State<ManageAddressScreen> {
             )
           ),
         ),
-      )
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context)=>AddAddressScreen(user: widget.user,))
+          );
+        },
+        child:Icon(Icons.add,
+          color: Colors.white,
+        )
+      ),
     );
   }
 

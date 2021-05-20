@@ -70,29 +70,54 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                   TextField(
                     controller: _addressController,
                     decoration: InputDecoration(
-                      hintText: widget.addressList.streetAddress,
-                    labelText: 'Street Address',
+                      focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Theme.of(context).accentColor)
+                      ),
+                      labelText: 'Street Address',
+                      labelStyle: TextStyle(
+                        fontFamily: 'Calibri',
+                        color: Colors.red[200]
+                      )
                     ),
                   ),
                   TextField(
                     controller: _postCodeController,
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
-                      hintText: widget.addressList.postalCode,
-                    labelText: 'Postal Code',
+                      focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Theme.of(context).accentColor)
+                      ),
+                      labelText: 'Postal Code',
+                      labelStyle: TextStyle(
+                        fontFamily: 'Calibri',
+                        color: Colors.red[200]
+                      )
                     ),
                   ),
                   TextField(
                     controller: _cityController,
                     decoration: InputDecoration(
-                      hintText: widget.addressList.city,
-                    labelText: 'City',
+                      focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Theme.of(context).accentColor)
+                      ),
+                      labelText: 'City',
+                      labelStyle: TextStyle(
+                        fontFamily: 'Calibri',
+                        color: Colors.red[200]
+                      )
                     ),
                   ),
                   TextField(
                     controller: _stateController,
                     decoration: InputDecoration(
-                      hintText: widget.addressList.state,
-                    labelText: 'State',
+                      focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Theme.of(context).accentColor)
+                      ),
+                      labelText: 'State',
+                      labelStyle: TextStyle(
+                        fontFamily: 'Calibri',
+                        color: Colors.red[200]
+                      )
                     ),
                   ),
                   SizedBox(height:20),

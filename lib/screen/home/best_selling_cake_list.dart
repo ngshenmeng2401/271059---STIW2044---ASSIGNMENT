@@ -11,10 +11,17 @@ List<BestSellingProduct> productList =[
 ];
 
 class BestSellingCakeList extends StatelessWidget {
+
+  double screenHeight,screenWidth;
+
   @override
   Widget build(BuildContext context) {
+
+    screenHeight = MediaQuery.of(context).size.height;
+    screenWidth = MediaQuery.of(context).size.width;
+
     return Container(
-      height: 260,
+      height: screenHeight/2.6,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: productList.length,
@@ -37,8 +44,8 @@ class BestSellingCakeList extends StatelessWidget {
                   );
                 },
                 child: Container(
-                  height: 260,
-                  width: 150,
+                  height: screenHeight/2.6,
+                  width: screenWidth/2.74,
                   decoration: BoxDecoration(
                     color: Theme.of(context).hoverColor,
                     borderRadius: BorderRadius.circular(5),
@@ -52,6 +59,7 @@ class BestSellingCakeList extends StatelessWidget {
                     ]
                   ),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       ClipRRect(
                         borderRadius:BorderRadius.only(

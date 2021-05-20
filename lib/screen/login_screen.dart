@@ -4,7 +4,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:progress_dialog/progress_dialog.dart';
-import '../model/theme.dart';
 import 'register_screen.dart';
 import 'bottom_navigation_bar.dart';
 
@@ -77,17 +76,26 @@ class LoginScreenState extends State<LoginScreen> {
                   child: Column(
                     children:[
                       TextField(
+                        cursorColor: Theme.of(context).textSelectionTheme.cursorColor,
                         controller: _emailController,
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Theme.of(context).accentColor)
+                        ),
                         icon:Icon(Icons.email,
                           color: Colors.red[200],),
-                        labelText: 'Email',
+                        labelText: 'Email',labelStyle: TextStyle(color:Theme.of(context).accentColor)
                       ),
                       ),
                       TextField(
+                        cursorColor: Theme.of(context).textSelectionTheme.cursorColor,
                         controller: _passwordController,
                         decoration: InputDecoration(
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Theme.of(context).accentColor)
+                        ),
+                        focusColor: Theme.of(context).accentColor,
                           icon: Icon(Icons.lock,
                           color: Colors.red[200]),
                           labelText: 'Password',
@@ -313,6 +321,8 @@ class LoginScreenState extends State<LoginScreen> {
               children: [
                 Text('Enter your recovery email.',style: Theme.of(context).textTheme.bodyText1),
                 TextField(
+                  cursorColor: Theme.of(context).textSelectionTheme.cursorColor,
+                  // selectionControls: ,
                   controller: _useremailController,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(

@@ -44,14 +44,6 @@ class _MyBentoCakeDetailsState extends State<MyBentoCakeDetails> {
           },
         ),
         title: Text('Bento Cakes', style: TextStyle(fontFamily: 'Arial')),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.edit),
-            color: Colors.red[200],
-            onPressed: () {
-              _editDialog();
-          }),
-        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -159,6 +151,14 @@ class _MyBentoCakeDetailsState extends State<MyBentoCakeDetails> {
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _editDialog();
+        },
+        child:Icon(Icons.edit,
+          color: Colors.white,
+        )
+      ),
     );
   }
 
@@ -177,8 +177,13 @@ class _MyBentoCakeDetailsState extends State<MyBentoCakeDetails> {
                     controller: _nameController,
                     keyboardType: TextInputType.name,
                     decoration: InputDecoration(
-                      hintText: widget.bentocakeList.bentoCakeName,
-                      labelText: 'Name',
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Theme.of(context).accentColor)
+                      ),
+                      labelText: "Name:",
+                      labelStyle: TextStyle(
+                        color: Colors.red[200]
+                      )
                     ),
                   ),
                 ),
@@ -187,18 +192,28 @@ class _MyBentoCakeDetailsState extends State<MyBentoCakeDetails> {
                     controller: _oriPriceController,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
-                      hintText: widget.bentocakeList.oriPrice,
-                      labelText: 'Original Price',
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Theme.of(context).accentColor)
+                      ),
+                      labelText: "Original Price (RM):",
+                      labelStyle: TextStyle(
+                        color: Colors.red[200]
+                      )
                     ),
                   ),
                 ),
                 ListTile(
                   title: TextField(
                     controller: _offeredPriceController,
-                    keyboardType: TextInputType.number,
+                    keyboardType: TextInputType.name,
                     decoration: InputDecoration(
-                      hintText: widget.bentocakeList.offeredPrice,
-                      labelText: 'Offered Price',
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Theme.of(context).accentColor)
+                      ),
+                      labelText: "Offered Price:",
+                      labelStyle: TextStyle(
+                        color: Colors.red[200]
+                      )
                     ),
                   ),
                 ),
@@ -207,8 +222,13 @@ class _MyBentoCakeDetailsState extends State<MyBentoCakeDetails> {
                     controller: _ratingController,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
-                      hintText: widget.bentocakeList.rating,
-                      labelText: 'Rating',
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Theme.of(context).accentColor)
+                      ),
+                      labelText: "Rating:",
+                      labelStyle: TextStyle(
+                        color: Colors.red[200]
+                      )
                     ),
                   ),
                 ),
@@ -218,11 +238,16 @@ class _MyBentoCakeDetailsState extends State<MyBentoCakeDetails> {
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
                     decoration: InputDecoration(
-                      hintText: widget.bentocakeList.details,
-                      labelText: 'Details',
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Theme.of(context).accentColor)
+                      ),
+                      labelText: "Details:",
+                      labelStyle: TextStyle(
+                        color: Colors.red[200]
+                      )
                     ),
                   ),
-                )
+                ),
               ],
             ),
             actions: [

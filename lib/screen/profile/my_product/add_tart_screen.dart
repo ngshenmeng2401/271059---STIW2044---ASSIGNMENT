@@ -111,7 +111,13 @@ class _AddTartScreenState extends State<AddTartScreen> {
                           controller: _nameController,
                           keyboardType: TextInputType.name,
                           decoration: InputDecoration(
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Theme.of(context).accentColor)
+                            ),
                             labelText: "Name:",
+                            labelStyle: TextStyle(
+                              color: Colors.red[200]
+                            )
                           ),
                         ),
                       ),
@@ -120,7 +126,13 @@ class _AddTartScreenState extends State<AddTartScreen> {
                           controller: _priceController,
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Theme.of(context).accentColor)
+                            ),
                             labelText: "Original Price (RM):",
+                            labelStyle: TextStyle(
+                              color: Colors.red[200]
+                            )
                           ),
                         ),
                       ),
@@ -129,7 +141,13 @@ class _AddTartScreenState extends State<AddTartScreen> {
                           controller: _ratingController,
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Theme.of(context).accentColor)
+                            ),
                             labelText: "Rating:",
+                            labelStyle: TextStyle(
+                              color: Colors.red[200]
+                            )
                           ),
                         ),
                       ),
@@ -139,7 +157,13 @@ class _AddTartScreenState extends State<AddTartScreen> {
                           keyboardType: TextInputType.multiline,
                           maxLines: null,
                           decoration: InputDecoration(
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Theme.of(context).accentColor)
+                            ),
                             labelText: "Details:",
+                            labelStyle: TextStyle(
+                              color: Colors.red[200]
+                            )
                           ),
                         ),
                       ),

@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:little_cake_story/model/cake.dart';
 import 'package:little_cake_story/model/user.dart';
+import 'package:http/http.dart' as http;
+
 
 class CakeDetailsScreen extends StatefulWidget {
 
@@ -16,12 +18,12 @@ class CakeDetailsScreen extends StatefulWidget {
 
 class _CakeDetailsScreenState extends State<CakeDetailsScreen> {
 
-  var text;
-  Color buttonOnClick = Colors.red[200];
   bool hasBeenPressed1 = false, hasBeenPressed2 = false, hasBeenPressed3 = false, hasBeenPressed4 = false;
   bool enggLess = false;
   bool pressFavouriteColor = false, pressFavouriteIcon = false;
   double screenHeight,screenWidth;
+  double totalOriPrice = 0, totalOfferedPrice = 0;
+  TextEditingController _messageController = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +116,7 @@ class _CakeDetailsScreenState extends State<CakeDetailsScreen> {
                                     ]
                                   ),
                                   // SizedBox(height:20),
-                                  Text("Code: "+widget.cakeList.cakeNo),
+                                  Text("No: "+widget.cakeList.cakeNo),
                                 ],
                               ),
                             ),
@@ -146,7 +148,7 @@ class _CakeDetailsScreenState extends State<CakeDetailsScreen> {
                                   children: [
                                     Text(widget.cakeList.offeredPrice == "0"
                                       ? ""
-                                      : "RM "+widget.cakeList.offeredPrice,
+                                      : "RM "+widget.cakeList.oriPrice,
                                     style:TextStyle(
                                       fontSize: 14,
                                       fontFamily: 'Calibri'),)
@@ -172,19 +174,11 @@ class _CakeDetailsScreenState extends State<CakeDetailsScreen> {
                                   splashColor: Colors.red[200],
                                   shape: CircleBorder(),
                                   child: Text("slice",style: Theme.of(context).textTheme.bodyText2,),
-                                  onPressed: (){
-                                    setState(() {
-                                      hasBeenPressed1 = !hasBeenPressed1;
-                                      if(hasBeenPressed1==true){
-                                        hasBeenPressed2=false;
-                                        hasBeenPressed3=false;
-                                        hasBeenPressed4=false;
-
-                                      }
-                                    });
+                                  onPressed: (){                                      
+                                    _sliceCake();                                    
                                   }
                                 )
-                              : MaterialButton(onPressed: (){},),
+                              : Padding(padding: const EdgeInsets.all(0)),
 
                               widget.cakeList.inch_6 == true 
                               ? MaterialButton(
@@ -194,17 +188,10 @@ class _CakeDetailsScreenState extends State<CakeDetailsScreen> {
                                 shape: CircleBorder(),
                                 child: Text("6 inch",style: Theme.of(context).textTheme.bodyText2,),
                                 onPressed: (){
-                                  setState(() {
-                                    hasBeenPressed2 = !hasBeenPressed2;
-                                    if(hasBeenPressed2==true){
-                                      hasBeenPressed1=false;
-                                      hasBeenPressed3=false;
-                                      hasBeenPressed4=false;
-                                    }
-                                  });
+                                  _inch6Cake();
                                 }
                               )
-                              : MaterialButton(onPressed: (){},),
+                              : Padding(padding: const EdgeInsets.all(0)),
 
                               widget.cakeList.inch_8 == true 
                               ? MaterialButton(
@@ -214,17 +201,10 @@ class _CakeDetailsScreenState extends State<CakeDetailsScreen> {
                                 shape: CircleBorder(),
                                 child: Text("8 inch",style: Theme.of(context).textTheme.bodyText2,),
                                 onPressed: (){
-                                  setState(() {
-                                    hasBeenPressed3 = !hasBeenPressed3;
-                                    if(hasBeenPressed3==true){
-                                      hasBeenPressed1=false;
-                                      hasBeenPressed2=false;
-                                      hasBeenPressed4=false;
-                                    }
-                                  });
+                                  _inch8Cake();
                                 }
                               )
-                              : MaterialButton(onPressed: (){},),
+                              : Padding(padding: const EdgeInsets.all(0)),
 
                               widget.cakeList.inch_10 == true 
                               ? MaterialButton(
@@ -234,17 +214,10 @@ class _CakeDetailsScreenState extends State<CakeDetailsScreen> {
                                   shape: CircleBorder(),
                                   child: Text("10 inch",style: Theme.of(context).textTheme.bodyText2,),
                                   onPressed: (){
-                                    setState(() {
-                                      hasBeenPressed4 = !hasBeenPressed4;
-                                      if(hasBeenPressed4==true){
-                                        hasBeenPressed1=false;
-                                        hasBeenPressed2=false;
-                                        hasBeenPressed3=false;
-                                      }
-                                    });
+                                    _inch10Cake();
                                   }
                                 )
-                              : MaterialButton(onPressed: (){},),
+                              : Padding(padding: const EdgeInsets.all(0)),
                             ],
                           ),
                       ),
@@ -282,9 +255,7 @@ class _CakeDetailsScreenState extends State<CakeDetailsScreen> {
                                 ),
                               ),
                               onTap: (){
-                                setState(() {
-                                  enggLess = !enggLess;
-                                });
+                                _selectEggless();
                               },
                             ),
                             SizedBox(width:15),
@@ -305,7 +276,8 @@ class _CakeDetailsScreenState extends State<CakeDetailsScreen> {
                                 color: Theme.of(context).highlightColor,
                               ),
                               child: TextField(
-                                 decoration: InputDecoration(
+                                controller: _messageController,
+                                decoration: InputDecoration(
                                   hintText: 'Message on Cake',
                                   hintStyle: Theme.of(context).textTheme.bodyText2,
                                   border: InputBorder.none,
@@ -315,24 +287,35 @@ class _CakeDetailsScreenState extends State<CakeDetailsScreen> {
                           ]
                         ),),
                     ),
-                    SizedBox(height: 10,),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+                      child: Divider( color:Theme.of(context).bottomNavigationBarTheme.unselectedItemColor)),
                     Container(
                       padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                      child: MaterialButton(
-                        shape:RoundedRectangleBorder(
-                          borderRadius:BorderRadius.circular(20),
-                        ),
-                        minWidth: 360,
-                        height: 40,
-                        child: Text('Add To Cart',
-                        style: TextStyle(fontSize: 18,color: Colors.white,fontFamily: 'Arial'),),
-                        onPressed: (){
-                          
-                        },
-                        color: Colors.red[200],
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("Total: ",style: TextStyle(fontSize: 24),),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("RM\t\t"),
+                              Text(widget.cakeList.offeredPrice == "0"
+                                  ? totalOriPrice.toStringAsFixed(2)
+                                  : totalOfferedPrice.toStringAsFixed(2),
+                                style:TextStyle(
+                                  color: Colors.red[200],
+                                  fontSize: 28,
+                                  fontFamily: 'Calibri'),)
+                            ],
+                          )
+                        ],
                       ),
                     ),
-                    SizedBox(height: 10,),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+                      child: Divider( color:Theme.of(context).bottomNavigationBarTheme.unselectedItemColor)),
                     Container(
                       padding: const EdgeInsets.fromLTRB(15, 0, 15, 10),
                       width: 390,
@@ -342,7 +325,7 @@ class _CakeDetailsScreenState extends State<CakeDetailsScreen> {
                         children:<Widget> [
                           Text("Product Details",style:Theme.of(context).appBarTheme.textTheme.headline2,),
                           SizedBox(height: 5,),
-                          Text("• "+ widget.cakeList.details,style:Theme.of(context).textTheme.bodyText2),
+                          Text(widget.cakeList.details,style:Theme.of(context).textTheme.bodyText2),
                           
                         ],
                       ),
@@ -353,8 +336,138 @@ class _CakeDetailsScreenState extends State<CakeDetailsScreen> {
             ),
           ],
         ),
-          
-        ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+        },
+        icon:Icon(Icons.shopping_cart,
+          color: Colors.white,),
+        label: Text("Add Cart",
+          style: TextStyle(color:Colors.white,fontFamily: 'Calibri',fontSize: 16),),
+      ),
     );
+  }
+
+  void _sliceCake() {
+
+    setState(() {
+      hasBeenPressed1 = !hasBeenPressed1;
+      if(hasBeenPressed1==true){
+        hasBeenPressed2=false;
+        hasBeenPressed3=false;
+        hasBeenPressed4=false;
+      }
+      
+        totalOriPrice = double.parse(widget.cakeList.oriPrice)/6;
+        totalOfferedPrice = double.parse(widget.cakeList.offeredPrice)/6;
+        print(totalOriPrice);
+      
+    });
+
+      
+  }
+
+  void _inch6Cake() {
+      
+    setState(() {
+      hasBeenPressed2 = !hasBeenPressed2;
+      if(hasBeenPressed2==true){
+        hasBeenPressed1=false;
+        hasBeenPressed3=false;
+        hasBeenPressed4=false;
+      }
+
+        totalOriPrice = double.parse(widget.cakeList.oriPrice);
+        totalOfferedPrice = double.parse(widget.cakeList.offeredPrice);
+      
+    });
+  }
+
+  void _inch8Cake() {
+
+    setState(() {
+      hasBeenPressed3 = !hasBeenPressed3;
+      if(hasBeenPressed3==true){
+        hasBeenPressed1=false;
+        hasBeenPressed2=false;
+        hasBeenPressed4=false;
+      }
+      
+        totalOriPrice = double.parse(widget.cakeList.oriPrice)*1.20;
+        totalOfferedPrice = double.parse(widget.cakeList.offeredPrice)*1.20;
+        print(totalOriPrice);
+      
+    });
+  }
+
+  void _inch10Cake() {
+    setState(() {
+      hasBeenPressed4 = !hasBeenPressed4;
+      if(hasBeenPressed4==true){
+        hasBeenPressed1=false;
+        hasBeenPressed2=false;
+        hasBeenPressed3=false;
+      }
+      
+        totalOriPrice = double.parse(widget.cakeList.oriPrice)*1.44;
+        totalOfferedPrice = double.parse(widget.cakeList.offeredPrice)*1.44;
+        print(totalOriPrice);
+      
+    });
+  }
+
+  void _selectEggless() {
+    setState(() {
+
+      enggLess = !enggLess;
+
+      if(enggLess == true && hasBeenPressed1 == true){
+
+        totalOriPrice = double.parse(widget.cakeList.oriPrice)/6 *1.1;
+        totalOfferedPrice = double.parse(widget.cakeList.offeredPrice)/6 *1.1;
+        
+      }else if(enggLess == true && hasBeenPressed1 == true){
+
+        totalOriPrice = double.parse(widget.cakeList.oriPrice)/6 ;
+        totalOfferedPrice = double.parse(widget.cakeList.offeredPrice)/6 ;
+
+      }
+      
+      if(enggLess == true && hasBeenPressed2 == true){
+
+        totalOriPrice = double.parse(widget.cakeList.oriPrice)*1.1;
+        totalOfferedPrice = double.parse(widget.cakeList.offeredPrice)*1.1;
+        
+      }else if(enggLess == false && hasBeenPressed2 == true){
+
+        totalOriPrice = double.parse(widget.cakeList.oriPrice);
+        totalOfferedPrice = double.parse(widget.cakeList.offeredPrice);
+
+      }
+      
+      if(enggLess == true && hasBeenPressed3 == true){
+
+        totalOriPrice = double.parse(widget.cakeList.oriPrice)*1.20*1.1;
+        totalOfferedPrice = double.parse(widget.cakeList.offeredPrice)*1.20*1.1;
+        
+      }else if(enggLess == false && hasBeenPressed3 == true){
+
+        totalOriPrice = double.parse(widget.cakeList.oriPrice)*1.20;
+        totalOfferedPrice = double.parse(widget.cakeList.offeredPrice)*1.20;
+        
+      }
+      
+      if(enggLess == true && hasBeenPressed4 == true){
+
+        totalOriPrice = double.parse(widget.cakeList.oriPrice)*1.44*1.1;
+        totalOfferedPrice = double.parse(widget.cakeList.offeredPrice)*1.44*1.1;
+        
+      }else if(enggLess == false && hasBeenPressed4 == true){
+
+        totalOriPrice = double.parse(widget.cakeList.oriPrice)*1.44;
+        totalOfferedPrice = double.parse(widget.cakeList.offeredPrice)*1.44;
+        
+      }
+    });
   }
 }

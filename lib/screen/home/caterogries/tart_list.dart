@@ -1,28 +1,28 @@
-import 'dart:convert';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:little_cake_story/model/cake.dart';
+import 'dart:convert';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:little_cake_story/model/tart.dart';
 import 'package:little_cake_story/model/user.dart';
 
-import 'cake_details.dart';
+import 'tart_details.dart';
 
-class CakeListScreen extends StatefulWidget {
+class TartListScreen extends StatefulWidget {
 
   final User user;
-  final CakeList cakeList;
-  const CakeListScreen({Key key, this.user, this.cakeList}) : super(key: key);
+  final TartList tartList;
+
+  const TartListScreen({Key key, this.user, this.tartList}) : super(key: key);
 
   @override
-  _CakeListScreenState createState() => _CakeListScreenState();
+  _TartListScreenState createState() => _TartListScreenState();
 }
 
-class _CakeListScreenState extends State<CakeListScreen> {
+class _TartListScreenState extends State<TartListScreen> {
 
-  List _cakeList;
+  List _tartList;
   String titleCenter = "Loading...",searchText="Search";
   double screenHeight, screenWidth;
-  bool selected_slice, selected_6inch, selected_8inch, selected_10inch, selected_12inch;
   TextEditingController _searchCakeController = new TextEditingController();
   int sortButton=1;
 
@@ -30,7 +30,7 @@ class _CakeListScreenState extends State<CakeListScreen> {
   void initState() {
 
     super.initState();
-    _loadCake();
+    _loadTart();
   }
   
   @override
@@ -41,12 +41,12 @@ class _CakeListScreenState extends State<CakeListScreen> {
 
     return Scaffold(
       appBar:AppBar(
-        title: Text('Cakes',style: TextStyle(fontFamily: 'Arial')),
+        title: Text('Tarts',style: TextStyle(fontFamily: 'Arial')),
       ),
       body: Center(
         child: Column(
           children: [
-            _cakeList == null 
+            _tartList == null 
             ? Flexible(
                 child: Center(
                   child: Text(titleCenter)),
@@ -61,7 +61,7 @@ class _CakeListScreenState extends State<CakeListScreen> {
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                           child: GridView.builder(
-                            itemCount: _cakeList.length,
+                            itemCount: _tartList.length,
                             gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
                               mainAxisSpacing: 5,
@@ -95,7 +95,7 @@ class _CakeListScreenState extends State<CakeListScreen> {
                                             topLeft:Radius.circular(10),
                                             topRight:Radius.circular(10),),
                                             child: CachedNetworkImage(
-                                              imageUrl: "https://javathree99.com/s271059/littlecakestory/images/product_cake/${_cakeList[index]['cake_no']}.png",
+                                              imageUrl: "https://javathree99.com/s271059/littlecakestory/images/product_tart/${_tartList[index]['tart_no']}.png",
                                               height: 185,
                                               width: 185,
                                               fit: BoxFit.cover,
@@ -113,7 +113,7 @@ class _CakeListScreenState extends State<CakeListScreen> {
                                           ),
                                           Padding(
                                           padding: const EdgeInsets.fromLTRB(5, 15, 5, 0),
-                                          child: Text(_cakeList[index]['cake_name'],
+                                          child: Text(_tartList[index]['tart_name'],
                                               overflow: TextOverflow.ellipsis,
                                               textAlign: TextAlign.left,
                                               style: Theme.of(context).appBarTheme.textTheme.headline2),
@@ -123,15 +123,15 @@ class _CakeListScreenState extends State<CakeListScreen> {
                                             children: [
                                               Padding(
                                                 padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                                child: Text(_cakeList[index]['offered_price'] == "0" 
-                                                ? "RM ${_cakeList[index]['original_price']}"
-                                                : "RM ${_cakeList[index]['offered_price']}",
+                                                child: Text(_tartList[index]['offered_price'] == "0" 
+                                                ? "RM ${_tartList[index]['original_price']}"
+                                                : "RM ${_tartList[index]['offered_price']}",
                                                 style: TextStyle(fontSize:16,),),
                                               ),
                                               SizedBox(width:10),
-                                              Text(_cakeList[index]['offered_price'] == "0" 
+                                              Text(_tartList[index]['offered_price'] == "0" 
                                                 ? ""
-                                                : "RM ${_cakeList[index]['original_price']}",
+                                                : "RM ${_tartList[index]['original_price']}",
                                                 style: Theme.of(context).appBarTheme.textTheme.headline3,)
                                             ],),
                                           SizedBox(height:6),
@@ -139,7 +139,7 @@ class _CakeListScreenState extends State<CakeListScreen> {
                                             children: [
                                               Padding(
                                                 padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                                child: Text(_cakeList[index]['rating'],
+                                                child: Text(_tartList[index]['rating'],
                                                 style: TextStyle(fontSize:12,color: Colors.orange),),
                                               ),
                                               SizedBox(width: 5),
@@ -178,10 +178,10 @@ class _CakeListScreenState extends State<CakeListScreen> {
     );
   }
 
-  void _loadCake() {
+  void _loadTart() {
 
     http.post(
-      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/load_cake.php"),
+      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/load_tart.php"),
       body: {
         "email":widget.user.email,
       }).then(
@@ -191,10 +191,10 @@ class _CakeListScreenState extends State<CakeListScreen> {
             return;
           }else{
             var jsondata = json.decode(response.body);
-            _cakeList = jsondata["cake"];
+            _tartList = jsondata["tart"];
             titleCenter = "Contain Data";
             setState(() {});
-            print(_cakeList);
+            print(_tartList);
           }
       }
     );
@@ -202,44 +202,17 @@ class _CakeListScreenState extends State<CakeListScreen> {
 
   void _cakeDetails(int index) {
 
-    _cakeList[index]['size_slice']=="true" 
-      ? selected_slice=true
-      : selected_slice=false;
-
-    _cakeList[index]['size6_inch']=="true" 
-      ? selected_6inch=true
-      : selected_6inch=false;
-    
-    _cakeList[index]['size8_inch']=="true" 
-      ? selected_8inch=true
-      : selected_8inch=false;
-
-    _cakeList[index]['size10_inch']=="true" 
-      ? selected_10inch=true
-      : selected_10inch=false;
-
-    _cakeList[index]['size12_inch']=="true" 
-      ? selected_12inch=true
-      : selected_12inch=false;
-    
-    print(selected_12inch);
-
-    print(_cakeList[index]['cake_no']);
-    CakeList cakeList = new CakeList(
-      cakeNo: _cakeList[index]['cake_no'],
-      cakeName: _cakeList[index]['cake_name'],
-      oriPrice: _cakeList[index]['original_price'],
-      offeredPrice: _cakeList[index]['offered_price'],
-      rating: _cakeList[index]['rating'],
-      details: _cakeList[index]['cake_detail'],
-      slice: selected_slice,
-      inch_6: selected_6inch,
-      inch_8: selected_8inch,
-      inch_10: selected_10inch,
+    print(_tartList[index]['cake_no']);
+    TartList tartList = new TartList(
+      tartNo: _tartList[index]['tart_no'],
+      tartName: _tartList[index]['tart_name'],
+      oriPrice: _tartList[index]['original_price'],
+      offeredPrice: _tartList[index]['offered_price'],
+      rating: _tartList[index]['rating'],
+      details: _tartList[index]['tart_detail'],
     );
-
     Navigator.push(
-      context,MaterialPageRoute(builder: (context)=> CakeDetailsScreen(cakeList:cakeList,user: widget.user,))
+      context,MaterialPageRoute(builder: (context)=> TartDetailsScreen(tartList:tartList,user: widget.user,))
     );
   }
 
@@ -305,7 +278,7 @@ class _CakeListScreenState extends State<CakeListScreen> {
                   child: (Text('OK',
                       style: Theme.of(context).textTheme.bodyText2)),
                   onPressed: () {
-                    _sortCakePrice(sortButton);
+                    _sortTartPrice(sortButton,);
                     Navigator.of(context).pop();
                   },
                 ),
@@ -322,15 +295,15 @@ class _CakeListScreenState extends State<CakeListScreen> {
         });
   }
 
-  void _sortCakePrice(int sortButton) {
+  void _sortTartPrice(int sortButton) {
 
     print(sortButton);
 
     if(sortButton == 1){
-      _loadCake();
+      _loadTart();
     }
     http.post(
-      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/sort_cake_price.php"),
+      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/sort_tart_price.php"),
       body: {
         "email":widget.user.email,
         "sort_value":sortButton.toString(),
@@ -338,7 +311,7 @@ class _CakeListScreenState extends State<CakeListScreen> {
         (response){
           setState(() {
             var jsondata = json.decode(response.body);
-            _cakeList = jsondata["cake"];
+            _tartList = jsondata["tart"];
             FocusScope.of(context).requestFocus(new FocusNode());
           });
       }

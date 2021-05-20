@@ -40,16 +40,6 @@ class _MyCupCakeListScreenState extends State<MyCupCakeListScreen> {
     return Scaffold(
       appBar:AppBar(
         title: Text('Cup Cakes',style: TextStyle(fontFamily: 'Arial')),
-        actions: [
-          IconButton(
-              icon: Icon(Icons.add), 
-              color: Colors.white,
-              onPressed: (){
-                Navigator.pushReplacement(
-                  context, MaterialPageRoute(builder: (context)=>AddCupCakeScreen(user: widget.user,))
-                );
-          }),
-        ],
       ),
       body: Center(
         child: Column(
@@ -90,6 +80,7 @@ class _MyCupCakeListScreenState extends State<MyCupCakeListScreen> {
                                   ]
                                 ),
                                 child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     ClipRRect(
                                       borderRadius:BorderRadius.only(
@@ -99,16 +90,12 @@ class _MyCupCakeListScreenState extends State<MyCupCakeListScreen> {
                                         imageUrl: "https://javathree99.com/s271059/littlecakestory/images/product_cup_cake/${_cupCakeList[index]['cup_cake_no']}.png",
                                         height: 185,
                                         width: 185,)),
-                                    Row(
-                                      children:[
-                                        Padding(
-                                        padding: const EdgeInsets.fromLTRB(5, 15, 5, 0),
-                                        child: Text(_cupCakeList[index]['cup_cake_name'],
-                                            overflow: TextOverflow.ellipsis,
-                                            textAlign: TextAlign.left,
-                                            style: Theme.of(context).appBarTheme.textTheme.headline2),
-                                        ),
-                                      ] 
+                                    Padding(
+                                    padding: const EdgeInsets.fromLTRB(5, 15, 5, 0),
+                                    child: Text(_cupCakeList[index]['cup_cake_name'],
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.left,
+                                        style: Theme.of(context).appBarTheme.textTheme.headline2),
                                     ), 
                                     SizedBox(height: 6),
                                     Row(
@@ -154,6 +141,16 @@ class _MyCupCakeListScreenState extends State<MyCupCakeListScreen> {
             )
           ]
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context)=>AddCupCakeScreen(user: widget.user,))
+          );
+        },
+        child:Icon(Icons.add,
+          color: Colors.white,
+        )
       ),
     );
   }
