@@ -2,17 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:little_cake_story/model/cup_cake.dart';
+import 'package:little_cake_story/model/product.dart';
 import 'package:little_cake_story/model/user.dart';
-
-import 'cup_cake_details.dart';
+import 'package:little_cake_story/screen/cart/cart_screen.dart';
+import 'package:little_cake_story/screen/home/caterogries/cup_cake_details.dart';
 
 class CupCakeListScreen extends StatefulWidget {
 
   final User user;
-  final CupCakeList cupCakeList;
-
-  const CupCakeListScreen({Key key, this.user, this.cupCakeList}) : super(key: key);
+  final ProductList productList;
+  const CupCakeListScreen({Key key, this.user, this.productList}) : super(key: key);
 
   @override
   _CupCakeListScreenState createState() => _CupCakeListScreenState();
@@ -20,17 +19,19 @@ class CupCakeListScreen extends StatefulWidget {
 
 class _CupCakeListScreenState extends State<CupCakeListScreen> {
 
-  List _cupCakeList;
+  List _productList;
   String titleCenter = "Loading...",searchText="Search";
   double screenHeight, screenWidth;
   TextEditingController _searchCakeController = new TextEditingController();
   int sortButton=1;
+  String type = "CupCake";
 
   @override
   void initState() {
 
     super.initState();
     _loadCupCake();
+    _loadCartQuantity();
   }
   
   @override
@@ -42,11 +43,16 @@ class _CupCakeListScreenState extends State<CupCakeListScreen> {
     return Scaffold(
       appBar:AppBar(
         title: Text('Cup Cakes',style: TextStyle(fontFamily: 'Arial')),
+        actions: [
+          IconButton(onPressed: (){
+            _sortCupCakeDialog(context);
+          }, icon: Icon(Icons.list,color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor))
+        ],
       ),
       body: Center(
         child: Column(
           children: [
-            _cupCakeList == null 
+            _productList == null 
             ? Flexible(
                 child: Center(
                   child: Text(titleCenter)),
@@ -61,7 +67,7 @@ class _CupCakeListScreenState extends State<CupCakeListScreen> {
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                           child: GridView.builder(
-                            itemCount: _cupCakeList.length,
+                            itemCount: _productList.length,
                             gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
                               mainAxisSpacing: 5,
@@ -95,7 +101,7 @@ class _CupCakeListScreenState extends State<CupCakeListScreen> {
                                             topLeft:Radius.circular(10),
                                             topRight:Radius.circular(10),),
                                             child: CachedNetworkImage(
-                                              imageUrl: "https://javathree99.com/s271059/littlecakestory/images/product_cup_cake/${_cupCakeList[index]['cup_cake_no']}.png",
+                                              imageUrl: "https://javathree99.com/s271059/littlecakestory/images/product/${_productList[index]['product_no']}.png",
                                               height: 185,
                                               width: 185,
                                               fit: BoxFit.cover,
@@ -113,7 +119,7 @@ class _CupCakeListScreenState extends State<CupCakeListScreen> {
                                           ),
                                           Padding(
                                           padding: const EdgeInsets.fromLTRB(5, 15, 5, 0),
-                                          child: Text(_cupCakeList[index]['cup_cake_name'],
+                                          child: Text(_productList[index]['product_name'],
                                               overflow: TextOverflow.ellipsis,
                                               textAlign: TextAlign.left,
                                               style: Theme.of(context).appBarTheme.textTheme.headline2),
@@ -123,15 +129,15 @@ class _CupCakeListScreenState extends State<CupCakeListScreen> {
                                             children: [
                                               Padding(
                                                 padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                                child: Text(_cupCakeList[index]['offered_price'] == "0" 
-                                                ? "RM ${_cupCakeList[index]['original_price']}"
-                                                : "RM ${_cupCakeList[index]['offered_price']}",
+                                                child: Text(_productList[index]['offered_price'] == "0" 
+                                                ? "RM ${_productList[index]['original_price']}"
+                                                : "RM ${_productList[index]['offered_price']}",
                                                 style: TextStyle(fontSize:16,),),
                                               ),
                                               SizedBox(width:10),
-                                              Text(_cupCakeList[index]['offered_price'] == "0" 
+                                              Text(_productList[index]['offered_price'] == "0" 
                                                 ? ""
-                                                : "RM ${_cupCakeList[index]['original_price']}",
+                                                : "RM ${_productList[index]['original_price']}",
                                                 style: Theme.of(context).appBarTheme.textTheme.headline3,)
                                             ],),
                                           SizedBox(height:6),
@@ -139,7 +145,7 @@ class _CupCakeListScreenState extends State<CupCakeListScreen> {
                                             children: [
                                               Padding(
                                                 padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                                child: Text(_cupCakeList[index]['rating'],
+                                                child: Text(_productList[index]['rating'],
                                                 style: TextStyle(fontSize:12,color: Colors.orange),),
                                               ),
                                               SizedBox(width: 5),
@@ -167,12 +173,15 @@ class _CupCakeListScreenState extends State<CupCakeListScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: Colors.red[200],
         onPressed: () {
-          _sortCakeDialog(context);
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context)=>CartScreen(user: widget.user,))
+          );
         },
-        icon:Icon(Icons.list,
+        icon:Icon(Icons.shopping_cart,
           color: Colors.white,),
-        label: Text("Sort",
+        label: Text(widget.user.qty,
           style: TextStyle(color:Colors.white,fontFamily: 'Calibri',fontSize: 16),),
       ),
     );
@@ -181,9 +190,11 @@ class _CupCakeListScreenState extends State<CupCakeListScreen> {
   void _loadCupCake() {
 
     http.post(
-      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/load_cup_cake.php"),
+      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/load_other_product.php"),
       body: {
         "email":widget.user.email,
+        "type":type,
+
       }).then(
         (response){
           if(response.body == "nodata"){
@@ -191,10 +202,29 @@ class _CupCakeListScreenState extends State<CupCakeListScreen> {
             return;
           }else{
             var jsondata = json.decode(response.body);
-            _cupCakeList = jsondata["cupcake"];
+            _productList = jsondata["product"];
             titleCenter = "Contain Data";
             setState(() {});
-            print(_cupCakeList);
+            print(_productList);
+          }
+      }
+    );
+  }
+
+  void _loadCartQuantity(){
+
+    http.post(
+      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/load_cart_quantity.php"),
+      body: {
+        "email":widget.user.email,
+      }).then(
+        (response){
+          print(response.body);
+
+          if(response.body=="nodata"){
+          }
+          else {
+            widget.user.qty = response.body;
           }
       }
     );
@@ -202,21 +232,21 @@ class _CupCakeListScreenState extends State<CupCakeListScreen> {
 
   void _cakeDetails(int index) {
 
-    print(_cupCakeList[index]['cake_no']);
-    CupCakeList cupCakeList = new CupCakeList(
-      cupCakeNo: _cupCakeList[index]['cup_cake_no'],
-      cupCakeName: _cupCakeList[index]['cup_cake_name'],
-      oriPrice: _cupCakeList[index]['original_price'],
-      offeredPrice: _cupCakeList[index]['offered_price'],
-      rating: _cupCakeList[index]['rating'],
-      details: _cupCakeList[index]['cup_cake_detail'],
+    ProductList productList = new ProductList(
+      productNo: _productList[index]['product_no'],
+      productName: _productList[index]['product_name'],
+      oriPrice: _productList[index]['original_price'],
+      offeredPrice: _productList[index]['offered_price'],
+      rating: _productList[index]['rating'],
+      details: _productList[index]['product_detail'],
+      type: _productList[index]['type'],
     );
     Navigator.push(
-      context,MaterialPageRoute(builder: (context)=> CupCakeDetailsScreen(cupCakeList:cupCakeList,user: widget.user,))
+      context,MaterialPageRoute(builder: (context)=> CupCakeDetailsScreen(productList:productList,user: widget.user,))
     );
   }
 
-  Future<void> _sortCakeDialog(BuildContext context) async {
+  Future<void> _sortCupCakeDialog(BuildContext context) async {
     return await showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -303,15 +333,17 @@ class _CupCakeListScreenState extends State<CupCakeListScreen> {
       _loadCupCake();
     }
     http.post(
-      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/sort_cup_cake_price.php"),
+      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/sort_other_product_price.php"),
       body: {
         "email":widget.user.email,
         "sort_value":sortButton.toString(),
+        "type":type,
+
       }).then(
         (response){
           setState(() {
             var jsondata = json.decode(response.body);
-            _cupCakeList = jsondata["cupcake"];
+            _productList = jsondata["product"];
             FocusScope.of(context).requestFocus(new FocusNode());
           });
       }

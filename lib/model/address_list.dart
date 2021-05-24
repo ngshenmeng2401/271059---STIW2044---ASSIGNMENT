@@ -1,8 +1,8 @@
-class AddressList{
+class Address{
 
-  String addressNo,streetAddress,postalCode,city,state;
+  String addressNo ,streetAddress = "Street Address",postalCode = "Post Code",city = "City",state = "State";
 
-  AddressList(
+  Address(
     {
       this.addressNo,
       this.streetAddress,

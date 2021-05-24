@@ -2,15 +2,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-import 'package:little_cake_story/model/tart.dart';
+import 'package:little_cake_story/model/product.dart';
 import 'package:little_cake_story/model/user.dart';
 import 'package:little_cake_story/screen/profile/my_product/my_tarts_list.dart';
 
 class MyTartDetails extends StatefulWidget {
 
   final User user;
-  final TartList tartList;
-  const MyTartDetails({Key key, this.user, this.tartList}) : super(key: key);
+  final ProductList productList;
+  const MyTartDetails({Key key, this.user, this.productList}) : super(key: key);
 
   @override
   _MyTartDetailsState createState() => _MyTartDetailsState();
@@ -40,7 +40,7 @@ class _MyTartDetailsState extends State<MyTartDetails> {
                 context,
                 MaterialPageRoute(
                     builder: (context) =>
-                        MyTartsListScreen(tartList: widget.tartList,user: widget.user)));
+                        MyTartsListScreen(productList: widget.productList,user: widget.user)));
           },
         ),
         title: Text('Tarts', style: TextStyle(fontFamily: 'Arial')),
@@ -53,7 +53,7 @@ class _MyTartDetailsState extends State<MyTartDetails> {
               height: screenHeight / 2.35,
               child: CachedNetworkImage(
                 imageUrl:
-                    "https://javathree99.com/s271059/littlecakestory/images/product_tart/${widget.tartList.tartNo}.png",
+                    "https://javathree99.com/s271059/littlecakestory/images/product/${widget.productList.productNo}.png",
               ),
             ),
             Container(
@@ -66,7 +66,7 @@ class _MyTartDetailsState extends State<MyTartDetails> {
                     ListTile(
                       leading: Icon(Icons.inventory),
                       title: Text(
-                        widget.tartList.tartName,
+                        widget.productList.productName,
                         style: TextStyle(fontSize: 20, fontFamily: 'Calibri'),
                       ),
                       subtitle: Text("Name"),
@@ -79,7 +79,7 @@ class _MyTartDetailsState extends State<MyTartDetails> {
                     ListTile(
                       leading: Icon(Icons.money),
                       title: Text(
-                        "RM ${widget.tartList.oriPrice}",
+                        "RM ${widget.productList.oriPrice}",
                         style: TextStyle(fontSize: 20, fontFamily: 'Calibri'),
                       ),
                       subtitle: Text("Original Price"),
@@ -92,7 +92,7 @@ class _MyTartDetailsState extends State<MyTartDetails> {
                     ListTile(
                       leading: Icon(Icons.money),
                       title: Text(
-                        "RM ${widget.tartList.offeredPrice}",
+                        "RM ${widget.productList.offeredPrice}",
                         style: TextStyle(fontSize: 20, fontFamily: 'Calibri'),
                       ),
                       subtitle: Text("Offered Price"),
@@ -105,7 +105,7 @@ class _MyTartDetailsState extends State<MyTartDetails> {
                     ListTile(
                       leading: Icon(Icons.star),
                       title: Text(
-                        widget.tartList.rating,
+                        widget.productList.rating,
                         style: TextStyle(fontSize: 20, fontFamily: 'Calibri'),
                       ),
                       subtitle: Text("Rating"),
@@ -118,7 +118,7 @@ class _MyTartDetailsState extends State<MyTartDetails> {
                     ListTile(
                       leading: Icon(Icons.list),
                       title: Text(
-                        widget.tartList.details,
+                        widget.productList.details,
                         style: TextStyle(fontSize: 16, fontFamily: 'Calibri',),
                       ),
                       subtitle: Text("Details"),
@@ -152,6 +152,7 @@ class _MyTartDetailsState extends State<MyTartDetails> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.red[200],
         onPressed: () {
           _editDialog();
         },
@@ -286,23 +287,23 @@ class _MyTartDetailsState extends State<MyTartDetails> {
     }else{
 
       name = (_nameController.text.toString() == "")
-        ? widget.tartList.tartName
+        ? widget.productList.productName
         : _nameController.text.toString();
       
       oriPrice = (_oriPriceController.text.toString() == "")
-        ? widget.tartList.oriPrice
+        ? widget.productList.oriPrice
         : _oriPriceController.text.toString();
 
       offeredPrice = (_offeredPriceController.text.toString() == "")
-        ? widget.tartList.offeredPrice
+        ? widget.productList.offeredPrice
         : _offeredPriceController.text.toString();
 
       rating = (_ratingController.text.toString() == "")
-        ? widget.tartList.rating
+        ? widget.productList.rating
         : _ratingController.text.toString();
 
       details = (_detailsController.text.toString() == "")
-        ? widget.tartList.details
+        ? widget.productList.details
         : _detailsController.text.toString();
 
       _editCake(name,oriPrice,offeredPrice,rating,details);
@@ -320,14 +321,14 @@ class _MyTartDetailsState extends State<MyTartDetails> {
     print(details);
 
     http.post(
-      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/edit_tart.php"),
+      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/edit_product.php"),
       body: {
-        "tart_no":widget.tartList.tartNo,
-        "tart_name":name,
+        "product_no":widget.productList.productNo,
+        "name":name,
         "original_price":oriPrice,
         "offered_price":offeredPrice,
         "rating":rating,
-        "tart_detail":details,
+        "detail":details,
 
       }).then(
         (response){
@@ -345,11 +346,11 @@ class _MyTartDetailsState extends State<MyTartDetails> {
               fontSize: 16.0);
             setState(() {
 
-              widget.tartList.tartName=name;
-              widget.tartList.oriPrice=oriPrice;
-              widget.tartList.offeredPrice=offeredPrice;
-              widget.tartList.rating=rating;
-              widget.tartList.details=details;
+              widget.productList.productName=name;
+              widget.productList.oriPrice=oriPrice;
+              widget.productList.offeredPrice=offeredPrice;
+              widget.productList.rating=rating;
+              widget.productList.details=details;
             });
 
           }else{
@@ -370,7 +371,7 @@ class _MyTartDetailsState extends State<MyTartDetails> {
 
   void _deleteDialog() {
 
-    print(widget.tartList.tartNo);
+    print(widget.productList.productNo);
 
     showDialog(
       context: context, 
@@ -385,9 +386,9 @@ class _MyTartDetailsState extends State<MyTartDetails> {
               child:(Text('Yes',style: Theme.of(context).textTheme.bodyText2)),
               onPressed: (){
                 Navigator.of(context).pop();
-                _deleteTart(widget.tartList.tartNo);
+                _deleteTart(widget.productList.productNo);
                 Navigator.pushReplacement(
-                  context,MaterialPageRoute(builder: (context)=> MyTartsListScreen(tartList: widget.tartList,user: widget.user))
+                  context,MaterialPageRoute(builder: (context)=> MyTartsListScreen(productList: widget.productList,user: widget.user))
                 );
               },),
             TextButton(
@@ -404,9 +405,9 @@ class _MyTartDetailsState extends State<MyTartDetails> {
     print(tartNo);
 
     http.post(
-      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/delete_tart.php"),
+      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/delete_product.php"),
       body: {
-        "tart_no":widget.tartList.tartNo,
+        "product_no":widget.productList.productNo,
       }).then(
         (response){
           if(response.body == "success"){

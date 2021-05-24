@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:little_cake_story/model/payment.dart';
 import 'package:little_cake_story/model/user.dart';
-import 'package:little_cake_story/screen/cart/cart_screen.dart';
-import 'package:little_cake_story/screen/profile/payment/payment_complete.dart';
+import 'package:little_cake_story/screen/cart/payment_complete.dart';
+import 'package:http/http.dart' as http;
 
 class PaymentSelectionScreen extends StatefulWidget {
 
   final User user;
-  const PaymentSelectionScreen({Key key, this.user}) : super(key: key);
+  final Payment payment;
+  const PaymentSelectionScreen({Key key, this.user, this.payment}) : super(key: key);
 
   @override
   _PaymentSelectionScreenState createState() => _PaymentSelectionScreenState();
 }
 
 class _PaymentSelectionScreenState extends State<PaymentSelectionScreen> {
+
+  String _dateTime, paymentMethod;
   int value = 0;
   final paymentSelectionList = [
     'Credit Card / Debit Card',
@@ -39,13 +44,6 @@ class _PaymentSelectionScreenState extends State<PaymentSelectionScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back), 
-          onPressed: (){
-            Navigator.pushReplacement(
-              context,MaterialPageRoute(builder: (context) =>CartScreen()));
-            },
-          ),
         title: Text(
           'Payment',
           style: TextStyle(fontFamily: 'Arial'),
@@ -104,14 +102,84 @@ class _PaymentSelectionScreenState extends State<PaymentSelectionScreen> {
                   fontSize: 18, color: Colors.white, fontFamily: 'Arial'),
             ),
             onPressed: () {
-              Navigator.pushReplacement(
-                  context,MaterialPageRoute(builder: (context)=>PaymentCompleteScreen(user: widget.user,))
-                );
+              _checkPaymentMethod();
             },
             color: Colors.red[200],
           ),
         ],
       ),
+    );
+  }
+
+  void _checkPaymentMethod(){
+
+    if(value == 0){
+      paymentMethod = "Card Payment";
+    }else if(value == 1){
+      paymentMethod = "Online Transfer";
+    }else if(value == 2){
+      paymentMethod = "Cash";
+    }else if(value == 3){
+      paymentMethod = "Paypal";
+    }else if(value == 4){
+      paymentMethod = "E Wallet";
+    }
+
+    _makePayment(paymentMethod);
+  }
+
+  void _makePayment(String paymentMethod) {
+
+    _dateTime = widget.payment.date + " " + widget.payment.time;
+    print(_dateTime);
+    print(widget.payment.message);
+    print(widget.payment.address);
+    print(widget.payment.totalPayment);
+    print(widget.user.email);
+    print(paymentMethod);
+
+    http.post(
+      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/add_payment.php"),
+      body: {
+        "dateTime":_dateTime,
+        "email":widget.user.email,
+        "message":widget.payment.message,
+        "address":widget.payment.address,
+        "total_payment":widget.payment.totalPayment.toString(),
+        "paymentMethod":paymentMethod,
+        "item_qty":widget.user.qty,
+
+      }).then(
+        (response){
+          print(response.body);
+
+          if(response.body=="success"){
+            Fluttertoast.showToast(
+            msg: "Pay Success",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red[200],
+            textColor: Colors.white,
+            fontSize: 16.0);
+
+          }
+          else {
+            Fluttertoast.showToast(
+            msg: "Pay Failed",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red[200],
+            textColor: Colors.white,
+            fontSize: 16.0);
+
+          }
+        }
+      );
+
+    Navigator.pushReplacement(
+      context,MaterialPageRoute(builder: (context)=>PaymentCompleteScreen(user: widget.user,))
     );
   }
 }

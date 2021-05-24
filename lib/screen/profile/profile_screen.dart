@@ -2,11 +2,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:little_cake_story/model/user.dart';
-import 'package:little_cake_story/screen/profile/payment/payment_selection.dart';
+import 'package:little_cake_story/screen/cart/cart_screen.dart';
 import 'package:little_cake_story/screen/profile/my_product/product_dashboard.dart';
+import 'package:little_cake_story/screen/profile/payment_history/payment_history.dart';
 import '../login_screen.dart';
+import 'favourite/favourite.dart';
 import 'settings/setting_screen.dart';
 import 'edit_profile_screen.dart';
+import 'package:http/http.dart' as http;
 
 class ProfileScreen extends StatefulWidget {
   
@@ -24,6 +27,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
   File _image;
 
   @override
+  void initState() {
+
+    super.initState();
+    _loadCartQuantity();
+  }
+
+  @override
   Widget build(BuildContext context) {
 
     screenHeight = MediaQuery.of(context).size.height;
@@ -32,6 +42,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       appBar:AppBar(
         title: Text('LITTLE CAKE STORY',style: TextStyle(fontFamily: 'Arial')),
+        actions:<Widget> [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 15, 20, 0),
+            child: Container(
+              width: 30,
+              height: 10,
+              child: GestureDetector(
+                onTap: (){
+                  Navigator.push(
+                    context, MaterialPageRoute(builder: (context)=>CartScreen(user: widget.user,))
+                  );
+                },
+                child: Stack(
+                  children:<Widget> [
+                    Icon(Icons.shopping_cart_outlined,
+                      size: 28,
+                      color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor,),
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: Container(
+                        width: 18,
+                        height: 18,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor,),
+                          color: Colors.red[300],
+                          shape: BoxShape.circle),
+                        child: Text(widget.user.qty,
+                          style: TextStyle(fontSize: 12,color:Theme.of(context).bottomNavigationBarTheme.unselectedItemColor),
+                          textAlign: TextAlign.center,)),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       body:Center(
         child:Container(
@@ -122,21 +168,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ProfileMenu(
                           icon: Icon(Icons.favorite_outline),
                           text: "Favourite",
-                          press: (){},
-                        ),
-                        ProfileMenu(
-                          icon: Icon(Icons.payment),
-                          text: "Payment",
                           press: (){
-                            Navigator.pushReplacement(
-                              context,MaterialPageRoute(builder: (context)=>PaymentSelectionScreen(user: widget.user,))
+                            Navigator.push(
+                              context,MaterialPageRoute(builder: (context)=>FavouriteProductScreen(user: widget.user))
                             );
                           },
-                        ), 
+                        ),
                         ProfileMenu(
                           icon: Icon(Icons.history),
                           text: "Payment History",
-                          press: (){},
+                          press: (){
+                            Navigator.push(
+                              context,MaterialPageRoute(builder: (context)=>PaymentHistoryScreen(user: widget.user))
+                            ); 
+                          },
                         ), 
                         ProfileMenu(
                           icon: Icon(Icons.settings_outlined),
@@ -153,7 +198,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           press: (){
                             Navigator.pushReplacement(
                               context,MaterialPageRoute(builder: (context)=>LoginScreen())
-                            );                    
+                            );               
                           },
                           hasNavigation: false,
                         ),
@@ -165,6 +210,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
         )
       )
+    );
+  }
+  void _loadCartQuantity(){
+
+  http.post(
+    Uri.parse("https://javathree99.com/s271059/littlecakestory/php/load_cart_quantity.php"),
+    body: {
+      "email":widget.user.email,
+    }).then(
+      (response){
+        print(response.body);
+
+        if(response.body=="nodata"){
+        }
+        else {
+          widget.user.qty = response.body;
+        }
+      }
     );
   }
 }

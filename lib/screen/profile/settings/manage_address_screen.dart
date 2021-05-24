@@ -9,7 +9,7 @@ import 'edit_address.dart';
 
 class ManageAddressScreen extends StatefulWidget {
 
-  final AddressList addressList;
+  final Address addressList;
   final User user;
   const ManageAddressScreen({Key key, this.user, this.addressList}) : super(key: key);
 
@@ -50,64 +50,59 @@ class _ManageAddressScreenState extends State<ManageAddressScreen> {
           }),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Container(
-            height: screenHeight,
-            width: screenWidth,
-            child:Column(
-              children:[
-                useraddressList == null 
-                ? Flexible(
-                    child: Center(
-                      child: Text(titleCenter)),
-                )
-                : Flexible(
-                    child: Center(
-                      child: GridView.count(
-                        crossAxisCount: 1,
-                        childAspectRatio: (screenWidth / screenHeight) /0.19,
-                        children: List.generate(useraddressList.length, (index){
-                          return Padding(
-                            padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-                            child: Card(
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                              child:Column(
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-
-                                    ),
-                                    padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                                    child: ListTile(
-                                      title: Text(useraddressList[index]['street_address'],style: TextStyle(fontSize:16,fontFamily:'Calibri'),),
-                                      subtitle: RichText(
-                                        text: TextSpan(
-                                          children:<TextSpan>[
-                                            TextSpan(text:useraddressList[index]['postal_code']+"\t",style: Theme.of(context).textTheme.bodyText2,),
-                                            TextSpan(text:useraddressList[index]['city']+"\n",style: Theme.of(context).textTheme.bodyText2,),
-                                            TextSpan(text:useraddressList[index]['state'],style: Theme.of(context).textTheme.bodyText2,),
-                                          ]
-                                        )),
-                                      trailing: IconButton(
-                                        onPressed: (){
-                                          _editAddress(index);
-                                        },
-                                        icon:Icon(Icons.edit,
-                                        color: Colors.red[200],)),
-                                    ),
+      body: Center(
+        child: Container(
+          height: screenHeight,
+          width: screenWidth,
+          child:Column(
+            children:[
+              useraddressList == null 
+              ? Flexible(
+                  child: Center(
+                    child: Text(titleCenter)),
+              )
+              : Flexible(
+                  child: Center(
+                    child: GridView.count(
+                      crossAxisCount: 1,
+                      childAspectRatio: (screenWidth / screenHeight) /0.19,
+                      children: List.generate(useraddressList.length, (index){
+                        return Padding(
+                          padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
+                          child: Card(
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                            child:Column(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                  child: ListTile(
+                                    title: Text(useraddressList[index]['street_address'],style: TextStyle(fontSize:16,fontFamily:'Calibri'),),
+                                    subtitle: RichText(
+                                      text: TextSpan(
+                                        children:<TextSpan>[
+                                          TextSpan(text:useraddressList[index]['postal_code']+"\t",style: Theme.of(context).textTheme.bodyText2,),
+                                          TextSpan(text:useraddressList[index]['city']+"\n",style: Theme.of(context).textTheme.bodyText2,),
+                                          TextSpan(text:useraddressList[index]['state'],style: Theme.of(context).textTheme.bodyText2,),
+                                        ]
+                                      )),
+                                    trailing: IconButton(
+                                      onPressed: (){
+                                        _editAddress(index);
+                                      },
+                                      icon:Icon(Icons.edit,
+                                      color: Colors.red[200],)),
                                   ),
-                                ],
-                              )
-                            ),
-                          );
-                        })
-                      )
-                      ),
-                ),
-              ]
-            )
-          ),
+                                ),
+                              ],
+                            )
+                          ),
+                        );
+                      })
+                    )
+                    ),
+              ),
+            ]
+          )
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -147,7 +142,7 @@ class _ManageAddressScreenState extends State<ManageAddressScreen> {
 
   void _editAddress(int index) {
     print(useraddressList[index]['address_no']);
-    AddressList addressList = new AddressList(
+    Address addressList = new Address(
       addressNo: useraddressList[index]['address_no'],
       streetAddress: useraddressList[index]['street_address'],
       postalCode: useraddressList[index]['postal_code'],

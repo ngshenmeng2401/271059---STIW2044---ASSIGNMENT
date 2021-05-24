@@ -2,15 +2,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-import 'package:little_cake_story/model/cake.dart';
+import 'package:little_cake_story/model/product.dart';
 import 'package:little_cake_story/model/user.dart';
 import 'my_cake_list.dart';
 
 class MyCakeDetails extends StatefulWidget {
 
   final User user;
-  final CakeList cakeList;
-  const MyCakeDetails({Key key, this.user, this.cakeList}) : super(key: key);
+  final ProductList productList;
+  const MyCakeDetails({Key key, this.user, this.productList}) : super(key: key);
 
   @override
   _MyCakeDetailsState createState() => _MyCakeDetailsState();
@@ -40,7 +40,7 @@ class _MyCakeDetailsState extends State<MyCakeDetails> {
                 context,
                 MaterialPageRoute(
                     builder: (context) =>
-                        MyCakeListScreen(cakeList: widget.cakeList,user: widget.user)));
+                        MyCakeListScreen(productList: widget.productList,user: widget.user)));
           },
         ),
         title: Text('Cakes',style: TextStyle(fontFamily: 'Arial')),
@@ -53,7 +53,7 @@ class _MyCakeDetailsState extends State<MyCakeDetails> {
               height: screenHeight / 2.35,
               child: CachedNetworkImage(
                 imageUrl:
-                    "https://javathree99.com/s271059/littlecakestory/images/product_cake/${widget.cakeList.cakeNo}.png",
+                    "https://javathree99.com/s271059/littlecakestory/images/product/${widget.productList.productNo}.png",
               ),
             ),
             Container(
@@ -66,7 +66,7 @@ class _MyCakeDetailsState extends State<MyCakeDetails> {
                     ListTile(
                       leading: Icon(Icons.inventory),
                       title: Text(
-                        widget.cakeList.cakeName,
+                        widget.productList.productName,
                         style: TextStyle(fontSize: 20, fontFamily: 'Calibri'),
                       ),
                       subtitle: Text("Name"),
@@ -79,7 +79,7 @@ class _MyCakeDetailsState extends State<MyCakeDetails> {
                     ListTile(
                       leading: Icon(Icons.money),
                       title: Text(
-                        "RM ${widget.cakeList.oriPrice}",
+                        "RM ${widget.productList.oriPrice}",
                         style: TextStyle(fontSize: 20, fontFamily: 'Calibri'),
                       ),
                       subtitle: Text("Original Price"),
@@ -92,7 +92,7 @@ class _MyCakeDetailsState extends State<MyCakeDetails> {
                     ListTile(
                       leading: Icon(Icons.money),
                       title: Text(
-                        "RM ${widget.cakeList.offeredPrice}",
+                        "RM ${widget.productList.offeredPrice}",
                         style: TextStyle(fontSize: 20, fontFamily: 'Calibri'),
                       ),
                       subtitle: Text("Offered Price"),
@@ -105,7 +105,7 @@ class _MyCakeDetailsState extends State<MyCakeDetails> {
                     ListTile(
                       leading: Icon(Icons.star),
                       title: Text(
-                        widget.cakeList.rating,
+                        widget.productList.rating,
                         style: TextStyle(fontSize: 20, fontFamily: 'Calibri'),
                       ),
                       subtitle: Text("Rating"),
@@ -118,7 +118,7 @@ class _MyCakeDetailsState extends State<MyCakeDetails> {
                     ListTile(
                       leading: Icon(Icons.list),
                       title: Text(
-                        widget.cakeList.details,
+                        widget.productList.details,
                         style: TextStyle(fontSize: 16, fontFamily: 'Calibri',),
                       ),
                       subtitle: Text("Details"),
@@ -167,6 +167,7 @@ class _MyCakeDetailsState extends State<MyCakeDetails> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.red[200],
         onPressed: () {
           _editDialog();
         },
@@ -301,23 +302,23 @@ class _MyCakeDetailsState extends State<MyCakeDetails> {
     }else{
 
       name = (_nameController.text.toString() == "")
-        ? widget.cakeList.cakeName
+        ? widget.productList.productName
         : _nameController.text.toString();
       
       oriPrice = (_oriPriceController.text.toString() == "")
-        ? widget.cakeList.oriPrice
+        ? widget.productList.oriPrice
         : _oriPriceController.text.toString();
 
       offeredPrice = (_offeredPriceController.text.toString() == "")
-        ? widget.cakeList.offeredPrice
+        ? widget.productList.offeredPrice
         : _offeredPriceController.text.toString();
 
       rating = (_ratingController.text.toString() == "")
-        ? widget.cakeList.rating
+        ? widget.productList.rating
         : _ratingController.text.toString();
 
       details = (_detailsController.text.toString() == "")
-        ? widget.cakeList.details
+        ? widget.productList.details
         : _detailsController.text.toString();
 
       _editCake(name,oriPrice,offeredPrice,rating,details);
@@ -335,14 +336,14 @@ class _MyCakeDetailsState extends State<MyCakeDetails> {
     print(details);
 
     http.post(
-      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/edit_cake.php"),
+      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/edit_product.php"),
       body: {
-        "cake_no":widget.cakeList.cakeNo,
-        "cake_name":name,
+        "product_no":widget.productList.productNo,
+        "name":name,
         "original_price":oriPrice,
         "offered_price":offeredPrice,
         "rating":rating,
-        "cake_detail":details,
+        "detail":details,
 
       }).then(
         (response){
@@ -360,11 +361,11 @@ class _MyCakeDetailsState extends State<MyCakeDetails> {
               fontSize: 16.0);
             setState(() {
 
-              widget.cakeList.cakeName=name;
-              widget.cakeList.oriPrice=oriPrice;
-              widget.cakeList.offeredPrice=offeredPrice;
-              widget.cakeList.rating=rating;
-              widget.cakeList.details=details;
+              widget.productList.productName=name;
+              widget.productList.oriPrice=oriPrice;
+              widget.productList.offeredPrice=offeredPrice;
+              widget.productList.rating=rating;
+              widget.productList.details=details;
             });
 
           }else{
@@ -399,11 +400,11 @@ class _MyCakeDetailsState extends State<MyCakeDetails> {
                       title: Text("slice",style: TextStyle(fontFamily: 'Calibri',)),
                       trailing: Checkbox(
                         activeColor: Colors.red[200],
-                        value: widget.cakeList.slice,
+                        value: widget.productList.slice,
                         onChanged: (value){
                           setState(() {
-                            widget.cakeList.slice = value;
-                            print(widget.cakeList.slice);
+                            widget.productList.slice = value;
+                            print(widget.productList.slice);
                           });
                         },
                       ),
@@ -412,11 +413,11 @@ class _MyCakeDetailsState extends State<MyCakeDetails> {
                       title: Text("6 inch",style: TextStyle(fontFamily: 'Calibri',)),
                       trailing: Checkbox(
                         activeColor: Colors.red[200],
-                        value: widget.cakeList.inch_6,
+                        value: widget.productList.inch_6,
                         onChanged: (value){
                           setState(() {
-                            widget.cakeList.inch_6 = value;
-                            print(widget.cakeList.inch_6);
+                            widget.productList.inch_6 = value;
+                            print(widget.productList.inch_6);
                           });
                         },
                       ),
@@ -425,11 +426,11 @@ class _MyCakeDetailsState extends State<MyCakeDetails> {
                       title: Text("8 inch",style: TextStyle(fontFamily: 'Calibri',)),
                       trailing: Checkbox(
                         activeColor: Colors.red[200],
-                        value: widget.cakeList.inch_8,
+                        value: widget.productList.inch_8,
                         onChanged: (value){
                           setState(() {
-                            widget.cakeList.inch_8 = value;
-                            print(widget.cakeList.inch_8);
+                            widget.productList.inch_8 = value;
+                            print(widget.productList.inch_8);
                           });
                         },
                       ),
@@ -438,11 +439,11 @@ class _MyCakeDetailsState extends State<MyCakeDetails> {
                       title: Text("10 inch",style: TextStyle(fontFamily: 'Calibri',)),
                       trailing: Checkbox(
                         activeColor: Colors.red[200],
-                        value: widget.cakeList.inch_10,
+                        value: widget.productList.inch_10,
                         onChanged: (value){
                           setState(() {
-                            widget.cakeList.inch_10 = value;
-                            print(widget.cakeList.inch_10);
+                            widget.productList.inch_10 = value;
+                            print(widget.productList.inch_10);
                           });
                         },
                       ),
@@ -455,7 +456,7 @@ class _MyCakeDetailsState extends State<MyCakeDetails> {
                   child: (Text('Submit',
                       style: Theme.of(context).textTheme.bodyText2)),
                   onPressed: () {
-                    _editSize(widget.cakeList.slice, widget.cakeList.inch_6, widget.cakeList.inch_8, widget.cakeList.inch_10);
+                    _editSize(widget.productList.slice, widget.productList.inch_6, widget.productList.inch_8, widget.productList.inch_10);
                     Navigator.of(context).pop();
                   },
                 ),
@@ -474,7 +475,7 @@ class _MyCakeDetailsState extends State<MyCakeDetails> {
 
   void _editSize(bool slice, bool inch_6, bool inch_8, bool inch_10) {
 
-    print(widget.cakeList.cakeNo);
+    print(widget.productList.productNo);
     print(slice);
     print(inch_6);
     print(inch_8);
@@ -483,7 +484,7 @@ class _MyCakeDetailsState extends State<MyCakeDetails> {
     http.post(
       Uri.parse("https://javathree99.com/s271059/littlecakestory/php/edit_cake_size.php"),
       body: {
-        "cake_no":widget.cakeList.cakeNo,
+        "product_no":widget.productList.productNo,
         "selected_slice":slice.toString(),
         "6_inch":inch_6.toString(),
         "8_inch":inch_8.toString(),
@@ -505,9 +506,9 @@ class _MyCakeDetailsState extends State<MyCakeDetails> {
               fontSize: 16.0);
             setState(() {
 
-              widget.cakeList.inch_6=inch_6;
-              widget.cakeList.inch_8=inch_8;
-              widget.cakeList.inch_10=inch_10;
+              widget.productList.inch_6=inch_6;
+              widget.productList.inch_8=inch_8;
+              widget.productList.inch_10=inch_10;
             });
 
           }else{
@@ -529,7 +530,7 @@ class _MyCakeDetailsState extends State<MyCakeDetails> {
 
   void _deleteDialog() {
 
-    print(widget.cakeList.cakeNo);
+    print(widget.productList.productNo);
 
     showDialog(
       context: context, 
@@ -544,9 +545,9 @@ class _MyCakeDetailsState extends State<MyCakeDetails> {
               child:(Text('Yes',style: Theme.of(context).textTheme.bodyText2)),
               onPressed: (){
                 Navigator.of(context).pop();
-                _deleteCake(widget.cakeList.cakeNo);
+                _deleteCake(widget.productList.productNo);
                 Navigator.pushReplacement(
-                  context,MaterialPageRoute(builder: (context)=> MyCakeListScreen(cakeList: widget.cakeList,user: widget.user))
+                  context,MaterialPageRoute(builder: (context)=> MyCakeListScreen(productList: widget.productList,user: widget.user))
                 );
               },),
             TextButton(
@@ -563,9 +564,9 @@ class _MyCakeDetailsState extends State<MyCakeDetails> {
     print(cakeNo);
 
     http.post(
-      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/delete_cake.php"),
+      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/delete_product.php"),
       body: {
-        "cake_no":widget.cakeList.cakeNo,
+        "product_no":widget.productList.productNo,
       }).then(
         (response){
           if(response.body == "success"){

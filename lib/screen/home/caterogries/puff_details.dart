@@ -1,22 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:little_cake_story/model/puff.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:little_cake_story/model/product.dart';
 import 'package:little_cake_story/model/user.dart';
+import 'package:http/http.dart' as http;
 
 class PuffDetailsScreen extends StatefulWidget {
 
   final User user;
-  final PuffList puffList;
-
-  const PuffDetailsScreen({Key key, this.user, this.puffList}) : super(key: key);
+  final ProductList productList;
+  const PuffDetailsScreen({Key key, this.user, this.productList}) : super(key: key);
 
   @override
   _PuffDetailsScreenState createState() => _PuffDetailsScreenState();
 }
 
 class _PuffDetailsScreenState extends State<PuffDetailsScreen> {
-
-  bool pressFavouriteColor = false, pressFavouriteIcon = false;
+  
+  bool selectSlice = false, select6Inch = false, select8Inch = false, select10Inch = false;
+  bool eggLess = false, pressFavouriteIcon = false;
+  String cartQuantity, _message = "No";
   double screenHeight,screenWidth;
   double totalOriPrice = 0, totalOfferedPrice = 0;
   TextEditingController _messageController = new TextEditingController();
@@ -30,7 +33,6 @@ class _PuffDetailsScreenState extends State<PuffDetailsScreen> {
     return Scaffold(
       appBar:AppBar(
         title: Text('Puff',style: TextStyle(fontFamily: 'Arial'),),
-        
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -44,7 +46,7 @@ class _PuffDetailsScreenState extends State<PuffDetailsScreen> {
                     alignment: Alignment.center,
                     child: CachedNetworkImage(
                       imageUrl:
-                          "https://javathree99.com/s271059/littlecakestory/images/product_puff/${widget.puffList.puffNo}.png",
+                          "https://javathree99.com/s271059/littlecakestory/images/product/${widget.productList.productNo}.png",
                     ),),
                   Align(
                     alignment: Alignment.bottomRight,
@@ -91,18 +93,17 @@ class _PuffDetailsScreenState extends State<PuffDetailsScreen> {
                             children: [
                               Container(
                               width: 250,
-                              // color: Colors.grey,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(widget.puffList.puffName,
+                                  Text(widget.productList.productName,
                                   textAlign: TextAlign.left,
                                   style: Theme.of(context).textTheme.headline6,),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children:[
-                                      Text(widget.puffList.rating,
+                                      Text(widget.productList.rating,
                                       style: TextStyle(color:Colors.orange,fontSize: 14),),
                                       Icon(Icons.star,color: Colors.orange,size: 20,),
                                       Icon(Icons.star,color: Colors.orange,size: 20,),
@@ -111,8 +112,7 @@ class _PuffDetailsScreenState extends State<PuffDetailsScreen> {
                                       Icon(Icons.star_half,color: Colors.orange,size: 20,),
                                     ]
                                   ),
-                                  // SizedBox(height:20),
-                                  Text("No: "+widget.puffList.puffNo),
+                                  Text("No: "+widget.productList.productNo),
                                 ],
                               ),
                             ),
@@ -120,7 +120,6 @@ class _PuffDetailsScreenState extends State<PuffDetailsScreen> {
                           ),
                           Container(
                             width: 110,
-                            // color: Colors.blue,
                             margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                             child:Column(
                               crossAxisAlignment: CrossAxisAlignment.end,
@@ -130,9 +129,9 @@ class _PuffDetailsScreenState extends State<PuffDetailsScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text("RM ",style: TextStyle(fontFamily: 'Calibri',fontSize: 14),),
-                                    Text(widget.puffList.offeredPrice == "0"
-                                      ? widget.puffList.oriPrice
-                                      : widget.puffList.offeredPrice,
+                                    Text(widget.productList.offeredPrice == "0"
+                                      ? widget.productList.oriPrice
+                                      : widget.productList.offeredPrice,
                                     style:TextStyle(
                                         color:Colors.red[200],
                                         fontSize: 40,
@@ -142,9 +141,9 @@ class _PuffDetailsScreenState extends State<PuffDetailsScreen> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
-                                    Text(widget.puffList.offeredPrice == "0"
+                                    Text(widget.productList.offeredPrice == "0"
                                       ? ""
-                                      : "RM "+widget.puffList.oriPrice,
+                                      : "RM "+widget.productList.oriPrice,
                                     style:Theme.of(context).appBarTheme.textTheme.headline3)
                                   ],
                                 ),
@@ -166,8 +165,7 @@ class _PuffDetailsScreenState extends State<PuffDetailsScreen> {
                         children:<Widget> [
                           Text("Product Details",style:Theme.of(context).appBarTheme.textTheme.headline2,),
                           SizedBox(height: 5,),
-                          Text(widget.puffList.details,style:Theme.of(context).textTheme.bodyText2),
-                          
+                          Text(widget.productList.details,style:Theme.of(context).textTheme.bodyText2),
                         ],
                       ),
                     ),
@@ -179,7 +177,9 @@ class _PuffDetailsScreenState extends State<PuffDetailsScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: Colors.red[200],
         onPressed: () {
+          _addToCartDialog();
         },
         icon:Icon(Icons.shopping_cart,
           color: Colors.white,),
@@ -188,5 +188,91 @@ class _PuffDetailsScreenState extends State<PuffDetailsScreen> {
       ),
     );
   }
+  void _addToCartDialog() {
 
+    showDialog(
+      context: context, 
+      builder: (BuildContext context){
+        return AlertDialog(
+          title: RichText(text: TextSpan(
+            children:<TextSpan>[
+              TextSpan(text: "Add ",style: Theme.of(context).textTheme.bodyText1),
+              TextSpan(text: widget.productList.productName,style: TextStyle(fontSize: 20,color: Colors.red[200])),
+              TextSpan(text: " to cart ?",style: Theme.of(context).textTheme.bodyText1),
+            ] 
+          )),
+          actions: [
+            TextButton(
+              child:(Text('Yes',style: Theme.of(context).textTheme.bodyText2)),
+              onPressed: (){
+                _addToCart();
+                Navigator.of(context).pop();
+              },),
+            TextButton(
+              child: (Text('No',style: Theme.of(context).textTheme.bodyText2)),
+              onPressed: (){
+                Navigator.of(context).pop();
+              },),
+          ],
+        );
+      });
+  }
+
+  void _addToCart() {
+
+    String product_qty = "1";
+    print(widget.user.email);
+    print(selectSlice);
+    print(select6Inch);
+    print(select8Inch);
+    print(select10Inch);
+    print(eggLess);
+
+    http.post(
+    Uri.parse("https://javathree99.com/s271059/littlecakestory/php/add_cart.php"),
+    body: {
+      "product_no":widget.productList.productNo,
+      "user_qty":product_qty,
+      "email":widget.user.email,
+      "selectSlice":selectSlice.toString(),
+      "select6Inch":select6Inch.toString(),
+      "select8Inch":select8Inch.toString(),
+      "select10Inch":select10Inch.toString(),
+      "eggLess":eggLess.toString(),
+      "message":_message,
+
+    }).then(
+      (response){
+        print(response.body);
+
+        if(response.body=="failed"){
+          Fluttertoast.showToast(
+          msg: "Add Into Cart Failed",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red[200],
+          textColor: Colors.white,
+          fontSize: 16.0);
+        }
+        else {
+          Fluttertoast.showToast(
+          msg: "Add Into Cart Sucess",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red[200],
+          textColor: Colors.white,
+          fontSize: 16.0);
+
+          List respond = response.body.split(",");
+          setState(() {
+            cartQuantity = respond[1];
+            widget.user.qty = cartQuantity;
+          });
+
+        }
+      }
+    );
+  }
 }

@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-import 'package:little_cake_story/model/puff.dart';
+import 'package:little_cake_story/model/product.dart';
 import 'package:little_cake_story/model/user.dart';
 import 'package:little_cake_story/screen/profile/my_product/my_puff_list.dart';
 
@@ -10,9 +10,9 @@ import 'package:little_cake_story/screen/profile/my_product/my_puff_list.dart';
 class MyPuffDetails extends StatefulWidget {
 
   final User user;
-  final PuffList puffList;
+  final ProductList productList;
 
-  const MyPuffDetails({Key key, this.user, this.puffList}) : super(key: key);
+  const MyPuffDetails({Key key, this.user, this.productList}) : super(key: key);
 
   @override
   _MyPuffDetailsState createState() => _MyPuffDetailsState();
@@ -42,7 +42,7 @@ class _MyPuffDetailsState extends State<MyPuffDetails> {
                 context,
                 MaterialPageRoute(
                     builder: (context) =>
-                        MyPuffsListScreen(puffList: widget.puffList,user: widget.user)));
+                        MyPuffsListScreen(productList: widget.productList,user: widget.user)));
           },
         ),
         title: Text('Puff', style: TextStyle(fontFamily: 'Arial')),
@@ -55,7 +55,7 @@ class _MyPuffDetailsState extends State<MyPuffDetails> {
               height: screenHeight / 2.35,
               child: CachedNetworkImage(
                 imageUrl:
-                    "https://javathree99.com/s271059/littlecakestory/images/product_puff/${widget.puffList.puffNo}.png",
+                    "https://javathree99.com/s271059/littlecakestory/images/product/${widget.productList.productNo}.png",
               ),
             ),
             Container(
@@ -68,7 +68,7 @@ class _MyPuffDetailsState extends State<MyPuffDetails> {
                     ListTile(
                       leading: Icon(Icons.inventory),
                       title: Text(
-                        widget.puffList.puffName,
+                        widget.productList.productName,
                         style: TextStyle(fontSize: 20, fontFamily: 'Calibri'),
                       ),
                       subtitle: Text("Name"),
@@ -81,7 +81,7 @@ class _MyPuffDetailsState extends State<MyPuffDetails> {
                     ListTile(
                       leading: Icon(Icons.money),
                       title: Text(
-                        "RM ${widget.puffList.oriPrice}",
+                        "RM ${widget.productList.oriPrice}",
                         style: TextStyle(fontSize: 20, fontFamily: 'Calibri'),
                       ),
                       subtitle: Text("Original Price"),
@@ -94,7 +94,7 @@ class _MyPuffDetailsState extends State<MyPuffDetails> {
                     ListTile(
                       leading: Icon(Icons.money),
                       title: Text(
-                        "RM ${widget.puffList.offeredPrice}",
+                        "RM ${widget.productList.offeredPrice}",
                         style: TextStyle(fontSize: 20, fontFamily: 'Calibri'),
                       ),
                       subtitle: Text("Offered Price"),
@@ -107,7 +107,7 @@ class _MyPuffDetailsState extends State<MyPuffDetails> {
                     ListTile(
                       leading: Icon(Icons.star),
                       title: Text(
-                        widget.puffList.rating,
+                        widget.productList.rating,
                         style: TextStyle(fontSize: 20, fontFamily: 'Calibri'),
                       ),
                       subtitle: Text("Rating"),
@@ -120,7 +120,7 @@ class _MyPuffDetailsState extends State<MyPuffDetails> {
                     ListTile(
                       leading: Icon(Icons.list),
                       title: Text(
-                        widget.puffList.details,
+                        widget.productList.details,
                         style: TextStyle(fontSize: 16, fontFamily: 'Calibri',),
                       ),
                       subtitle: Text("Details"),
@@ -154,6 +154,7 @@ class _MyPuffDetailsState extends State<MyPuffDetails> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.red[200],
         onPressed: () {
           _editDialog();
         },
@@ -288,23 +289,23 @@ class _MyPuffDetailsState extends State<MyPuffDetails> {
     }else{
 
       name = (_nameController.text.toString() == "")
-        ? widget.puffList.puffName
+        ? widget.productList.productName
         : _nameController.text.toString();
       
       oriPrice = (_oriPriceController.text.toString() == "")
-        ? widget.puffList.oriPrice
+        ? widget.productList.oriPrice
         : _oriPriceController.text.toString();
 
       offeredPrice = (_offeredPriceController.text.toString() == "")
-        ? widget.puffList.offeredPrice
+        ? widget.productList.offeredPrice
         : _offeredPriceController.text.toString();
 
       rating = (_ratingController.text.toString() == "")
-        ? widget.puffList.rating
+        ? widget.productList.rating
         : _ratingController.text.toString();
 
       details = (_detailsController.text.toString() == "")
-        ? widget.puffList.details
+        ? widget.productList.details
         : _detailsController.text.toString();
 
       _editCake(name,oriPrice,offeredPrice,rating,details);
@@ -322,14 +323,14 @@ class _MyPuffDetailsState extends State<MyPuffDetails> {
     print(details);
 
     http.post(
-      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/edit_puff.php"),
+      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/edit_product.php"),
       body: {
-        "puff_no":widget.puffList.puffNo,
-        "puff_name":name,
+        "product_no":widget.productList.productNo,
+        "name":name,
         "original_price":oriPrice,
         "offered_price":offeredPrice,
         "rating":rating,
-        "puff_detail":details,
+        "detail":details,
 
       }).then(
         (response){
@@ -347,11 +348,11 @@ class _MyPuffDetailsState extends State<MyPuffDetails> {
               fontSize: 16.0);
             setState(() {
 
-              widget.puffList.puffName=name;
-              widget.puffList.oriPrice=oriPrice;
-              widget.puffList.offeredPrice=offeredPrice;
-              widget.puffList.rating=rating;
-              widget.puffList.details=details;
+              widget.productList.productName=name;
+              widget.productList.oriPrice=oriPrice;
+              widget.productList.offeredPrice=offeredPrice;
+              widget.productList.rating=rating;
+              widget.productList.details=details;
             });
 
           }else{
@@ -372,7 +373,7 @@ class _MyPuffDetailsState extends State<MyPuffDetails> {
 
   void _deleteDialog() {
 
-    print(widget.puffList.puffNo);
+    print(widget.productList.productNo);
 
     showDialog(
       context: context, 
@@ -387,9 +388,9 @@ class _MyPuffDetailsState extends State<MyPuffDetails> {
               child:(Text('Yes',style: Theme.of(context).textTheme.bodyText2)),
               onPressed: (){
                 Navigator.of(context).pop();
-                _deletePuff(widget.puffList.puffNo);
+                _deletePuff();
                 Navigator.pushReplacement(
-                  context,MaterialPageRoute(builder: (context)=> MyPuffsListScreen(puffList: widget.puffList,user: widget.user))
+                  context,MaterialPageRoute(builder: (context)=> MyPuffsListScreen(productList: widget.productList,user: widget.user))
                 );
               },),
             TextButton(
@@ -402,13 +403,12 @@ class _MyPuffDetailsState extends State<MyPuffDetails> {
       });
   }
 
-  void _deletePuff(String puffNo) {
-    print(puffNo);
+  void _deletePuff() {
 
     http.post(
-      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/delete_puff.php"),
+      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/delete_product.php"),
       body: {
-        "puff_no":widget.puffList.puffNo,
+        "product_no":widget.productList.productNo,
       }).then(
         (response){
           if(response.body == "success"){

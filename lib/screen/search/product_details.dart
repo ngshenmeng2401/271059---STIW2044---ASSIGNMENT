@@ -2,23 +2,22 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:favorite_button/favorite_button.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
 import 'package:little_cake_story/model/product.dart';
 import 'package:little_cake_story/model/user.dart';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'cake_list.dart';
 
-class CakeDetailsScreen extends StatefulWidget {
+class ProductDetailsScreen extends StatefulWidget {
 
   final User user;
   final ProductList productList;
-  const CakeDetailsScreen({Key key, this.user, this.productList}) : super(key: key);
+  const ProductDetailsScreen({Key key, this.user, this.productList}) : super(key: key);
 
   @override
-  _CakeDetailsScreenState createState() => _CakeDetailsScreenState();
+  _ProductDetailsScreenState createState() => _ProductDetailsScreenState();
 }
 
-class _CakeDetailsScreenState extends State<CakeDetailsScreen> {
+class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   bool selectSlice = false, select6Inch = false, select8Inch = false, select10Inch = false;
   bool eggLess = false, pressFavouriteIcon ;
@@ -36,14 +35,14 @@ class _CakeDetailsScreenState extends State<CakeDetailsScreen> {
     
     return Scaffold(
       appBar:AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: (){
-            Navigator.pushReplacement(
-              context,MaterialPageRoute(builder: (context)=> CakeListScreen(user: widget.user,))
-            );
-          },
-        ),
+        // leading: IconButton(
+        //   icon: Icon(Icons.arrow_back),
+        //   onPressed: (){
+        //     Navigator.pushReplacement(
+        //       context,MaterialPageRoute(builder: (context)=> SearchScreen(user: widget.user,))
+        //     );
+        //   },
+        // ),
         title: Text('LITTLE CAKE STORY',style: TextStyle(fontFamily: 'Arial'),),
         
       ),
@@ -229,7 +228,8 @@ class _CakeDetailsScreenState extends State<CakeDetailsScreen> {
                           ),
                       ),
                     ),
-                    Container(
+                    widget.productList.type == "Cake"
+                    ? Container(
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(15, 20, 15, 10),
                         child: Row(
@@ -293,11 +293,15 @@ class _CakeDetailsScreenState extends State<CakeDetailsScreen> {
                             )
                           ]
                         ),),
-                    ),
-                    Padding(
+                    )
+                    : Padding(padding: const EdgeInsets.all(0)),
+                    widget.productList.type == "Cake"
+                    ? Padding(
                       padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
-                      child: Divider( color:Theme.of(context).bottomNavigationBarTheme.unselectedItemColor)),
-                    Container(
+                      child: Divider( color:Theme.of(context).bottomNavigationBarTheme.unselectedItemColor))
+                    : Padding(padding: const EdgeInsets.all(0)),
+                    widget.productList.type == "Cake"
+                    ? Container(
                       padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -319,8 +323,8 @@ class _CakeDetailsScreenState extends State<CakeDetailsScreen> {
                           )
                         ],
                       ),
-                    ),
-                    Padding(padding: const EdgeInsets.all(0)),
+                    )
+                    : Padding(padding: const EdgeInsets.all(0)),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
                       child: Divider( color:Theme.of(context).bottomNavigationBarTheme.unselectedItemColor)),
@@ -552,18 +556,15 @@ class _CakeDetailsScreenState extends State<CakeDetailsScreen> {
     print(widget.user.email);
     print(selectSlice);
 
-    if(widget.productList.type == "Cake"){
-      
-      if (widget.productList.productNo.isNotEmpty && product_qty.isNotEmpty && widget.user.email.isNotEmpty && selectSlice== false && select6Inch== false && select8Inch== false && select10Inch== false && eggLess== false) {
-      Fluttertoast.showToast(
-      msg: "Please size of cake and whether the cake is eggless",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      timeInSecForIosWeb: 1,
-      backgroundColor: Colors.red[200],
-      textColor: Colors.white,
-      fontSize: 16.0);
-      }
+    if (widget.productList.type == "Cake" && widget.productList.productNo.isNotEmpty && product_qty.isNotEmpty && widget.user.email.isNotEmpty && selectSlice== false && select6Inch== false && select8Inch== false && select10Inch== false && eggLess== false) {
+    Fluttertoast.showToast(
+    msg: "Please size of cake and whether the cake is eggless",
+    toastLength: Toast.LENGTH_SHORT,
+    gravity: ToastGravity.BOTTOM,
+    timeInSecForIosWeb: 1,
+    backgroundColor: Colors.red[200],
+    textColor: Colors.white,
+    fontSize: 16.0);
     }
     else{
 

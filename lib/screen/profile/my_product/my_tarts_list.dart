@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:little_cake_story/model/tart.dart';
+import 'package:little_cake_story/model/product.dart';
 import 'package:little_cake_story/model/user.dart';
 import 'package:little_cake_story/screen/profile/my_product/my_tart_details.dart';
 import 'add_tart_screen.dart';
@@ -10,8 +10,8 @@ import 'add_tart_screen.dart';
 class MyTartsListScreen extends StatefulWidget {
 
   final User user;
-  final TartList tartList;
-  const MyTartsListScreen({Key key, this.user, this.tartList}) : super(key: key);
+  final ProductList productList;
+  const MyTartsListScreen({Key key, this.user, this.productList}) : super(key: key);
 
   @override
   _MyTartsListScreenState createState() => _MyTartsListScreenState();
@@ -19,9 +19,10 @@ class MyTartsListScreen extends StatefulWidget {
 
 class _MyTartsListScreenState extends State<MyTartsListScreen> {
 
-  List _tartList;
+  List _productList;
   String titleCenter = "Loading...";
   double screenHeight, screenWidth;
+  String type = "Tart";
 
   @override
   void initState() {
@@ -43,7 +44,7 @@ class _MyTartsListScreenState extends State<MyTartsListScreen> {
       body: Center(
         child: Column(
           children: [
-            _tartList == null 
+            _productList == null 
             ? Flexible(
                 child: Center(
                   child: Text(titleCenter)),
@@ -53,7 +54,7 @@ class _MyTartsListScreenState extends State<MyTartsListScreen> {
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                     child: GridView.builder(
-                      itemCount: _tartList.length,
+                      itemCount: _productList.length,
                       gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                         mainAxisSpacing: 5,
@@ -85,14 +86,24 @@ class _MyTartsListScreenState extends State<MyTartsListScreen> {
                                       topLeft:Radius.circular(10),
                                       topRight:Radius.circular(10),),
                                       child: CachedNetworkImage(
-                                        imageUrl: "https://javathree99.com/s271059/littlecakestory/images/product_tart/${_tartList[index]['tart_no']}.png",
+                                        imageUrl: "https://javathree99.com/s271059/littlecakestory/images/product/${_productList[index]['product_no']}.png",
                                         height: 185,
-                                        width: 185,)),
+                                        width: 185,
+                                        placeholder: (context, url) =>
+                                          new Transform.scale(
+                                            scale: 0.5,
+                                            child:
+                                              CircularProgressIndicator(color: Colors.red[200],)),
+                                        errorWidget:
+                                            (context, url, error) =>
+                                                new Icon(
+                                          Icons.broken_image,
+                                          size: screenWidth / 3,))),
                                     Row(
                                       children:[
                                         Padding(
                                         padding: const EdgeInsets.fromLTRB(5, 15, 5, 0),
-                                        child: Text(_tartList[index]['tart_name'],
+                                        child: Text(_productList[index]['product_name'],
                                             overflow: TextOverflow.ellipsis,
                                             textAlign: TextAlign.left,
                                             style: Theme.of(context).appBarTheme.textTheme.headline2),
@@ -104,15 +115,15 @@ class _MyTartsListScreenState extends State<MyTartsListScreen> {
                                       children: [
                                         Padding(
                                           padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                          child: Text(_tartList[index]['offered_price'] == "0"
-                                            ? "RM${_tartList[index]['original_price']}"
-                                            : "RM${_tartList[index]['offered_price']}",
+                                          child: Text(_productList[index]['offered_price'] == "0"
+                                            ? "RM${_productList[index]['original_price']}"
+                                            : "RM${_productList[index]['offered_price']}",
                                           style: TextStyle(fontSize:16,),),
                                         ),
                                         SizedBox(width:10),
-                                        Text(_tartList[index]['offered_price'] == "0"
+                                        Text(_productList[index]['offered_price'] == "0"
                                             ? ""
-                                            : "RM${_tartList[index]['original_price']}",
+                                            : "RM${_productList[index]['original_price']}",
                                           style: Theme.of(context).appBarTheme.textTheme.headline3,)
                                       ],),
                                     SizedBox(height:6),
@@ -120,7 +131,7 @@ class _MyTartsListScreenState extends State<MyTartsListScreen> {
                                       children: [
                                         Padding(
                                           padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                          child: Text(_tartList[index]['rating'],
+                                          child: Text(_productList[index]['rating'],
                                           style: TextStyle(fontSize:12,color: Colors.orange),),
                                         ),
                                         SizedBox(width: 5),
@@ -145,6 +156,7 @@ class _MyTartsListScreenState extends State<MyTartsListScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.red[200],
         onPressed: () {
           Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context)=>AddTartScreen(user: widget.user,))
@@ -160,9 +172,11 @@ class _MyTartsListScreenState extends State<MyTartsListScreen> {
   void _loadMyTarts() {
 
     http.post(
-      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/load_my_tart.php"),
+      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/load_other_product.php"),
       body: {
         "email":widget.user.email,
+        "type":type,
+
       }).then(
         (response){
           if(response.body == "nodata"){
@@ -170,28 +184,28 @@ class _MyTartsListScreenState extends State<MyTartsListScreen> {
             return;
           }else{
             var jsondata = json.decode(response.body);
-            _tartList = jsondata["tart"];
+            _productList = jsondata["product"];
             titleCenter = "Contain Data";
             setState(() {});
-            print(_tartList);
+            print(_productList);
           }
       }
     );
   }
 
   void _tartDetails(int index) {
-    print(_tartList[index]['tart_no']);
-    TartList tartList = new TartList(
-      tartNo: _tartList[index]['tart_no'],
-      tartName: _tartList[index]['tart_name'],
-      oriPrice: _tartList[index]['original_price'],
-      offeredPrice: _tartList[index]['offered_price'],
-      rating: _tartList[index]['rating'],
-      details: _tartList[index]['tart_detail'],
+    print(_productList[index]['product_no']);
+    ProductList productList = new ProductList(
+      productNo: _productList[index]['product_no'],
+      productName: _productList[index]['product_name'],
+      oriPrice: _productList[index]['original_price'],
+      offeredPrice: _productList[index]['offered_price'],
+      rating: _productList[index]['rating'],
+      details: _productList[index]['product_detail'],
     );
 
     Navigator.pushReplacement(
-      context,MaterialPageRoute(builder: (context)=> MyTartDetails(tartList: tartList,user: widget.user,))
+      context,MaterialPageRoute(builder: (context)=> MyTartDetails(productList: productList,user: widget.user,))
     );
   }
 }

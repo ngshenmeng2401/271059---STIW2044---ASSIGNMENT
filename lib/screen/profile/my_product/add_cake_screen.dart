@@ -12,7 +12,6 @@ import 'my_cake_list.dart';
 class AddCakeScreen extends StatefulWidget {
 
   final User user;
-
   const AddCakeScreen({Key key, this.user}) : super(key: key);
 
   @override
@@ -110,6 +109,7 @@ class _AddCakeScreenState extends State<AddCakeScreen> {
                     borderRadius: BorderRadius.circular(10)
                   ),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ListTile(
                         title: TextField(
@@ -172,15 +172,18 @@ class _AddCakeScreenState extends State<AddCakeScreen> {
                           ),
                         ),
                       ),
-                      SizedBox(height:20),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
+                        child: Divider(color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor,)),
                       Container(
-                        margin: const EdgeInsets.fromLTRB(0, 0, 315, 0),
+                        margin: const EdgeInsets.fromLTRB(15, 0, 0, 0),
                         child: Text("Size",
                         textAlign: TextAlign.left,
                         style: TextStyle(fontFamily: 'Calibri',fontSize:22),)),
                       ListTile(
-                        title: Text("6 inch",style: TextStyle(fontFamily: 'Calibri',)),
+                        title: Text("Slice",style: TextStyle(fontFamily: 'Calibri',)),
                         trailing: Checkbox(
+                          activeColor: Colors.red[200],
                           value: selected_slice,
                           onChanged: (value){
                             setState(() {
@@ -193,6 +196,7 @@ class _AddCakeScreenState extends State<AddCakeScreen> {
                       ListTile(
                         title: Text("6 inch",style: TextStyle(fontFamily: 'Calibri',)),
                         trailing: Checkbox(
+                          activeColor: Colors.red[200],
                           value: selected_6Inch,
                           onChanged: (value){
                             setState(() {
@@ -205,6 +209,7 @@ class _AddCakeScreenState extends State<AddCakeScreen> {
                       ListTile(
                         title: Text("8 inch",style: TextStyle(fontFamily: 'Calibri',)),
                         trailing: Checkbox(
+                          activeColor: Colors.red[200],
                           value: selected_8Inch,
                           onChanged: (value){
                             setState(() {
@@ -217,6 +222,7 @@ class _AddCakeScreenState extends State<AddCakeScreen> {
                       ListTile(
                         title: Text("10 inch",style: TextStyle(fontFamily: 'Calibri',)),
                         trailing: Checkbox(
+                          activeColor: Colors.red[200],
                           value: selected_10Inch,
                           onChanged: (value){
                             setState(() {
@@ -265,7 +271,7 @@ class _AddCakeScreenState extends State<AddCakeScreen> {
 
     if(_image==null && _name.isEmpty && _price.isEmpty && _rating.isEmpty && _details.isEmpty && selected_slice==false && selected_6Inch==false && selected_8Inch==false && selected_10Inch==false ){
       Fluttertoast.showToast(
-        msg: "Please fill in all textfield and select the size and photo",
+        msg: "Please fill in all textfield and select the size, type and photo",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 3,
@@ -445,10 +451,6 @@ class _AddCakeScreenState extends State<AddCakeScreen> {
       sourcePath: _image.path,
       aspectRatioPresets: [
         CropAspectRatioPreset.square,
-        CropAspectRatioPreset.ratio3x2,
-        CropAspectRatioPreset.original,
-        CropAspectRatioPreset.ratio4x3,
-        CropAspectRatioPreset.ratio16x9
       ],
       androidUiSettings: AndroidUiSettings(
           toolbarTitle: 'Crop your image',
@@ -469,6 +471,8 @@ class _AddCakeScreenState extends State<AddCakeScreen> {
   }
 
   void _addProduct(String name, String price, String rating, String details) {
+
+    String type ="Cake";
     
     String base64Image = base64Encode(_image.readAsBytesSync());
     // print(base64Image);
@@ -477,9 +481,10 @@ class _AddCakeScreenState extends State<AddCakeScreen> {
     // print(rating);
     // print(details);
     // print(widget.user.email);
-    // print("6 inch: $selected_6Inch");
-    // print("8 inch: $selected_8Inch");
-    // print("10 inch: $selected_10Inch");
+    print("slice: $selected_slice");
+    print("6 inch: $selected_6Inch");
+    print("8 inch: $selected_8Inch");
+    print("10 inch: $selected_10Inch");
 
     http.post(
       Uri.parse("https://javathree99.com/s271059/littlecakestory/php/add_cake.php"),
@@ -494,6 +499,8 @@ class _AddCakeScreenState extends State<AddCakeScreen> {
         "selected_6Inch":selected_6Inch.toString(),
         "selected_8Inch":selected_8Inch.toString(),
         "selected_10Inch":selected_10Inch.toString(),
+        "type":type,
+        
       }).then(
         (response){
           print(response.body);

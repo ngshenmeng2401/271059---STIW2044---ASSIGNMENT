@@ -2,15 +2,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-import 'package:little_cake_story/model/bento_cake.dart';
+import 'package:little_cake_story/model/product.dart';
 import 'package:little_cake_story/model/user.dart';
 import 'my_bento_cake_list.dart';
 
 class MyBentoCakeDetails extends StatefulWidget {
 
   final User user;
-  final BentoCakeList bentocakeList;
-  const MyBentoCakeDetails({Key key, this.user, this.bentocakeList}) : super(key: key);
+  final ProductList productList;
+  const MyBentoCakeDetails({Key key, this.user, this.productList}) : super(key: key);
 
   @override
   _MyBentoCakeDetailsState createState() => _MyBentoCakeDetailsState();
@@ -40,7 +40,7 @@ class _MyBentoCakeDetailsState extends State<MyBentoCakeDetails> {
                 context,
                 MaterialPageRoute(
                     builder: (context) =>
-                        MyBentoCakeListScreen(bentoCakeList: widget.bentocakeList,user: widget.user)));
+                        MyBentoCakeListScreen(productList: widget.productList,user: widget.user)));
           },
         ),
         title: Text('Bento Cakes', style: TextStyle(fontFamily: 'Arial')),
@@ -53,7 +53,7 @@ class _MyBentoCakeDetailsState extends State<MyBentoCakeDetails> {
               height: screenHeight / 2.35,
               child: CachedNetworkImage(
                 imageUrl:
-                    "https://javathree99.com/s271059/littlecakestory/images/product_bento_cake/${widget.bentocakeList.bentoCakeNo}.png",
+                    "https://javathree99.com/s271059/littlecakestory/images/product/${widget.productList.productNo}.png",
               ),
             ),
             Container(
@@ -66,7 +66,7 @@ class _MyBentoCakeDetailsState extends State<MyBentoCakeDetails> {
                     ListTile(
                       leading: Icon(Icons.inventory),
                       title: Text(
-                        widget.bentocakeList.bentoCakeName,
+                        widget.productList.productName,
                         style: TextStyle(fontSize: 20, fontFamily: 'Calibri'),
                       ),
                       subtitle: Text("Name"),
@@ -79,7 +79,7 @@ class _MyBentoCakeDetailsState extends State<MyBentoCakeDetails> {
                     ListTile(
                       leading: Icon(Icons.money),
                       title: Text(
-                        "RM ${widget.bentocakeList.oriPrice}",
+                        "RM ${widget.productList.oriPrice}",
                         style: TextStyle(fontSize: 20, fontFamily: 'Calibri'),
                       ),
                       subtitle: Text("Original Price"),
@@ -92,7 +92,7 @@ class _MyBentoCakeDetailsState extends State<MyBentoCakeDetails> {
                     ListTile(
                       leading: Icon(Icons.money),
                       title: Text(
-                        "RM ${widget.bentocakeList.offeredPrice}",
+                        "RM ${widget.productList.offeredPrice}",
                         style: TextStyle(fontSize: 20, fontFamily: 'Calibri'),
                       ),
                       subtitle: Text("Offered Price"),
@@ -105,7 +105,7 @@ class _MyBentoCakeDetailsState extends State<MyBentoCakeDetails> {
                     ListTile(
                       leading: Icon(Icons.star),
                       title: Text(
-                        widget.bentocakeList.rating,
+                        widget.productList.rating,
                         style: TextStyle(fontSize: 20, fontFamily: 'Calibri'),
                       ),
                       subtitle: Text("Rating"),
@@ -118,7 +118,7 @@ class _MyBentoCakeDetailsState extends State<MyBentoCakeDetails> {
                     ListTile(
                       leading: Icon(Icons.list),
                       title: Text(
-                        widget.bentocakeList.details,
+                        widget.productList.details,
                         style: TextStyle(fontSize: 16, fontFamily: 'Calibri',),
                       ),
                       subtitle: Text("Details"),
@@ -152,6 +152,7 @@ class _MyBentoCakeDetailsState extends State<MyBentoCakeDetails> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.red[200],
         onPressed: () {
           _editDialog();
         },
@@ -286,23 +287,23 @@ class _MyBentoCakeDetailsState extends State<MyBentoCakeDetails> {
     }else{
 
       name = (_nameController.text.toString() == "")
-        ? widget.bentocakeList.bentoCakeName
+        ? widget.productList.productName
         : _nameController.text.toString();
       
       oriPrice = (_oriPriceController.text.toString() == "")
-        ? widget.bentocakeList.oriPrice
+        ? widget.productList.oriPrice
         : _oriPriceController.text.toString();
 
       offeredPrice = (_offeredPriceController.text.toString() == "")
-        ? widget.bentocakeList.offeredPrice
+        ? widget.productList.offeredPrice
         : _offeredPriceController.text.toString();
 
       rating = (_ratingController.text.toString() == "")
-        ? widget.bentocakeList.rating
+        ? widget.productList.rating
         : _ratingController.text.toString();
 
       details = (_detailsController.text.toString() == "")
-        ? widget.bentocakeList.details
+        ? widget.productList.details
         : _detailsController.text.toString();
 
       _editCake(name,oriPrice,offeredPrice,rating,details);
@@ -320,14 +321,14 @@ class _MyBentoCakeDetailsState extends State<MyBentoCakeDetails> {
     print(details);
 
     http.post(
-      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/edit_bento_cake.php"),
+      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/edit_product.php"),
       body: {
-        "bento_cake_no":widget.bentocakeList.bentoCakeNo,
-        "bento_cake_name":name,
+        "product_no":widget.productList.productNo,
+        "name":name,
         "original_price":oriPrice,
         "offered_price":offeredPrice,
         "rating":rating,
-        "bento_cake_detail":details,
+        "detail":details,
 
       }).then(
         (response){
@@ -345,11 +346,11 @@ class _MyBentoCakeDetailsState extends State<MyBentoCakeDetails> {
               fontSize: 16.0);
             setState(() {
 
-              widget.bentocakeList.bentoCakeName=name;
-              widget.bentocakeList.oriPrice=oriPrice;
-              widget.bentocakeList.offeredPrice=offeredPrice;
-              widget.bentocakeList.rating=rating;
-              widget.bentocakeList.details=details;
+              widget.productList.productName=name;
+              widget.productList.oriPrice=oriPrice;
+              widget.productList.offeredPrice=offeredPrice;
+              widget.productList.rating=rating;
+              widget.productList.details=details;
             });
 
           }else{
@@ -370,7 +371,7 @@ class _MyBentoCakeDetailsState extends State<MyBentoCakeDetails> {
 
   void _deleteDialog() {
 
-    print(widget.bentocakeList.bentoCakeNo);
+    print(widget.productList.productNo);
 
     showDialog(
       context: context, 
@@ -385,9 +386,9 @@ class _MyBentoCakeDetailsState extends State<MyBentoCakeDetails> {
               child:(Text('Yes',style: Theme.of(context).textTheme.bodyText2)),
               onPressed: (){
                 Navigator.of(context).pop();
-                _deleteBentoCake(widget.bentocakeList.bentoCakeNo);
+                _deleteBentoCake(widget.productList.productNo);
                 Navigator.pushReplacement(
-                  context,MaterialPageRoute(builder: (context)=> MyBentoCakeListScreen(bentoCakeList: widget.bentocakeList,user: widget.user))
+                  context,MaterialPageRoute(builder: (context)=> MyBentoCakeListScreen(productList: widget.productList,user: widget.user))
                 );
               },),
             TextButton(
@@ -404,9 +405,9 @@ class _MyBentoCakeDetailsState extends State<MyBentoCakeDetails> {
     print(bentoCakeNo);
 
     http.post(
-      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/delete_bento_cake.php"),
+      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/delete_product.php"),
       body: {
-        "bento_cake_no":widget.bentocakeList.bentoCakeNo,
+        "product_no":widget.productList.productNo,
       }).then(
         (response){
           if(response.body == "success"){

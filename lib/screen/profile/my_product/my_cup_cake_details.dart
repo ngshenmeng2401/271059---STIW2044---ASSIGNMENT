@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:little_cake_story/model/cup_cake.dart';
+import 'package:little_cake_story/model/product.dart';
 import 'package:little_cake_story/model/user.dart';
 import 'package:http/http.dart' as http;
 import 'my_cup_cake_list.dart';
@@ -9,8 +9,8 @@ import 'my_cup_cake_list.dart';
 class MyCupCakeDetails extends StatefulWidget {
 
   final User user;
-  final CupCakeList cupCakeList;
-  const MyCupCakeDetails({Key key, this.user, this.cupCakeList}) : super(key: key);
+  final ProductList productList;
+  const MyCupCakeDetails({Key key, this.user, this.productList}) : super(key: key);
 
   @override
   _MyCupCakeDetailsState createState() => _MyCupCakeDetailsState();
@@ -40,7 +40,7 @@ class _MyCupCakeDetailsState extends State<MyCupCakeDetails> {
                 context,
                 MaterialPageRoute(
                     builder: (context) =>
-                        MyCupCakeListScreen(cupCakeList: widget.cupCakeList,user: widget.user)));
+                        MyCupCakeListScreen(productList: widget.productList,user: widget.user)));
           },
         ),
         title: Text('Cup Cakes', style: TextStyle(fontFamily: 'Arial')),
@@ -53,7 +53,7 @@ class _MyCupCakeDetailsState extends State<MyCupCakeDetails> {
               height: screenHeight / 2.35,
               child: CachedNetworkImage(
                 imageUrl:
-                    "https://javathree99.com/s271059/littlecakestory/images/product_cup_cake/${widget.cupCakeList.cupCakeNo}.png",
+                    "https://javathree99.com/s271059/littlecakestory/images/product/${widget.productList.productNo}.png",
               ),
             ),
             Container(
@@ -66,7 +66,7 @@ class _MyCupCakeDetailsState extends State<MyCupCakeDetails> {
                     ListTile(
                       leading: Icon(Icons.inventory),
                       title: Text(
-                        widget.cupCakeList.cupCakeName,
+                        widget.productList.productName,
                         style: TextStyle(fontSize: 20, fontFamily: 'Calibri'),
                       ),
                       subtitle: Text("Name"),
@@ -79,7 +79,7 @@ class _MyCupCakeDetailsState extends State<MyCupCakeDetails> {
                     ListTile(
                       leading: Icon(Icons.money),
                       title: Text(
-                        "RM ${widget.cupCakeList.oriPrice}",
+                        "RM ${widget.productList.oriPrice}",
                         style: TextStyle(fontSize: 20, fontFamily: 'Calibri'),
                       ),
                       subtitle: Text("Original Price"),
@@ -92,7 +92,7 @@ class _MyCupCakeDetailsState extends State<MyCupCakeDetails> {
                     ListTile(
                       leading: Icon(Icons.money),
                       title: Text(
-                        "RM ${widget.cupCakeList.offeredPrice}",
+                        "RM ${widget.productList.offeredPrice}",
                         style: TextStyle(fontSize: 20, fontFamily: 'Calibri'),
                       ),
                       subtitle: Text("Offered Price"),
@@ -105,7 +105,7 @@ class _MyCupCakeDetailsState extends State<MyCupCakeDetails> {
                     ListTile(
                       leading: Icon(Icons.star),
                       title: Text(
-                        widget.cupCakeList.rating,
+                        widget.productList.rating,
                         style: TextStyle(fontSize: 20, fontFamily: 'Calibri'),
                       ),
                       subtitle: Text("Rating"),
@@ -118,7 +118,7 @@ class _MyCupCakeDetailsState extends State<MyCupCakeDetails> {
                     ListTile(
                       leading: Icon(Icons.list),
                       title: Text(
-                        widget.cupCakeList.details,
+                        widget.productList.details,
                         style: TextStyle(fontSize: 16, fontFamily: 'Calibri',),
                       ),
                       subtitle: Text("Details"),
@@ -152,6 +152,7 @@ class _MyCupCakeDetailsState extends State<MyCupCakeDetails> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.red[200],
         onPressed: () {
           _editDialog();
         },
@@ -286,23 +287,23 @@ class _MyCupCakeDetailsState extends State<MyCupCakeDetails> {
     }else{
 
       name = (_nameController.text.toString() == "")
-        ? widget.cupCakeList.cupCakeName
+        ? widget.productList.productName
         : _nameController.text.toString();
       
       oriPrice = (_oriPriceController.text.toString() == "")
-        ? widget.cupCakeList.oriPrice
+        ? widget.productList.oriPrice
         : _oriPriceController.text.toString();
 
       offeredPrice = (_offeredPriceController.text.toString() == "")
-        ? widget.cupCakeList.offeredPrice
+        ? widget.productList.offeredPrice
         : _offeredPriceController.text.toString();
 
       rating = (_ratingController.text.toString() == "")
-        ? widget.cupCakeList.rating
+        ? widget.productList.rating
         : _ratingController.text.toString();
 
       details = (_detailsController.text.toString() == "")
-        ? widget.cupCakeList.details
+        ? widget.productList.details
         : _detailsController.text.toString();
 
       _editCake(name,oriPrice,offeredPrice,rating,details);
@@ -320,14 +321,14 @@ class _MyCupCakeDetailsState extends State<MyCupCakeDetails> {
     print(details);
 
     http.post(
-      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/edit_cup_cake.php"),
+      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/edit_product.php"),
       body: {
-        "cup_cake_no":widget.cupCakeList.cupCakeNo,
-        "cup_cake_name":name,
+        "product_no":widget.productList.productNo,
+        "name":name,
         "original_price":oriPrice,
         "offered_price":offeredPrice,
         "rating":rating,
-        "cup_cake_detail":details,
+        "detail":details,
 
       }).then(
         (response){
@@ -345,11 +346,11 @@ class _MyCupCakeDetailsState extends State<MyCupCakeDetails> {
               fontSize: 16.0);
             setState(() {
 
-              widget.cupCakeList.cupCakeName=name;
-              widget.cupCakeList.oriPrice=oriPrice;
-              widget.cupCakeList.offeredPrice=offeredPrice;
-              widget.cupCakeList.rating=rating;
-              widget.cupCakeList.details=details;
+              widget.productList.productName=name;
+              widget.productList.oriPrice=oriPrice;
+              widget.productList.offeredPrice=offeredPrice;
+              widget.productList.rating=rating;
+              widget.productList.details=details;
             });
 
           }else{
@@ -370,7 +371,7 @@ class _MyCupCakeDetailsState extends State<MyCupCakeDetails> {
 
   void _deleteDialog() {
 
-    print(widget.cupCakeList.cupCakeNo);
+    print(widget.productList.productNo);
 
     showDialog(
       context: context, 
@@ -385,9 +386,9 @@ class _MyCupCakeDetailsState extends State<MyCupCakeDetails> {
               child:(Text('Yes',style: Theme.of(context).textTheme.bodyText2)),
               onPressed: (){
                 Navigator.of(context).pop();
-                _deleteCupCake(widget.cupCakeList.cupCakeNo);
+                _deleteCupCake(widget.productList.productNo);
                 Navigator.pushReplacement(
-                  context,MaterialPageRoute(builder: (context)=> MyCupCakeListScreen(cupCakeList: widget.cupCakeList,user: widget.user))
+                  context,MaterialPageRoute(builder: (context)=> MyCupCakeListScreen(productList: widget.productList,user: widget.user))
                 );
               },),
             TextButton(
@@ -404,9 +405,9 @@ class _MyCupCakeDetailsState extends State<MyCupCakeDetails> {
     print(cupCakeNo);
 
     http.post(
-      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/delete_cup_cake.php"),
+      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/delete_product.php"),
       body: {
-        "cup_cake_no":widget.cupCakeList.cupCakeNo,
+        "product_no":widget.productList.productNo,
       }).then(
         (response){
           if(response.body == "success"){

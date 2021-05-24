@@ -10,7 +10,7 @@ import 'package:progress_dialog/progress_dialog.dart';
 class EditAddressScreen extends StatefulWidget {
 
   final User user;
-  final AddressList addressList;
+  final Address addressList;
 
   const EditAddressScreen({Key key, this.addressList,this.user}) : super(key: key);
 

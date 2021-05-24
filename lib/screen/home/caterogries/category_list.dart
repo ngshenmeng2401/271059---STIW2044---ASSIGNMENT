@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:little_cake_story/model/cake.dart';
 import 'package:little_cake_story/model/user.dart';
 import 'package:little_cake_story/screen/home/caterogries/puff_list.dart';
 
@@ -11,8 +10,7 @@ import 'tart_list.dart';
 class CategoryList extends StatelessWidget {
 
   final User user;
-  final CakeList cakeList;
-  const CategoryList({Key key, this.user, this.cakeList}) : super(key: key);
+  const CategoryList({Key key, this.user}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -366,10 +366,6 @@ class _AddTartScreenState extends State<AddTartScreen> {
       sourcePath: _image.path,
       aspectRatioPresets: [
         CropAspectRatioPreset.square,
-        CropAspectRatioPreset.ratio3x2,
-        CropAspectRatioPreset.original,
-        CropAspectRatioPreset.ratio4x3,
-        CropAspectRatioPreset.ratio16x9
       ],
       androidUiSettings: AndroidUiSettings(
           toolbarTitle: 'Crop your image',
@@ -390,17 +386,19 @@ class _AddTartScreenState extends State<AddTartScreen> {
   }
 
   void _addProduct(String name, String price, String rating, String details,String email) {
+
+    String type ="Tart";
     
     String base64Image = base64Encode(_image.readAsBytesSync());
-    print(base64Image);
-    print(name);
-    print(price);
-    print(rating);
-    print(details);
-    print(email);
+    // print(base64Image);
+    // print(name);
+    // print(price);
+    // print(rating);
+    // print(details);
+    // print(email);
 
     http.post(
-      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/add_tart.php"),
+      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/add_product.php"),
       body: {
         "name":name,
         "price":price,
@@ -408,6 +406,8 @@ class _AddTartScreenState extends State<AddTartScreen> {
         "details":details,
         "email":email,
         "encoded_string":base64Image,
+        "type":type,
+
       }).then(
         (response){
           print(response.body);

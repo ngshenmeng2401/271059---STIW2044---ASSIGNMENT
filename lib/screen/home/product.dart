@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:little_cake_story/model/best_selling_product.dart';
-import 'product_details_screen.dart';
+import 'text_1.dart';
 
 
 List<BestSellingProduct> productList =[

@@ -50,137 +50,137 @@ class LoginScreenState extends State<LoginScreen> {
         color: Colors.red[200], fontSize: 20.0, fontWeight: FontWeight.w600)
     );
 
-        return Scaffold(
-        appBar:AppBar(
-          title: Text('LITTLE CAKE STORY'),
-        ),
-        body: SingleChildScrollView(
-          child:Column(
-            children: [
-              Container(
-                margin: EdgeInsets.fromLTRB(80,30,80,10),
-                child: Image.asset('assets/images/logo2.png',
-                scale: 0.5,),
-                ),
-              SizedBox(height: 10,),
-              Container(
-                margin: EdgeInsets.fromLTRB(25,10,25,5),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                  color:Colors.red[200]
+    return Scaffold(
+    appBar:AppBar(
+      title: Text('LITTLE CAKE STORY'),
+    ),
+    body: SingleChildScrollView(
+      child:Column(
+        children: [
+          Container(
+            margin: EdgeInsets.fromLTRB(80,30,80,10),
+            child: Image.asset('assets/images/logo2.png',
+            scale: 0.5,),
+          ),
+          SizedBox(height: 10,),
+          Container(
+            margin: EdgeInsets.fromLTRB(25,10,25,5),
+            decoration: BoxDecoration(
+              border: Border.all(
+              color:Colors.red[200]
+              ),
+              borderRadius: BorderRadius.all(Radius.circular(5))
+            ),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+              child: Column(
+                children:[
+                  TextField(
+                    cursorColor: Theme.of(context).textSelectionTheme.cursorColor,
+                    controller: _emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: InputDecoration(
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Theme.of(context).accentColor)
+                    ),
+                    icon:Icon(Icons.email,
+                      color: Colors.red[200],),
+                    labelText: 'Email',labelStyle: TextStyle(color:Theme.of(context).accentColor)
                   ),
-                  borderRadius: BorderRadius.all(Radius.circular(5))
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                  child: Column(
+                  ),
+                  TextField(
+                    cursorColor: Theme.of(context).textSelectionTheme.cursorColor,
+                    controller: _passwordController,
+                    decoration: InputDecoration(
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Theme.of(context).accentColor)
+                    ),
+                    focusColor: Theme.of(context).accentColor,
+                      icon: Icon(Icons.lock,
+                      color: Colors.red[200]),
+                      labelText: 'Password',
+                    ),
+                    obscureText: true,
+                  ),                        
+                ]
+              ),
+            ),
+          ),
+          Container(
+            child: Column(
+              children:[
+                Container(
+                  margin: EdgeInsets.fromLTRB(25,0,25,0),
+                  child:Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children:[
-                      TextField(
-                        cursorColor: Theme.of(context).textSelectionTheme.cursorColor,
-                        controller: _emailController,
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Theme.of(context).accentColor)
+                      Container(
+                        child: Row(
+                          children: [
+                            Checkbox(
+                              activeColor: Colors.red[200],
+                              value: _rememberMe,
+                              onChanged:(value){
+                              _onChanged(value);
+                            }),
+                            Text('Remember me',),
+                          ],
                         ),
-                        icon:Icon(Icons.email,
-                          color: Colors.red[200],),
-                        labelText: 'Email',labelStyle: TextStyle(color:Theme.of(context).accentColor)
                       ),
+                      Container(
+                        child: Row(
+                          children: [
+                            GestureDetector(
+                              child:Text('Forgot Password ?',
+                                textAlign: TextAlign.right,
+                                style: TextStyle(
+                                fontSize: 16,
+                                color:Colors.red[300]),),
+                              onTap: _forgotPassword,
+                            ) 
+                          ],
+                        ),
                       ),
-                      TextField(
-                        cursorColor: Theme.of(context).textSelectionTheme.cursorColor,
-                        controller: _passwordController,
-                        decoration: InputDecoration(
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Theme.of(context).accentColor)
-                        ),
-                        focusColor: Theme.of(context).accentColor,
-                          icon: Icon(Icons.lock,
-                          color: Colors.red[200]),
-                          labelText: 'Password',
-                        ),
-                        obscureText: true,
-                      ),                        
                     ]
                   ),
                 ),
-              ),
-              Container(
-                child: Column(
-                  children:[
-                    Container(
-                      margin: EdgeInsets.fromLTRB(25,0,25,0),
-                      child:Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children:[
-                          Container(
-                            child: Row(
-                              children: [
-                                Checkbox(
-                                  activeColor: Colors.red[200],
-                                  value: _rememberMe,
-                                  onChanged:(value){
-                                  _onChanged(value);
-                                }),
-                                Text('Remember me',),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            child: Row(
-                              children: [
-                                GestureDetector(
-                                  child:Text('Forgot Password ?',
-                                    textAlign: TextAlign.right,
-                                    style: TextStyle(
-                                    fontSize: 16,
-                                    color:Colors.red[300]),),
-                                  onTap: _forgotPassword,
-                                ) 
-                              ],
-                            ),
-                          ),
-                        ]
-                      ),
-                    ),
-                    MaterialButton(
-                      shape:RoundedRectangleBorder(
-                        borderRadius:BorderRadius.circular(10),
-                      ),
-                      minWidth: screenWidth/1.15,
-                      height: screenHeight/18,
-                      child: Text('Login',
-                      style: TextStyle(fontSize: 18,color: Colors.white,fontFamily: 'Arial'),),
-                      onPressed: (){
-                        _onLogin();
-                      },
-                      color: Colors.red[200],
-                    ),
-                    SizedBox(height:10),
-                    Container(
-                      child:Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text("Don't have an account?"),
-                          GestureDetector(
-                            child: Text('  SignUp',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.red[300]
-                              ),
-                              ),
-                            onTap: _registerNewAccount,
-                          ),
-                        ],)
-                    )
-                  ]
+                MaterialButton(
+                  shape:RoundedRectangleBorder(
+                    borderRadius:BorderRadius.circular(10),
+                  ),
+                  minWidth: screenWidth/1.15,
+                  height: screenHeight/18,
+                  child: Text('Login',
+                  style: TextStyle(fontSize: 18,color: Colors.white,fontFamily: 'Arial'),),
+                  onPressed: (){
+                    _onLogin();
+                  },
+                  color: Colors.red[200],
                 ),
-              ),
-            ],)
-        ),
-      );
+                SizedBox(height:10),
+                Container(
+                  child:Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Don't have an account?"),
+                      GestureDetector(
+                        child: Text('  SignUp',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red[300]
+                          ),
+                          ),
+                        onTap: _registerNewAccount,
+                      ),
+                    ],)
+                )
+              ]
+            ),
+          ),
+        ],)
+      ),
+    );
   }
                 
   void _onLogin() {
@@ -217,7 +217,8 @@ class LoginScreenState extends State<LoginScreen> {
               dateReg: userData[4],
               rating: userData[5],
               credit: userData[6],
-              status: userData[7]);
+              status: userData[7],
+              qty: userData[8]);
             Navigator.pushReplacement(
             context,MaterialPageRoute(builder: (context)=>BottomNavigationWidget(user:user,))
             );

@@ -368,10 +368,6 @@ class _AddCupCakeScreenState extends State<AddCupCakeScreen> {
       sourcePath: _image.path,
       aspectRatioPresets: [
         CropAspectRatioPreset.square,
-        CropAspectRatioPreset.ratio3x2,
-        CropAspectRatioPreset.original,
-        CropAspectRatioPreset.ratio4x3,
-        CropAspectRatioPreset.ratio16x9
       ],
       androidUiSettings: AndroidUiSettings(
           toolbarTitle: 'Crop your image',
@@ -392,6 +388,8 @@ class _AddCupCakeScreenState extends State<AddCupCakeScreen> {
   }
 
   void _addProduct(String name, String price, String rating, String details,String email) {
+
+    String type ="CupCake";
     
     String base64Image = base64Encode(_image.readAsBytesSync());
     print(base64Image);
@@ -402,7 +400,7 @@ class _AddCupCakeScreenState extends State<AddCupCakeScreen> {
     // print(email);
 
     http.post(
-      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/add_cup_cake.php"),
+      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/add_product.php"),
       body: {
         "name":name,
         "price":price,
@@ -410,6 +408,8 @@ class _AddCupCakeScreenState extends State<AddCupCakeScreen> {
         "details":details,
         "email":email,
         "encoded_string":base64Image,
+        "type":type,
+
       }).then(
         (response){
           print(response.body);

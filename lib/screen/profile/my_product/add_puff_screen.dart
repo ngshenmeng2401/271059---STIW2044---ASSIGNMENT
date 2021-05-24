@@ -368,10 +368,6 @@ class _AddPuffScreenState extends State<AddPuffScreen> {
       sourcePath: _image.path,
       aspectRatioPresets: [
         CropAspectRatioPreset.square,
-        CropAspectRatioPreset.ratio3x2,
-        CropAspectRatioPreset.original,
-        CropAspectRatioPreset.ratio4x3,
-        CropAspectRatioPreset.ratio16x9
       ],
       androidUiSettings: AndroidUiSettings(
           toolbarTitle: 'Crop your image',
@@ -392,6 +388,8 @@ class _AddPuffScreenState extends State<AddPuffScreen> {
   }
 
   void _addProduct(String name, String price, String rating, String details,String email) {
+
+    String type ="Puff";
     
     String base64Image = base64Encode(_image.readAsBytesSync());
     // print(base64Image);
@@ -402,7 +400,7 @@ class _AddPuffScreenState extends State<AddPuffScreen> {
     // print(email);
 
     http.post(
-      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/add_puff.php"),
+      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/add_product.php"),
       body: {
         "name":name,
         "price":price,
@@ -410,6 +408,8 @@ class _AddPuffScreenState extends State<AddPuffScreen> {
         "details":details,
         "email":email,
         "encoded_string":base64Image,
+        "type":type,
+
       }).then(
         (response){
           print(response.body);

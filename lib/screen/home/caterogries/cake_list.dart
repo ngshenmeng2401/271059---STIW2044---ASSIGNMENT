@@ -2,16 +2,17 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:little_cake_story/model/cake.dart';
+import 'package:little_cake_story/model/product.dart';
 import 'package:little_cake_story/model/user.dart';
+import 'package:little_cake_story/screen/cart/cart_screen.dart';
 
 import 'cake_details.dart';
 
 class CakeListScreen extends StatefulWidget {
 
   final User user;
-  final CakeList cakeList;
-  const CakeListScreen({Key key, this.user, this.cakeList}) : super(key: key);
+  final ProductList productList;
+  const CakeListScreen({Key key, this.user, this.productList}) : super(key: key);
 
   @override
   _CakeListScreenState createState() => _CakeListScreenState();
@@ -19,8 +20,8 @@ class CakeListScreen extends StatefulWidget {
 
 class _CakeListScreenState extends State<CakeListScreen> {
 
-  List _cakeList;
-  String titleCenter = "Loading...",searchText="Search";
+  List _productList;
+  String titleCenter = "Loading...",searchText="Search", cartQuantity ="0";
   double screenHeight, screenWidth;
   bool selected_slice, selected_6inch, selected_8inch, selected_10inch, selected_12inch;
   TextEditingController _searchCakeController = new TextEditingController();
@@ -31,6 +32,7 @@ class _CakeListScreenState extends State<CakeListScreen> {
 
     super.initState();
     _loadCake();
+    _loadCartQuantity();
   }
   
   @override
@@ -42,11 +44,16 @@ class _CakeListScreenState extends State<CakeListScreen> {
     return Scaffold(
       appBar:AppBar(
         title: Text('Cakes',style: TextStyle(fontFamily: 'Arial')),
+        actions: [
+          IconButton(onPressed: (){
+            _sortCakeDialog(context);
+          }, icon: Icon(Icons.list,color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor))
+        ],
       ),
       body: Center(
         child: Column(
           children: [
-            _cakeList == null 
+            _productList == null 
             ? Flexible(
                 child: Center(
                   child: Text(titleCenter)),
@@ -61,7 +68,7 @@ class _CakeListScreenState extends State<CakeListScreen> {
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                           child: GridView.builder(
-                            itemCount: _cakeList.length,
+                            itemCount: _productList.length,
                             gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
                               mainAxisSpacing: 5,
@@ -95,7 +102,7 @@ class _CakeListScreenState extends State<CakeListScreen> {
                                             topLeft:Radius.circular(10),
                                             topRight:Radius.circular(10),),
                                             child: CachedNetworkImage(
-                                              imageUrl: "https://javathree99.com/s271059/littlecakestory/images/product_cake/${_cakeList[index]['cake_no']}.png",
+                                              imageUrl: "https://javathree99.com/s271059/littlecakestory/images/product/${_productList[index]['product_no']}.png",
                                               height: 185,
                                               width: 185,
                                               fit: BoxFit.cover,
@@ -113,7 +120,7 @@ class _CakeListScreenState extends State<CakeListScreen> {
                                           ),
                                           Padding(
                                           padding: const EdgeInsets.fromLTRB(5, 15, 5, 0),
-                                          child: Text(_cakeList[index]['cake_name'],
+                                          child: Text(_productList[index]['product_name'],
                                               overflow: TextOverflow.ellipsis,
                                               textAlign: TextAlign.left,
                                               style: Theme.of(context).appBarTheme.textTheme.headline2),
@@ -123,15 +130,15 @@ class _CakeListScreenState extends State<CakeListScreen> {
                                             children: [
                                               Padding(
                                                 padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                                child: Text(_cakeList[index]['offered_price'] == "0" 
-                                                ? "RM ${_cakeList[index]['original_price']}"
-                                                : "RM ${_cakeList[index]['offered_price']}",
+                                                child: Text(_productList[index]['offered_price'] == "0" 
+                                                ? "RM ${_productList[index]['original_price']}"
+                                                : "RM ${_productList[index]['offered_price']}",
                                                 style: TextStyle(fontSize:16,),),
                                               ),
                                               SizedBox(width:10),
-                                              Text(_cakeList[index]['offered_price'] == "0" 
+                                              Text(_productList[index]['offered_price'] == "0" 
                                                 ? ""
-                                                : "RM ${_cakeList[index]['original_price']}",
+                                                : "RM ${_productList[index]['original_price']}",
                                                 style: Theme.of(context).appBarTheme.textTheme.headline3,)
                                             ],),
                                           SizedBox(height:6),
@@ -139,7 +146,7 @@ class _CakeListScreenState extends State<CakeListScreen> {
                                             children: [
                                               Padding(
                                                 padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                                child: Text(_cakeList[index]['rating'],
+                                                child: Text(_productList[index]['rating'],
                                                 style: TextStyle(fontSize:12,color: Colors.orange),),
                                               ),
                                               SizedBox(width: 5),
@@ -167,12 +174,15 @@ class _CakeListScreenState extends State<CakeListScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: Colors.red[200],
         onPressed: () {
-          _sortCakeDialog(context);
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context)=>CartScreen(user: widget.user,))
+          );
         },
-        icon:Icon(Icons.list,
+        icon:Icon(Icons.shopping_cart,
           color: Colors.white,),
-        label: Text("Sort",
+        label: Text(widget.user.qty,
           style: TextStyle(color:Colors.white,fontFamily: 'Calibri',fontSize: 16),),
       ),
     );
@@ -184,17 +194,40 @@ class _CakeListScreenState extends State<CakeListScreen> {
       Uri.parse("https://javathree99.com/s271059/littlecakestory/php/load_cake.php"),
       body: {
         "email":widget.user.email,
+
       }).then(
         (response){
           if(response.body == "nodata"){
             titleCenter = "No data";
+            cartQuantity="0";
             return;
           }else{
-            var jsondata = json.decode(response.body);
-            _cakeList = jsondata["cake"];
             titleCenter = "Contain Data";
-            setState(() {});
-            print(_cakeList);
+            setState(() {
+              var jsondata = json.decode(response.body);
+              _productList = jsondata["product"];
+              cartQuantity = widget.user.qty;
+            });
+            print(_productList);
+          }
+      }
+    );
+  }
+
+    void _loadCartQuantity(){
+
+    http.post(
+      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/load_cart_quantity.php"),
+      body: {
+        "email":widget.user.email,
+      }).then(
+        (response){
+          print(response.body);
+
+          if(response.body=="nodata"){
+          }
+          else {
+            widget.user.qty = response.body;
           }
       }
     );
@@ -202,44 +235,45 @@ class _CakeListScreenState extends State<CakeListScreen> {
 
   void _cakeDetails(int index) {
 
-    _cakeList[index]['size_slice']=="true" 
+    _productList[index]['slice']=="true" 
       ? selected_slice=true
       : selected_slice=false;
 
-    _cakeList[index]['size6_inch']=="true" 
+    _productList[index]['size6_inch']=="true" 
       ? selected_6inch=true
       : selected_6inch=false;
     
-    _cakeList[index]['size8_inch']=="true" 
+    _productList[index]['size8_inch']=="true" 
       ? selected_8inch=true
       : selected_8inch=false;
 
-    _cakeList[index]['size10_inch']=="true" 
+    _productList[index]['size10_inch']=="true" 
       ? selected_10inch=true
       : selected_10inch=false;
 
-    _cakeList[index]['size12_inch']=="true" 
+    _productList[index]['size12_inch']=="true" 
       ? selected_12inch=true
       : selected_12inch=false;
     
     print(selected_12inch);
 
-    print(_cakeList[index]['cake_no']);
-    CakeList cakeList = new CakeList(
-      cakeNo: _cakeList[index]['cake_no'],
-      cakeName: _cakeList[index]['cake_name'],
-      oriPrice: _cakeList[index]['original_price'],
-      offeredPrice: _cakeList[index]['offered_price'],
-      rating: _cakeList[index]['rating'],
-      details: _cakeList[index]['cake_detail'],
+    print(_productList[index]['product_no']);
+    ProductList productList = new ProductList(
+      productNo: _productList[index]['product_no'],
+      productName: _productList[index]['product_name'],
+      oriPrice: _productList[index]['original_price'],
+      offeredPrice: _productList[index]['offered_price'],
+      rating: _productList[index]['rating'],
+      details: _productList[index]['product_detail'],
       slice: selected_slice,
       inch_6: selected_6inch,
       inch_8: selected_8inch,
       inch_10: selected_10inch,
+      type: _productList[index]['type'],
     );
 
-    Navigator.push(
-      context,MaterialPageRoute(builder: (context)=> CakeDetailsScreen(cakeList:cakeList,user: widget.user,))
+    Navigator.pushReplacement(
+      context,MaterialPageRoute(builder: (context)=> CakeDetailsScreen(productList:productList,user: widget.user,))
     );
   }
 
@@ -338,11 +372,10 @@ class _CakeListScreenState extends State<CakeListScreen> {
         (response){
           setState(() {
             var jsondata = json.decode(response.body);
-            _cakeList = jsondata["cake"];
+            _productList = jsondata["product"];
             FocusScope.of(context).requestFocus(new FocusNode());
           });
       }
     );
   }
-  
 }

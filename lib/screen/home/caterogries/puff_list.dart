@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:little_cake_story/model/puff.dart';
+import 'package:little_cake_story/model/product.dart';
 import 'package:little_cake_story/model/user.dart';
+import 'package:little_cake_story/screen/cart/cart_screen.dart';
 import 'package:little_cake_story/screen/home/caterogries/puff_details.dart';
 
 class PuffListScreen extends StatefulWidget {
 
   final User user;
-  final PuffList puffList;
-
-  const PuffListScreen({Key key, this.user, this.puffList}) : super(key: key);
+  final ProductList productList;
+  const PuffListScreen({Key key, this.user, this.productList}) : super(key: key);
 
   @override
   _PuffListScreenState createState() => _PuffListScreenState();
@@ -19,17 +19,18 @@ class PuffListScreen extends StatefulWidget {
 
 class _PuffListScreenState extends State<PuffListScreen> {
 
-  List _puffList;
+  List _productList;
   String titleCenter = "Loading...",searchText="Search";
   double screenHeight, screenWidth;
-  TextEditingController _searchCakeController = new TextEditingController();
   int sortButton=1;
+  String type = "Puff";
 
   @override
   void initState() {
 
     super.initState();
     _loadPuff();
+    _loadCartQuantity();
   }
   
   @override
@@ -41,11 +42,16 @@ class _PuffListScreenState extends State<PuffListScreen> {
     return Scaffold(
       appBar:AppBar(
         title: Text('Puff Cakes',style: TextStyle(fontFamily: 'Arial')),
+        actions: [
+          IconButton(onPressed: (){
+            _sortPuffDialog(context);
+          }, icon: Icon(Icons.list,color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor))
+        ],
       ),
       body: Center(
         child: Column(
           children: [
-            _puffList == null 
+            _productList == null 
             ? Flexible(
                 child: Center(
                   child: Text(titleCenter)),
@@ -60,7 +66,7 @@ class _PuffListScreenState extends State<PuffListScreen> {
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                           child: GridView.builder(
-                            itemCount: _puffList.length,
+                            itemCount: _productList.length,
                             gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
                               mainAxisSpacing: 5,
@@ -94,7 +100,7 @@ class _PuffListScreenState extends State<PuffListScreen> {
                                             topLeft:Radius.circular(10),
                                             topRight:Radius.circular(10),),
                                             child: CachedNetworkImage(
-                                              imageUrl: "https://javathree99.com/s271059/littlecakestory/images/product_puff/${_puffList[index]['puff_no']}.png",
+                                              imageUrl: "https://javathree99.com/s271059/littlecakestory/images/product/${_productList[index]['product_no']}.png",
                                               height: 185,
                                               width: 185,
                                               fit: BoxFit.cover,
@@ -112,7 +118,7 @@ class _PuffListScreenState extends State<PuffListScreen> {
                                           ),
                                           Padding(
                                           padding: const EdgeInsets.fromLTRB(5, 15, 5, 0),
-                                          child: Text(_puffList[index]['puff_name'],
+                                          child: Text(_productList[index]['product_name'],
                                               overflow: TextOverflow.ellipsis,
                                               textAlign: TextAlign.left,
                                               style: Theme.of(context).appBarTheme.textTheme.headline2),
@@ -122,15 +128,15 @@ class _PuffListScreenState extends State<PuffListScreen> {
                                             children: [
                                               Padding(
                                                 padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                                child: Text(_puffList[index]['offered_price'] == "0" 
-                                                ? "RM ${_puffList[index]['original_price']}"
-                                                : "RM ${_puffList[index]['offered_price']}",
+                                                child: Text(_productList[index]['offered_price'] == "0" 
+                                                ? "RM ${_productList[index]['original_price']}"
+                                                : "RM ${_productList[index]['offered_price']}",
                                                 style: TextStyle(fontSize:16,),),
                                               ),
                                               SizedBox(width:10),
-                                              Text(_puffList[index]['offered_price'] == "0" 
+                                              Text(_productList[index]['offered_price'] == "0" 
                                                 ? ""
-                                                : "RM ${_puffList[index]['original_price']}",
+                                                : "RM ${_productList[index]['original_price']}",
                                                 style: Theme.of(context).appBarTheme.textTheme.headline3,)
                                             ],),
                                           SizedBox(height:6),
@@ -138,7 +144,7 @@ class _PuffListScreenState extends State<PuffListScreen> {
                                             children: [
                                               Padding(
                                                 padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                                child: Text(_puffList[index]['rating'],
+                                                child: Text(_productList[index]['rating'],
                                                 style: TextStyle(fontSize:12,color: Colors.orange),),
                                               ),
                                               SizedBox(width: 5),
@@ -166,12 +172,15 @@ class _PuffListScreenState extends State<PuffListScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: Colors.red[200],
         onPressed: () {
-          _sortCakeDialog(context);
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context)=>CartScreen(user: widget.user,))
+          );
         },
-        icon:Icon(Icons.list,
+        icon:Icon(Icons.shopping_cart,
           color: Colors.white,),
-        label: Text("Sort",
+        label: Text(widget.user.qty,
           style: TextStyle(color:Colors.white,fontFamily: 'Calibri',fontSize: 16),),
       ),
     );
@@ -180,9 +189,11 @@ class _PuffListScreenState extends State<PuffListScreen> {
   void _loadPuff() {
 
     http.post(
-      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/load_puff.php"),
+      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/load_other_product.php"),
       body: {
         "email":widget.user.email,
+        "type":type,
+
       }).then(
         (response){
           if(response.body == "nodata"){
@@ -190,10 +201,29 @@ class _PuffListScreenState extends State<PuffListScreen> {
             return;
           }else{
             var jsondata = json.decode(response.body);
-            _puffList = jsondata["puff"];
+            _productList = jsondata["product"];
             titleCenter = "Contain Data";
             setState(() {});
-            print(_puffList);
+            print(_productList);
+          }
+      }
+    );
+  }
+
+  void _loadCartQuantity(){
+
+    http.post(
+      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/load_cart_quantity.php"),
+      body: {
+        "email":widget.user.email,
+      }).then(
+        (response){
+          print(response.body);
+
+          if(response.body=="nodata"){
+          }
+          else {
+            widget.user.qty = response.body;
           }
       }
     );
@@ -201,21 +231,22 @@ class _PuffListScreenState extends State<PuffListScreen> {
 
   void _cakeDetails(int index) {
 
-    print(_puffList[index]['cake_no']);
-    PuffList puffList = new PuffList(
-      puffNo: _puffList[index]['puff_no'],
-      puffName: _puffList[index]['puff_name'],
-      oriPrice: _puffList[index]['original_price'],
-      offeredPrice: _puffList[index]['offered_price'],
-      rating: _puffList[index]['rating'],
-      details: _puffList[index]['puff_detail'],
+    print(_productList[index]['product_no']);
+    ProductList productList = new ProductList(
+      productNo: _productList[index]['product_no'],
+      productName: _productList[index]['product_name'],
+      oriPrice: _productList[index]['original_price'],
+      offeredPrice: _productList[index]['offered_price'],
+      rating: _productList[index]['rating'],
+      details: _productList[index]['product_detail'],
+      type: _productList[index]['type'],
     );
     Navigator.push(
-      context,MaterialPageRoute(builder: (context)=> PuffDetailsScreen(puffList:puffList,user: widget.user,))
+      context,MaterialPageRoute(builder: (context)=> PuffDetailsScreen(productList:productList,user: widget.user,))
     );
   }
 
-  Future<void> _sortCakeDialog(BuildContext context) async {
+  Future<void> _sortPuffDialog(BuildContext context) async {
     return await showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -302,15 +333,17 @@ class _PuffListScreenState extends State<PuffListScreen> {
       _loadPuff();
     }
     http.post(
-      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/sort_puff_price.php"),
+      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/sort_other_product_price.php"),
       body: {
         "email":widget.user.email,
         "sort_value":sortButton.toString(),
+        "type":type,
+        
       }).then(
         (response){
           setState(() {
             var jsondata = json.decode(response.body);
-            _puffList = jsondata["puff"];
+            _productList = jsondata["product"];
             FocusScope.of(context).requestFocus(new FocusNode());
           });
       }

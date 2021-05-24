@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:little_cake_story/model/tart.dart';
+import 'package:little_cake_story/model/product.dart';
 import 'package:little_cake_story/model/user.dart';
+import 'package:little_cake_story/screen/cart/cart_screen.dart';
 
 import 'tart_details.dart';
 
 class TartListScreen extends StatefulWidget {
 
   final User user;
-  final TartList tartList;
-
-  const TartListScreen({Key key, this.user, this.tartList}) : super(key: key);
+  final ProductList productList;
+  const TartListScreen({Key key, this.user, this.productList}) : super(key: key);
 
   @override
   _TartListScreenState createState() => _TartListScreenState();
@@ -20,17 +20,18 @@ class TartListScreen extends StatefulWidget {
 
 class _TartListScreenState extends State<TartListScreen> {
 
-  List _tartList;
+  List _productList;
   String titleCenter = "Loading...",searchText="Search";
   double screenHeight, screenWidth;
-  TextEditingController _searchCakeController = new TextEditingController();
   int sortButton=1;
+  String type = "Tart";
 
   @override
   void initState() {
 
     super.initState();
     _loadTart();
+    _loadCartQuantity();
   }
   
   @override
@@ -46,7 +47,7 @@ class _TartListScreenState extends State<TartListScreen> {
       body: Center(
         child: Column(
           children: [
-            _tartList == null 
+            _productList == null 
             ? Flexible(
                 child: Center(
                   child: Text(titleCenter)),
@@ -61,7 +62,7 @@ class _TartListScreenState extends State<TartListScreen> {
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                           child: GridView.builder(
-                            itemCount: _tartList.length,
+                            itemCount: _productList.length,
                             gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
                               mainAxisSpacing: 5,
@@ -95,7 +96,7 @@ class _TartListScreenState extends State<TartListScreen> {
                                             topLeft:Radius.circular(10),
                                             topRight:Radius.circular(10),),
                                             child: CachedNetworkImage(
-                                              imageUrl: "https://javathree99.com/s271059/littlecakestory/images/product_tart/${_tartList[index]['tart_no']}.png",
+                                              imageUrl: "https://javathree99.com/s271059/littlecakestory/images/product/${_productList[index]['product_no']}.png",
                                               height: 185,
                                               width: 185,
                                               fit: BoxFit.cover,
@@ -113,7 +114,7 @@ class _TartListScreenState extends State<TartListScreen> {
                                           ),
                                           Padding(
                                           padding: const EdgeInsets.fromLTRB(5, 15, 5, 0),
-                                          child: Text(_tartList[index]['tart_name'],
+                                          child: Text(_productList[index]['product_name'],
                                               overflow: TextOverflow.ellipsis,
                                               textAlign: TextAlign.left,
                                               style: Theme.of(context).appBarTheme.textTheme.headline2),
@@ -123,15 +124,15 @@ class _TartListScreenState extends State<TartListScreen> {
                                             children: [
                                               Padding(
                                                 padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                                child: Text(_tartList[index]['offered_price'] == "0" 
-                                                ? "RM ${_tartList[index]['original_price']}"
-                                                : "RM ${_tartList[index]['offered_price']}",
+                                                child: Text(_productList[index]['offered_price'] == "0" 
+                                                ? "RM ${_productList[index]['original_price']}"
+                                                : "RM ${_productList[index]['offered_price']}",
                                                 style: TextStyle(fontSize:16,),),
                                               ),
                                               SizedBox(width:10),
-                                              Text(_tartList[index]['offered_price'] == "0" 
+                                              Text(_productList[index]['offered_price'] == "0" 
                                                 ? ""
-                                                : "RM ${_tartList[index]['original_price']}",
+                                                : "RM ${_productList[index]['original_price']}",
                                                 style: Theme.of(context).appBarTheme.textTheme.headline3,)
                                             ],),
                                           SizedBox(height:6),
@@ -139,7 +140,7 @@ class _TartListScreenState extends State<TartListScreen> {
                                             children: [
                                               Padding(
                                                 padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                                child: Text(_tartList[index]['rating'],
+                                                child: Text(_productList[index]['rating'],
                                                 style: TextStyle(fontSize:12,color: Colors.orange),),
                                               ),
                                               SizedBox(width: 5),
@@ -167,12 +168,15 @@ class _TartListScreenState extends State<TartListScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: Colors.red[200],
         onPressed: () {
-          _sortCakeDialog(context);
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context)=>CartScreen(user: widget.user,))
+          );
         },
-        icon:Icon(Icons.list,
+        icon:Icon(Icons.shopping_cart,
           color: Colors.white,),
-        label: Text("Sort",
+        label: Text(widget.user.qty,
           style: TextStyle(color:Colors.white,fontFamily: 'Calibri',fontSize: 16),),
       ),
     );
@@ -181,9 +185,11 @@ class _TartListScreenState extends State<TartListScreen> {
   void _loadTart() {
 
     http.post(
-      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/load_tart.php"),
+      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/load_other_product.php"),
       body: {
         "email":widget.user.email,
+        "type":type,
+        
       }).then(
         (response){
           if(response.body == "nodata"){
@@ -191,10 +197,29 @@ class _TartListScreenState extends State<TartListScreen> {
             return;
           }else{
             var jsondata = json.decode(response.body);
-            _tartList = jsondata["tart"];
+            _productList = jsondata["product"];
             titleCenter = "Contain Data";
             setState(() {});
-            print(_tartList);
+            print(_productList);
+          }
+      }
+    );
+  }
+
+  void _loadCartQuantity(){
+
+    http.post(
+      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/load_cart_quantity.php"),
+      body: {
+        "email":widget.user.email,
+      }).then(
+        (response){
+          print(response.body);
+
+          if(response.body=="nodata"){
+          }
+          else {
+            widget.user.qty = response.body;
           }
       }
     );
@@ -202,17 +227,18 @@ class _TartListScreenState extends State<TartListScreen> {
 
   void _cakeDetails(int index) {
 
-    print(_tartList[index]['cake_no']);
-    TartList tartList = new TartList(
-      tartNo: _tartList[index]['tart_no'],
-      tartName: _tartList[index]['tart_name'],
-      oriPrice: _tartList[index]['original_price'],
-      offeredPrice: _tartList[index]['offered_price'],
-      rating: _tartList[index]['rating'],
-      details: _tartList[index]['tart_detail'],
+    print(_productList[index]['product_no']);
+    ProductList productList = new ProductList(
+      productNo: _productList[index]['product_no'],
+      productName: _productList[index]['product_name'],
+      oriPrice: _productList[index]['original_price'],
+      offeredPrice: _productList[index]['offered_price'],
+      rating: _productList[index]['rating'],
+      details: _productList[index]['product_detail'],
+      type: _productList[index]['type'],
     );
     Navigator.push(
-      context,MaterialPageRoute(builder: (context)=> TartDetailsScreen(tartList:tartList,user: widget.user,))
+      context,MaterialPageRoute(builder: (context)=> TartDetailsScreen(productList:productList,user: widget.user,))
     );
   }
 
@@ -303,15 +329,17 @@ class _TartListScreenState extends State<TartListScreen> {
       _loadTart();
     }
     http.post(
-      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/sort_tart_price.php"),
+      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/sort_other_product_price.php"),
       body: {
         "email":widget.user.email,
         "sort_value":sortButton.toString(),
+        "type":type,
+        
       }).then(
         (response){
           setState(() {
             var jsondata = json.decode(response.body);
-            _tartList = jsondata["tart"];
+            _productList = jsondata["product"];
             FocusScope.of(context).requestFocus(new FocusNode());
           });
       }

@@ -1,12 +1,13 @@
-class CakeList{
+  
+class ProductList{
 
-  String cakeNo, cakeName, oriPrice, offeredPrice, rating, details;
+  String productNo, productName, oriPrice, offeredPrice, rating, details, type;
   bool slice, inch_6, inch_8, inch_10;
 
-  CakeList(
+  ProductList(
     {
-      this.cakeNo,
-      this.cakeName,
+      this.productNo,
+      this.productName,
       this.oriPrice,
       this.offeredPrice,
       this.rating,
@@ -15,6 +16,7 @@ class CakeList{
       this.inch_6,
       this.inch_8,
       this.inch_10,
+      this.type,
     }
   );
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'home/home_screen.dart';
 import 'search/search_screen.dart';
-import 'cart/cart_screen.dart';
 import 'profile/profile_screen.dart';
 import '../model/user.dart';
 
@@ -24,7 +23,6 @@ class BottomNavigationWidgetState extends State<BottomNavigationWidget> {
     list = [
       HomeScreen(user: widget.user,),
       SearchScreen(user: widget.user,),
-      CartScreen(user: widget.user,),
       ProfileScreen(user: widget.user,)
     ];
     super.initState();
@@ -50,14 +48,6 @@ class BottomNavigationWidgetState extends State<BottomNavigationWidget> {
             ),
             title:Text(
                'Search',
-            )
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.shopping_cart,
-            ),
-            title:Text(
-               'Cart',
             )
           ),
           BottomNavigationBarItem(
