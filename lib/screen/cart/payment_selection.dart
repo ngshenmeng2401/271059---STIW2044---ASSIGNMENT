@@ -163,6 +163,10 @@ class _PaymentSelectionScreenState extends State<PaymentSelectionScreen> {
             textColor: Colors.white,
             fontSize: 16.0);
 
+            setState(() {
+              widget.user.qty = "0";
+            });
+
           }
           else {
             Fluttertoast.showToast(

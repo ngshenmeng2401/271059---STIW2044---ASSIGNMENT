@@ -392,8 +392,21 @@ class _CartScreenState extends State<CartScreen> {
       city: "City",
       state: "State",
     );
-    Navigator.pushReplacement(
-      context,MaterialPageRoute(builder: (context)=> PaymentScreen(user: widget.user,cart: cart,address:address,))
-    );
+
+    if(_cartList==null){
+      Fluttertoast.showToast(
+            msg: "Cart is empty",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red[200],
+            textColor: Colors.white,
+            fontSize: 16.0);
+    }
+    else{
+      Navigator.pushReplacement(
+        context,MaterialPageRoute(builder: (context)=> PaymentScreen(user: widget.user,cart: cart,address:address,))
+      );
+    }
   }
 }
