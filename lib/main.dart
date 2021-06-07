@@ -22,6 +22,7 @@ class _MyAppState extends State<MyApp> {
         child: Consumer<ThemeNotifier>(
           builder: (context,ThemeNotifier notifier,child){
           return MaterialApp(
+            debugShowCheckedModeBanner: false,
             title: 'LITTLE CAKE STORY',
             theme: notifier.darkTheme ? CustomTheme.darktheme : CustomTheme.lighttheme,
             home: SplashScreen()

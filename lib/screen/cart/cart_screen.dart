@@ -118,24 +118,6 @@ class _CartScreenState extends State<CartScreen> {
                                         imageUrl: "https://javathree99.com/s271059/littlecakestory/images/product/${_cartList[index]['product_no']}.png",
                                       ),
                                     ),
-                                    Align(
-                                      alignment: Alignment.bottomCenter,
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.only(
-                                          bottomLeft: Radius.circular(10),
-                                        ),
-                                        child: Container(
-                                          color: Colors.white70,
-                                          width: screenWidth/3.38,
-                                          height: screenHeight/30,
-                                          child: Text(_cartList[index]['offered_price'] == "0" 
-                                              ? "RM " +_cartList[index]['original_price']
-                                              : "RM " +_cartList[index]['offered_price'],
-                                            style: TextStyle(color: Colors.black,fontSize: 18,fontWeight: FontWeight.w500),
-                                            textAlign: TextAlign.center,),
-                                        ),
-                                      ),
-                                    ),
                                   ],
                                 ),
                                 Column(
@@ -148,62 +130,62 @@ class _CartScreenState extends State<CartScreen> {
                                           children: [
                                             Container(
                                               margin: const EdgeInsets.only(left: 10),
-                                              width: screenWidth/2,
+                                              width: screenWidth/2.5,
                                               child: Text(
                                                 _cartList[index]['product_name'],
                                                 overflow: TextOverflow.ellipsis,
                                                 style: Theme.of(context).textTheme.bodyText1,
                                               ),
                                             ),
-                                            IconButton(
-                                                icon: Icon(
-                                                  Icons.delete,
-                                                  color: Colors.red[200],
-                                                  size: 25,
-                                                ),
-                                                onPressed: () {
-                                                  _deleteCartDialog(index);
-                                                })
+                                            Container(
+                                              margin: const EdgeInsets.only(left: 10),
+                                              width: screenWidth/5,
+                                              child: Text("RM "+ _cartList[index]['product_price'],
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(fontSize: 16),
+                                              ),
+                                            ),
                                           ],
                                         ),
                                       ),
                                       Expanded(
                                         flex: 1,
                                         child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          mainAxisAlignment: MainAxisAlignment.start,
                                           children: [
-                                            Icon(Icons.star,color: Colors.orange,size: 20,),
                                             Container(
-                                            width: screenWidth/6,
-                                            child: Text(_cartList[index]['rating'],
-                                              style: TextStyle(
-                                                    color: Colors.orange, fontSize: 18))),
-                                            SizedBox(),
-                                            Container(
-                                              width: screenWidth/2.8,
-                                              margin: const EdgeInsets.only(left:10),
+                                              margin: const EdgeInsets.only(left: 10),
+                                              width: screenWidth/3.4,
                                               child: RichText(
-                                                textAlign: TextAlign.right,
+                                                textAlign: TextAlign.left,
                                                 text: TextSpan(
-                                                  children: <TextSpan>[
-                                                    TextSpan(text:_cartList[index]['slice']=="true" 
-                                                      ? "slice, "
-                                                      : null),
-                                                    TextSpan(text:_cartList[index]['6_inch']=="true" 
-                                                      ? "6 inch, "
-                                                      : null),
-                                                    TextSpan(text:_cartList[index]['8_inch']=="true" 
-                                                      ? "8 inch, "
-                                                      : null),
-                                                    TextSpan(text:_cartList[index]['10_inch']=="true" 
-                                                      ? "10 inch, "
-                                                      : null),
-                                                    TextSpan(text:_cartList[index]['eggless']=="true" 
-                                                      ? "Eggless"
-                                                      : null),
-                                                  ]
-                                                ))
-                                            )
+                                                children: <TextSpan>[
+                                                  TextSpan(text: _cartList[index]['product_size'] == "No"
+                                                    ? _cartList[index]['product_size'] 
+                                                    : _cartList[index]['product_size'] ,style: TextStyle(fontSize: 16)),
+                                                  TextSpan(text: _cartList[index]['eggless']=="false"
+                                                    ? ""
+                                                    : ",Eggless",style: TextStyle(fontSize: 16)),
+                                                ]
+                                              )),
+                                            ),
+                                            Container(
+                                              width: screenWidth/3,
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.end,
+                                                children: [
+                                                  IconButton(onPressed: (){
+                                                    _updateCart(index,"remove");
+                                                  }, 
+                                                  icon: Icon(Icons.remove_circle_outline)),
+                                                  Text(_cartList[index]['product_qty']),
+                                                  IconButton(onPressed: (){
+                                                    _updateCart(index,"add");
+                                                  }, 
+                                                  icon: Icon(Icons.add_circle_outline)),
+                                                ],
+                                              ),
+                                            ),
                                           ],
                                         ),
                                       ),
@@ -220,7 +202,7 @@ class _CartScreenState extends State<CartScreen> {
                                               width:screenWidth/3.4,
                                               child: Text(_cartList[index]['total_price'],
                                                 textAlign: TextAlign.end,
-                                                style: TextStyle(fontSize: 20),),
+                                                style: TextStyle(fontSize: 22),),
                                             ),
                                           ],
                                         ),
@@ -275,6 +257,62 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 
+  
+  void _updateCart(int index, String op) {
+
+    quantity= int.parse(_cartList[index]['product_qty']);
+    if (op == "add") {
+      quantity++;
+    }
+    if (op == "remove") {
+      quantity--;
+      if (quantity == 0) {
+        _deleteCartDialog(index);
+        return;
+      }
+    }
+
+    http.post(
+      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/update_cart.php"),
+      body: {
+        "product_no":_cartList[index]['product_no'],
+        "email":widget.user.email,
+        "product_price":_cartList[index]['product_price'],
+        "quantity":quantity.toString(),
+
+      }).then(
+        (response){
+          print(response.body);
+
+          if(response.body=="success"){
+            Fluttertoast.showToast(
+            msg: "Cart Update",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red[200],
+            textColor: Colors.white,
+            fontSize: 16.0);
+
+            _loadCart();
+
+          }
+          else {
+            Fluttertoast.showToast(
+            msg: "Failed",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red[200],
+            textColor: Colors.white,
+            fontSize: 16.0);
+
+          }
+      }
+    );
+
+  }
+
   void _deleteCartDialog(index) {
 
     showDialog(
@@ -306,8 +344,9 @@ class _CartScreenState extends State<CartScreen> {
     http.post(
       Uri.parse("https://javathree99.com/s271059/littlecakestory/php/delete_cart.php"),
       body: {
-        "cart_no":_cartList[index]['cart_no'],
+        "product_no":_cartList[index]['product_no'],
         "email":widget.user.email,
+        "product_price":_cartList[index]['product_price'],
 
       }).then(
         (response){
@@ -357,5 +396,4 @@ class _CartScreenState extends State<CartScreen> {
       context,MaterialPageRoute(builder: (context)=> PaymentScreen(user: widget.user,cart: cart,address:address,))
     );
   }
-
 }

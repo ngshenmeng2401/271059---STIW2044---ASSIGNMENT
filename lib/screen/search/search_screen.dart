@@ -21,9 +21,10 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
 
   List _productList;
-  String titleCenter = "Loading...",searchText="Search", cartQuantity ="0", searchProduct;
+  String titleCenter = "Search Your Product",searchText="Search", cartQuantity ="0", searchProduct;
   double screenHeight, screenWidth;
-  bool selected_slice, selected_6inch, selected_8inch, selected_10inch, selected_12inch;
+  bool selected_slice, selected_6inch, selected_8inch, selected_10inch;
+  bool isSearch =false;
   TextEditingController _searchController = new TextEditingController();
   int sortButton=1;
 
@@ -31,7 +32,7 @@ class _SearchScreenState extends State<SearchScreen> {
   void initState() {
 
     super.initState();
-    _loadProduct();
+    // _loadProduct();
     _loadCartQuantity();
   }
 
@@ -46,7 +47,7 @@ class _SearchScreenState extends State<SearchScreen> {
         title: Text('LITTLE CAKE STORY',style: TextStyle(fontFamily: 'Arial'),),
         actions: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(0, 15, 20, 0),
+            padding: const EdgeInsets.fromLTRB(0, 15, 5, 0),
             child: Container(
               width: 30,
               height: 10,
@@ -84,25 +85,40 @@ class _SearchScreenState extends State<SearchScreen> {
       body: Center(
         child:Column(
           children:[
-            ListTile(
-              leading: IconButton(
-                icon: Icon(Icons.search,color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor,),
-                onPressed: (){
-                  
-                },
-              ),
-              title: TextField(
-                controller: _searchController,
-                decoration: InputDecoration(
-                hintText: "Search",hintStyle:TextStyle(fontSize:18,fontFamily: 'Calibri'),
-                ),
-              ),
-              trailing: IconButton(
-                icon: Icon(Icons.close),
-                onPressed: (){
-                  _searchProduct(_searchController.text.toString());
-                  // _searchController.clear();
-                },
+            Container(
+              padding: const EdgeInsets.fromLTRB(15, 0, 10, 0),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 8,
+                    child: TextField(
+                    controller: _searchController,
+                    decoration: InputDecoration(
+                    hintText: "Search",hintStyle:TextStyle(fontSize:18,fontFamily: 'Calibri'),
+                    ),
+                  ),),
+                  Expanded(
+                    flex: 1,
+                    child: IconButton(
+                      icon: Icon(Icons.clear),
+                      onPressed: (){
+                        _searchController.clear();
+                        setState(() {
+                          _productList = null;
+                          titleCenter = "Search Your Product";
+                        });
+                        FocusScope.of(context).requestFocus(new FocusNode());
+                      },
+                    )),
+                  Expanded(
+                    flex: 1,
+                    child: IconButton(
+                      icon: Icon(Icons.search),
+                      onPressed: (){
+                        _searchProduct(_searchController.text.toString());
+                      },
+                    )),
+                ],
               ),
             ),
             _productList == null 
@@ -110,7 +126,8 @@ class _SearchScreenState extends State<SearchScreen> {
                 child: Center(
                   child: Text(titleCenter)),
             )
-            : Flexible(
+            : 
+            Flexible(
                 child: Container(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -225,47 +242,34 @@ class _SearchScreenState extends State<SearchScreen> {
           ]
         )
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: Colors.red[200],
-        onPressed: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context)=>CartScreen(user: widget.user,))
-          );
-        },
-        icon:Icon(Icons.shopping_cart,
-          color: Colors.white,),
-        label: Text(widget.user.qty,
-          style: TextStyle(color:Colors.white,fontFamily: 'Calibri',fontSize: 16),),
-      ),
     );
   }
+  // void _loadProduct() {
 
-  void _loadProduct() {
 
+  //   http.post(
+  //     Uri.parse("https://javathree99.com/s271059/littlecakestory/php/load_product.php"),
+  //     body: {
+  //       "email":widget.user.email,
 
-    http.post(
-      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/load_product.php"),
-      body: {
-        "email":widget.user.email,
-
-      }).then(
-        (response){
-          if(response.body == "nodata"){
-            titleCenter = "No data";
-            cartQuantity="0";
-            return;
-          }else{
-            titleCenter = "Contain Data";
-            setState(() {
-              var jsondata = json.decode(response.body);
-              _productList = jsondata["product"];
-              cartQuantity = widget.user.qty;
-            });
-            print(_productList);
-          }
-      }
-    );
-  }
+  //     }).then(
+  //       (response){
+  //         if(response.body == "nodata"){
+  //           titleCenter = "No data";
+  //           cartQuantity="0";
+  //           return;
+  //         }else{
+  //           titleCenter = "Contain Data";
+  //           setState(() {
+  //             var jsondata = json.decode(response.body);
+  //             _productList = jsondata["product"];
+  //             cartQuantity = widget.user.qty;
+  //           });
+  //           print(_productList);
+  //         }
+  //     }
+  //   );
+  // }
 
   void _searchProduct(String searchProduct){
 
@@ -334,12 +338,6 @@ class _SearchScreenState extends State<SearchScreen> {
     _productList[index]['size10_inch']=="true" 
       ? selected_10inch=true
       : selected_10inch=false;
-
-    _productList[index]['size12_inch']=="true" 
-      ? selected_12inch=true
-      : selected_12inch=false;
-    
-    print(selected_12inch);
 
     print(_productList[index]['product_no']);
     ProductList productList = new ProductList(

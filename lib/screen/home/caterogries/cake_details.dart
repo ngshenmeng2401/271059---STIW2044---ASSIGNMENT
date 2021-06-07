@@ -22,11 +22,12 @@ class _CakeDetailsScreenState extends State<CakeDetailsScreen> {
 
   bool selectSlice = false, select6Inch = false, select8Inch = false, select10Inch = false;
   bool eggLess = false, pressFavouriteIcon ;
-  double screenHeight,screenWidth;
+  double screenHeight, screenWidth, price;
   double totalOriPrice = 0, totalOfferedPrice = 0;
   TextEditingController _messageController = new TextEditingController();
-  String cartQuantity, _message, status;
+  String cartQuantity, _message, status, productSize="Size";
   SharedPreferences pref;
+  int product_qty =1;
 
   @override
   Widget build(BuildContext context) {
@@ -543,81 +544,88 @@ class _CakeDetailsScreenState extends State<CakeDetailsScreen> {
 
   void _addToCart() {
 
-    String product_qty = "1";
-    if(_messageController.text.toString() == ""){
-      _message = "No";
-    }else{
-      _message = _messageController.text.toString();
+    _messageController.text.toString() == ""
+    ?  _message = "No"
+    :  _message = _messageController.text.toString();
+    
+    totalOfferedPrice == 0
+    ?  price = totalOriPrice
+    :  price = totalOfferedPrice;
+    
+    if (price==0.0 && selectSlice== false && select6Inch== false && select8Inch== false && select10Inch== false && eggLess== false) {
+    Fluttertoast.showToast(
+    msg: "Please size of cake and whether the cake is eggless",
+    toastLength: Toast.LENGTH_SHORT,
+    gravity: ToastGravity.BOTTOM,
+    timeInSecForIosWeb: 1,
+    backgroundColor: Colors.red[200],
+    textColor: Colors.white,
+    fontSize: 16.0);
     }
-    print(widget.user.email);
-    print(selectSlice);
 
-    if(widget.productList.type == "Cake"){
-      
-      if (widget.productList.productNo.isNotEmpty && product_qty.isNotEmpty && widget.user.email.isNotEmpty && selectSlice== false && select6Inch== false && select8Inch== false && select10Inch== false && eggLess== false) {
-      Fluttertoast.showToast(
-      msg: "Please size of cake and whether the cake is eggless",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      timeInSecForIosWeb: 1,
-      backgroundColor: Colors.red[200],
-      textColor: Colors.white,
-      fontSize: 16.0);
-      }
-    }
     else{
 
-      print(_message);
-
-      http.post(
-      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/add_cart.php"),
-      body: {
-        "product_no":widget.productList.productNo,
-        "user_qty":product_qty,
-        "email":widget.user.email,
-        "selectSlice":selectSlice.toString(),
-        "select6Inch":select6Inch.toString(),
-        "select8Inch":select8Inch.toString(),
-        "select10Inch":select10Inch.toString(),
-        "eggLess":eggLess.toString(),
-        "message":_message,
-
-      }).then(
-        (response){
-          print(response.body);
-
-          if(response.body=="failed"){
-            Fluttertoast.showToast(
-            msg: "Add Into Cart Failed",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red[200],
-            textColor: Colors.white,
-            fontSize: 16.0);
-
-          }
-          else {
-            Fluttertoast.showToast(
-            msg: "Add Into Cart Sucess",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red[200],
-            textColor: Colors.white,
-            fontSize: 16.0);
-
-            List respond = response.body.split(",");
-            setState(() {
-              cartQuantity = respond[1];
-              widget.user.qty = cartQuantity;
-            });
-
-          }
-        }
-      );
+    if(selectSlice == true){
+      productSize = "Slice";
+    }else if (select6Inch == true){
+      productSize = "6 Inch";
+    }else if (select8Inch == true){
+      productSize = "8 Inch";
+    }else if (select10Inch == true){
+      productSize = "10 Inch";
     }
-    
+
+    print(widget.user.email);
+    print(selectSlice);
+    print(_message);
+    print(price);
+    print(productSize);
+
+    http.post(
+    Uri.parse("https://javathree99.com/s271059/littlecakestory/php/add_cart.php"),
+    body: {
+      "product_no":widget.productList.productNo,
+      "product_price":price.toString(),
+      "user_qty":product_qty.toString(),
+      "email":widget.user.email,
+      "product_size":productSize,
+      "eggLess":eggLess.toString(),
+      "message":_message,
+
+    }).then(
+      (response){
+        print(response.body);
+
+        if(response.body=="failed"){
+          Fluttertoast.showToast(
+          msg: "Add Into Cart Failed",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red[200],
+          textColor: Colors.white,
+          fontSize: 16.0);
+
+        }
+        else {
+          Fluttertoast.showToast(
+          msg: "Add Into Cart Success",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red[200],
+          textColor: Colors.white,
+          fontSize: 16.0);
+
+          List respond = response.body.split(",");
+          setState(() {
+            cartQuantity = respond[1];
+            widget.user.qty = cartQuantity;
+          });
+        }
+      }
+    );
+    }
   }
 
 }

@@ -23,6 +23,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  autocomplete_textfield: ^1.7.3
   cached_network_image: ^3.0.0
   carousel_pro: ^1.0.0
   convex_bottom_bar: ^3.0.0

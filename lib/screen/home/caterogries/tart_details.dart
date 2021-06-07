@@ -19,9 +19,10 @@ class _TartDetailsScreenState extends State<TartDetailsScreen> {
 
   bool selectSlice = false, select6Inch = false, select8Inch = false, select10Inch = false;
   bool eggLess = false, pressFavouriteIcon = false;
-  String cartQuantity, _message = "No";
+  String cartQuantity, _message = "No", productSize = "4 Inch";
   double screenHeight,screenWidth;
-  double totalOriPrice = 0, totalOfferedPrice = 0;
+  double price;
+  int product_qty =1;
 
   @override
   Widget build(BuildContext context) {
@@ -223,24 +224,18 @@ class _TartDetailsScreenState extends State<TartDetailsScreen> {
 
   void _addToCart() {
 
-    String product_qty = "1";
-    print(widget.user.email);
-    print(selectSlice);
-    print(select6Inch);
-    print(select8Inch);
-    print(select10Inch);
-    print(eggLess);
+     widget.productList.offeredPrice == "0"
+    ?  price = double.parse(widget.productList.oriPrice)
+    :  price = double.parse(widget.productList.offeredPrice);
 
     http.post(
     Uri.parse("https://javathree99.com/s271059/littlecakestory/php/add_cart.php"),
     body: {
       "product_no":widget.productList.productNo,
-      "user_qty":product_qty,
+      "product_price":price.toString(),
+      "user_qty":product_qty.toString(),
       "email":widget.user.email,
-      "selectSlice":selectSlice.toString(),
-      "select6Inch":select6Inch.toString(),
-      "select8Inch":select8Inch.toString(),
-      "select10Inch":select10Inch.toString(),
+      "product_size":productSize,
       "eggLess":eggLess.toString(),
       "message":_message,
 

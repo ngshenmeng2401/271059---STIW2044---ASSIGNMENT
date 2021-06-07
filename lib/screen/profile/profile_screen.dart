@@ -44,7 +44,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         title: Text('LITTLE CAKE STORY',style: TextStyle(fontFamily: 'Arial')),
         actions:<Widget> [
           Padding(
-            padding: const EdgeInsets.fromLTRB(0, 15, 20, 0),
+            padding: const EdgeInsets.fromLTRB(0, 15, 5, 0),
             child: Container(
               width: 30,
               height: 10,
