@@ -19,6 +19,7 @@ class AddAddressScreen extends StatefulWidget {
 class _AddAddressScreenState extends State<AddAddressScreen> {
   
   int selectedButton;
+  TextEditingController _placeController = new TextEditingController();
   TextEditingController _addressController = new TextEditingController();
   TextEditingController _postCodeController = new TextEditingController();
   TextEditingController _cityController = new TextEditingController();
@@ -89,6 +90,19 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                   padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                   child: Column(
                     children:[
+                      TextField(
+                        controller: _placeController,
+                        decoration: InputDecoration(
+                          focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Theme.of(context).accentColor)
+                          ),
+                          labelText: 'Place',
+                          labelStyle: TextStyle(
+                            fontFamily: 'Calibri',
+                            color: Colors.red[200]
+                          )
+                        ),
+                      ),
                       TextField(
                         controller: _addressController,
                         decoration: InputDecoration(
@@ -166,15 +180,27 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
 
   _addAddress() {
     
+    String _place = _placeController.text.toString();
     String _streetAddress = _addressController.text.toString();
     String _postalCode = _postCodeController.text.toString();
     String _city = _cityController.text.toString();
     String _state = _stateController.text.toString();
     String email = widget.user.email;
 
-    if(_streetAddress.isEmpty && _postalCode.isEmpty && _city.isEmpty && _state.isEmpty ){
+    if(_place.isEmpty &&_streetAddress.isEmpty && _postalCode.isEmpty && _city.isEmpty && _state.isEmpty ){
       Fluttertoast.showToast(
         msg: "Please fill in all textfield",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red[200],
+        textColor: Colors.white,
+        fontSize: 16.0);
+      return;
+    }
+    else if(_place.isEmpty ){
+      Fluttertoast.showToast(
+        msg: "Place is empty",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
@@ -237,7 +263,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
             TextButton(
               child:(Text('Yes',style: Theme.of(context).textTheme.bodyText2)),
               onPressed: (){
-                _addAddressDatabase(_streetAddress,_postalCode,_city,_state,email);
+                _addAddressDatabase(_place,_streetAddress,_postalCode,_city,_state,email);
                 Navigator.of(context).pop();
               },),
             TextButton(
@@ -251,11 +277,12 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
     
   }
 
-  void _addAddressDatabase(String streetAddress, String postalCode, String city, String state, String email) {
+  void _addAddressDatabase(String place,String streetAddress, String postalCode, String city, String state, String email) {
 
     http.post(
       Uri.parse("https://javathree99.com/s271059/littlecakestory/php/add_address.php"),
       body: {
+        "place":place,
         "streetAddress":streetAddress,
         "postalCode":postalCode,
         "city":city,

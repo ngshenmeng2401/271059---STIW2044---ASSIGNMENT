@@ -60,7 +60,7 @@ class _SelectAddressScreenState extends State<SelectAddressScreen> {
                     child: Center(
                       child: GridView.count(
                         crossAxisCount: 1,
-                        childAspectRatio: (screenWidth / screenHeight) /0.17,
+                        childAspectRatio: (screenWidth / screenHeight) /0.2,
                         children: List.generate(useraddressList.length, (index){
                           return Padding(
                             padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
@@ -75,10 +75,11 @@ class _SelectAddressScreenState extends State<SelectAddressScreen> {
                                     child: Container(
                                       padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                                       child: ListTile(
-                                        title: Text(useraddressList[index]['street_address'],style: TextStyle(fontSize:16,fontFamily:'Calibri'),),
+                                        title: Text(useraddressList[index]['place'],style: TextStyle(fontSize:20,fontFamily:'Calibri'),),
                                         subtitle: RichText(
                                           text: TextSpan(
                                             children:<TextSpan>[
+                                              TextSpan(text:useraddressList[index]['street_address']+"\t",style: Theme.of(context).textTheme.bodyText2,),
                                               TextSpan(text:useraddressList[index]['postal_code']+"\t",style: Theme.of(context).textTheme.bodyText2,),
                                               TextSpan(text:useraddressList[index]['city']+"\n",style: Theme.of(context).textTheme.bodyText2,),
                                               TextSpan(text:useraddressList[index]['state'],style: Theme.of(context).textTheme.bodyText2,),

@@ -65,11 +65,11 @@ class _PaymentHistoryScreenState extends State<PaymentHistoryScreen> {
                                 Container(
                                   padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                                   child: ListTile(
-                                    title: Text(_paymentList[index]['payment_id'] + ".  " + _paymentList[index]['payment_method'],style: TextStyle(fontSize:20,fontFamily:'Calibri'),),
+                                    title: Text(_paymentList[index]['payment_id'] ,style: TextStyle(fontSize:20,fontFamily:'Calibri'),),
                                     subtitle: RichText(
                                       text: TextSpan(
                                         children:<TextSpan>[
-                                          TextSpan(text:"RM: " +_paymentList[index]['total_payment']+"\t\t\t\t",style: TextStyle(fontSize: 16),),
+                                          TextSpan(text:"RM " +_paymentList[index]['total_payment']+"\t\t\t\t",style: TextStyle(fontSize: 16),),
                                           TextSpan(text:_paymentList[index]['item']+" item\n",style: TextStyle(fontSize: 16),),
                                           TextSpan(text:df.format(DateTime.parse(_paymentList[index]['date_time'])),style: TextStyle(fontSize: 16),)
                                         ]

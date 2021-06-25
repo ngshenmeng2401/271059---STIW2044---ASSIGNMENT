@@ -4,7 +4,7 @@
         android:requestLegacyExternalStorage="true"
         android:label="little_cake_story"
         android:icon="@mipmap/ic_launcher"
-        
+        android:usesCleartextTraffic="true"
         >
         <activity
             android:name=".MainActivity"

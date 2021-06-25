@@ -65,7 +65,7 @@ class _ManageAddressScreenState extends State<ManageAddressScreen> {
                   child: Center(
                     child: GridView.count(
                       crossAxisCount: 1,
-                      childAspectRatio: (screenWidth / screenHeight) /0.19,
+                      childAspectRatio: (screenWidth / screenHeight) /0.2,
                       children: List.generate(useraddressList.length, (index){
                         return Padding(
                           padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
@@ -76,10 +76,11 @@ class _ManageAddressScreenState extends State<ManageAddressScreen> {
                                 Container(
                                   padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                                   child: ListTile(
-                                    title: Text(useraddressList[index]['street_address'],style: TextStyle(fontSize:16,fontFamily:'Calibri'),),
+                                    title: Text(useraddressList[index]['place'],style: TextStyle(fontSize:20,fontFamily:'Calibri'),),
                                     subtitle: RichText(
                                       text: TextSpan(
                                         children:<TextSpan>[
+                                          TextSpan(text:useraddressList[index]['street_address']+"\t",style: Theme.of(context).textTheme.bodyText2,),
                                           TextSpan(text:useraddressList[index]['postal_code']+"\t",style: Theme.of(context).textTheme.bodyText2,),
                                           TextSpan(text:useraddressList[index]['city']+"\n",style: Theme.of(context).textTheme.bodyText2,),
                                           TextSpan(text:useraddressList[index]['state'],style: Theme.of(context).textTheme.bodyText2,),
@@ -143,6 +144,7 @@ class _ManageAddressScreenState extends State<ManageAddressScreen> {
   void _editAddress(int index) {
     print(useraddressList[index]['address_no']);
     Address addressList = new Address(
+      place: useraddressList[index]['place'],
       addressNo: useraddressList[index]['address_no'],
       streetAddress: useraddressList[index]['street_address'],
       postalCode: useraddressList[index]['postal_code'],

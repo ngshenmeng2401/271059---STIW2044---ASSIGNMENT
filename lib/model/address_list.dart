@@ -1,9 +1,10 @@
 class Address{
 
-  String addressNo ,streetAddress = "Street Address",postalCode = "Post Code",city = "City",state = "State";
+  String place,addressNo ,streetAddress = "Street Address",postalCode = "Post Code",city = "City",state = "State";
 
   Address(
     {
+      this.place,
       this.addressNo,
       this.streetAddress,
       this.postalCode,

@@ -20,6 +20,7 @@ class EditAddressScreen extends StatefulWidget {
 
 class _EditAddressScreenState extends State<EditAddressScreen> {
 
+  TextEditingController _placeController = new TextEditingController();
   TextEditingController _addressController = new TextEditingController();
   TextEditingController _postCodeController = new TextEditingController();
   TextEditingController _cityController = new TextEditingController();
@@ -67,6 +68,19 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
               padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
               child: Column(
                 children: [
+                  TextField(
+                    controller: _placeController,
+                    decoration: InputDecoration(
+                      focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Theme.of(context).accentColor)
+                      ),
+                      labelText: 'Place',
+                      labelStyle: TextStyle(
+                        fontFamily: 'Calibri',
+                        color: Colors.red[200]
+                      )
+                    ),
+                  ),
                   TextField(
                     controller: _addressController,
                     decoration: InputDecoration(
@@ -225,12 +239,13 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
 
     setState(() {
 
+      String _place = _placeController.text.toString();
       String _streetAddress = _addressController.text.toString();
       String _postalCode = _postCodeController.text.toString();
       String _city = _cityController.text.toString();
       String _state = _stateController.text.toString();
 
-      if(_streetAddress.isEmpty && _postalCode.isEmpty && _city.isEmpty && _state.isEmpty ){
+      if(_place.isEmpty &&_streetAddress.isEmpty && _postalCode.isEmpty && _city.isEmpty && _state.isEmpty ){
           Fluttertoast.showToast(
             msg: "Do not have any update",
             toastLength: Toast.LENGTH_SHORT,
@@ -241,6 +256,9 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
             fontSize: 16.0);
         }
       else{
+        _place = (_placeController.text.toString() == "") 
+        ? widget.addressList.place
+        : _placeController.text.toString();
         _streetAddress = (_addressController.text.toString() == "") 
         ? widget.addressList.streetAddress
         : _addressController.text.toString();
@@ -266,7 +284,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
             TextButton(
               child:(Text('Yes',style: Theme.of(context).textTheme.bodyText2)),
               onPressed: (){
-                _updateAddress(_streetAddress,_postalCode,_city,_state);
+                _updateAddress(_place,_streetAddress,_postalCode,_city,_state);
                 Navigator.of(context).pop();
               },),
             TextButton(
@@ -282,7 +300,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
     });
   }
 
-  void _updateAddress(String streetAddress, String postalCode, String city, String state) {
+  void _updateAddress(String place,String streetAddress, String postalCode, String city, String state) {
 
     setState(() {
       http.post(
@@ -290,6 +308,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
       body: {
         "addressno":widget.addressList.addressNo,
         "streetAddress":streetAddress,
+        "place":place,
         "postalCode":postalCode,
         "city":city,
         "state":state,
