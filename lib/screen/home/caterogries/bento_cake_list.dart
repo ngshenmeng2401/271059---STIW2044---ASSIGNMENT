@@ -21,7 +21,7 @@ class _BentoCakeListScreenState extends State<BentoCakeListScreen> {
   List _productList;
   String titleCenter = "Loading...",searchText="Search";
   double screenHeight, screenWidth;
-  int sortButton=1;
+  int sortButton = 1;
   String type = "BentoCake";
 
   @override
@@ -42,9 +42,11 @@ class _BentoCakeListScreenState extends State<BentoCakeListScreen> {
       appBar:AppBar(
         title: Text('Bento Cakes',style: TextStyle(fontFamily: 'Arial')),
         actions: [
-          IconButton(onPressed: (){
+          IconButton(
+            onPressed: (){
             _sortBentoCakeDialog(context);
-          }, icon: Icon(Icons.list,color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor))
+          }, icon: Icon(Icons.list,color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor)),
+          
         ],
       ),
       body: Center(

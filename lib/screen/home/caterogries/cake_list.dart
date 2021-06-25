@@ -193,8 +193,6 @@ class _CakeListScreenState extends State<CakeListScreen> {
     http.post(
       Uri.parse("https://javathree99.com/s271059/littlecakestory/php/load_cake.php"),
       body: {
-        "email":widget.user.email,
-
       }).then(
         (response){
           if(response.body == "nodata"){

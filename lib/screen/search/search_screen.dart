@@ -32,7 +32,6 @@ class _SearchScreenState extends State<SearchScreen> {
   void initState() {
 
     super.initState();
-    // _loadProduct();
     _loadCartQuantity();
   }
 
@@ -244,41 +243,14 @@ class _SearchScreenState extends State<SearchScreen> {
       ),
     );
   }
-  // void _loadProduct() {
-
-
-  //   http.post(
-  //     Uri.parse("https://javathree99.com/s271059/littlecakestory/php/load_product.php"),
-  //     body: {
-  //       "email":widget.user.email,
-
-  //     }).then(
-  //       (response){
-  //         if(response.body == "nodata"){
-  //           titleCenter = "No data";
-  //           cartQuantity="0";
-  //           return;
-  //         }else{
-  //           titleCenter = "Contain Data";
-  //           setState(() {
-  //             var jsondata = json.decode(response.body);
-  //             _productList = jsondata["product"];
-  //             cartQuantity = widget.user.qty;
-  //           });
-  //           print(_productList);
-  //         }
-  //     }
-  //   );
-  // }
 
   void _searchProduct(String searchProduct){
 
     print(searchProduct);
 
     http.post(
-      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/load_product.php"),
+      Uri.parse("https://javathree99.com/s271059/littlecakestory/php/search_product.php"),
       body: {
-        "email":widget.user.email,
         "name":searchProduct,
 
       }).then(
@@ -287,7 +259,8 @@ class _SearchScreenState extends State<SearchScreen> {
             titleCenter = "No data";
             cartQuantity="0";
             return;
-          }else{
+          }
+          else{
             titleCenter = "Contain Data";
             setState(() {
               var jsondata = json.decode(response.body);
