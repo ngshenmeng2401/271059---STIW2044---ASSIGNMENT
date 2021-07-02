@@ -57,124 +57,124 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
               },
             ),
           ),
-          body:SingleChildScrollView(
-            child:Column(
-              children:[
-                Container(
-                  height: screenHeight/2.3,
-                  color:Colors.white,
-                  child: Stack(
-                    children: [
-                      GoogleMap(
-                        mapType: MapType.normal,
-                        myLocationEnabled: true,
-                        myLocationButtonEnabled: false,
-                        zoomControlsEnabled: true,
-                        trafficEnabled: true,
-                        initialCameraPosition: _initialCameraPosition,
-                        onMapCreated: (controller) => _googleMapController = controller,
-                      ),
-                      // Align(
-                      //   alignment: Alignment.bottomRight,
-                      //   child: FloatingActionButton(
-                      //     backgroundColor: Colors.red[200],
-                      //     foregroundColor: Colors.black,
-                      //     onPressed:() => _googleMapController.animateCamera(
-                      //       CameraUpdate.newCameraPosition(_initialCameraPosition)),
-                      //       child: const Icon(Icons.center_focus_strong),),
-                      // )
-                    ]
-                  ),
+          body:Column(
+            children:[
+              Container(
+                height: screenHeight/2.3,
+                color:Colors.white,
+                child: Stack(
+                  children: [
+                    GoogleMap(
+                      mapType: MapType.normal,
+                      myLocationEnabled: true,
+                      myLocationButtonEnabled: true,
+                      zoomControlsEnabled: true,
+                      trafficEnabled: true,
+                      initialCameraPosition: _initialCameraPosition,
+                      onMapCreated: (controller) => _googleMapController = controller,
+                    ),
+                    // Align(
+                    //   alignment: Alignment.bottomRight,
+                    //   child: FloatingActionButton(
+                    //     backgroundColor: Colors.red[200],
+                    //     foregroundColor: Colors.black,
+                    //     onPressed:() => _googleMapController.animateCamera(
+                    //       CameraUpdate.newCameraPosition(_initialCameraPosition)),
+                    //       child: const Icon(Icons.center_focus_strong),),
+                    // )
+                  ]
                 ),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                  child: Column(
-                    children:[
-                      TextField(
-                        controller: _placeController,
-                        decoration: InputDecoration(
-                          focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Theme.of(context).accentColor)
-                          ),
-                          labelText: 'Place',
-                          labelStyle: TextStyle(
-                            fontFamily: 'Calibri',
-                            color: Colors.red[200]
-                          )
+              ),
+              Container(
+                width: screenWidth,
+                height: screenHeight/3,
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                child: ListView(
+                  scrollDirection: Axis.vertical,
+                  children:<Widget>[
+                    TextField(
+                      controller: _placeController,
+                      decoration: InputDecoration(
+                        focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Theme.of(context).accentColor)
                         ),
+                        labelText: 'Place',
+                        labelStyle: TextStyle(
+                          fontFamily: 'Calibri',
+                          color: Colors.red[200]
+                        )
                       ),
-                      TextField(
-                        controller: _addressController,
-                        decoration: InputDecoration(
-                          focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Theme.of(context).accentColor)
-                          ),
-                          labelText: 'Street Address',
-                          labelStyle: TextStyle(
-                            fontFamily: 'Calibri',
-                            color: Colors.red[200]
-                          )
+                    ),
+                    TextField(
+                      controller: _addressController,
+                      decoration: InputDecoration(
+                        focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Theme.of(context).accentColor)
                         ),
+                        labelText: 'Street Address',
+                        labelStyle: TextStyle(
+                          fontFamily: 'Calibri',
+                          color: Colors.red[200]
+                        )
                       ),
-                      TextField(
-                        controller: _postCodeController,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Theme.of(context).accentColor)
-                          ),
-                          labelText: 'Postal Code',
-                          labelStyle: TextStyle(
-                            fontFamily: 'Calibri',
-                            color: Colors.red[200]
-                          )
+                    ),
+                    TextField(
+                      controller: _postCodeController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Theme.of(context).accentColor)
                         ),
+                        labelText: 'Postal Code',
+                        labelStyle: TextStyle(
+                          fontFamily: 'Calibri',
+                          color: Colors.red[200]
+                        )
                       ),
-                      TextField(
-                        controller: _cityController,
-                        decoration: InputDecoration(
-                          focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Theme.of(context).accentColor)
-                          ),
-                          labelText: 'City',
-                          labelStyle: TextStyle(
-                            fontFamily: 'Calibri',
-                            color: Colors.red[200]
-                          )
+                    ),
+                    TextField(
+                      controller: _cityController,
+                      decoration: InputDecoration(
+                        focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Theme.of(context).accentColor)
                         ),
+                        labelText: 'City',
+                        labelStyle: TextStyle(
+                          fontFamily: 'Calibri',
+                          color: Colors.red[200]
+                        )
                       ),
-                      TextField(
-                        controller: _stateController,
-                        decoration: InputDecoration(
-                          focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Theme.of(context).accentColor)
-                          ),
-                          labelText: 'State',
-                          labelStyle: TextStyle(
-                            fontFamily: 'Calibri',
-                            color: Colors.red[200]
-                          )
+                    ),
+                    TextField(
+                      controller: _stateController,
+                      decoration: InputDecoration(
+                        focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Theme.of(context).accentColor)
                         ),
+                        labelText: 'State',
+                        labelStyle: TextStyle(
+                          fontFamily: 'Calibri',
+                          color: Colors.red[200]
+                        )
                       ),
-                      SizedBox(height:15),
-                      MaterialButton(
-                        shape:RoundedRectangleBorder(
-                          borderRadius:BorderRadius.circular(20),
-                        ),
-                        minWidth: screenWidth/1.1,
-                        height: screenHeight/18,
-                        child: Text('Submit',
-                        style: TextStyle(fontSize: 18,color: Colors.white,fontFamily: 'Arial'),),
-                        onPressed: _addAddress,
-                        color: Colors.red[200],
-                      ),
-                    ]
-                  ),
-                  
+                    ),
+                  ]
+                ),
+          ),
+          SizedBox(height:15),
+          MaterialButton(
+            shape:RoundedRectangleBorder(
+              borderRadius:BorderRadius.circular(20),
             ),
+            minWidth: screenWidth/1.1,
+            height: screenHeight/18,
+            child: Text('Submit',
+            style: TextStyle(fontSize: 18,color: Colors.white,fontFamily: 'Arial'),),
+            onPressed: _addAddress,
+            color: Colors.red[200],
+          ),
           ]
         ),
-      ),
     );
   }
 
